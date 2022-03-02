@@ -12,7 +12,7 @@ import setuptools
 try:
     import pypalex
 except ImportError:
-    print("error: pypalex requires Python 3.5 or greater.")
+    print("error: pypalex requires Python 3.7 or greater.")
     sys.exit(1)
 
 LONG_DESC = open('README.md').read()
@@ -27,18 +27,24 @@ setuptools.setup(
     description="Extract color palettes from images into json files",
     long_description_content_type="text/markdown",
     long_description=LONG_DESC,
-    # keywords="wal colorscheme terminal-emulators changing-colorschemes",
+    keywords="palex color-palette colorscheme extract-colorscheme extractor colorscheme-generator",
     license="MIT",
     url="https://github.com/AlTimofeyev/pypalex",
     download_url=DOWNLOAD,
     classifiers=[
+        "Environment :: X11 Applications",
         "License :: MIT License",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
+        "Operating System :: MacOS",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
     packages=["pypalex"],
     entry_points={"console_scripts": ["palex=pypalex.__main__:main"]},
-    python_requires=">=3.5",
+    python_requires=">=3.7",
     # test_suite="tests",
     include_package_data=True,
     zip_safe=False)
