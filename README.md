@@ -1,6 +1,6 @@
 ## <div align="center">PyPalEx</div>
 ### <div align="center">Python Palette Extractor</div>
-#
+
 ## Table of Contents
 - **[Description](#description)**
     - [Note](#note)
@@ -11,9 +11,6 @@
 - **[Documentation](#documentation)**
 
 
-
-
-#
 ## **DESCRIPTION**
 PyPalEx is a tool for extracting color palettes from images and generating a JSON format file with light, normal, and dark color schemes/palettes. This tool is intended to be non-OS dependant, for use by the tech community for developing their own custom theme managers or by artists who want to generate color palettes for thier art from images/pictures/wallpapers they adore.
 
@@ -22,14 +19,13 @@ PyPalEx does **NOT** select only dominant colors from an image. Instead, it pick
 ### **_NOTE_**
 Future update may include a `-p --pastel` option for generating pastelle palettes as well as a `-g --generate` option for generating missing colors from their respective hue range instead of borrowing missing colors from pre-existing colors in the image.
 
-#
 
 ## **INSTALLATION**
 ### **_DEPENDENCIES_**
-- `Python 3.5+`
+- `Python 3.7+`
 - `Pillow (PIL) 9.0+`
     - For performing operations on images.
-- `NumPy 1.22+`
+- `NumPy 1.21+`
     - To manage large amounts of image data.
 - `filetype 1.0+`
     - To confirm filetypes are images file types.
@@ -67,7 +63,6 @@ pip3 install --user .
 export PATH="${PATH}:${HOME}/.local/bin/"
 ```
 
-#
 
 ## **DOCUMENTATION**
 \[[Documentation](https://docs.google.com/viewer?url=${https://github.com/AlTimofeyev/pypalex/Documentation-PyPalEx.pdf})]
