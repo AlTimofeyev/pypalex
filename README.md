@@ -8,7 +8,7 @@
     - [Dependencies](#dependencies)
     - [Environment Variables](#environment-variables)
     - [Install](#install)
-- **[Documentation](#documentation)**
+- **[Code Documentation](#code-documentation)**
 
 
 ## **DESCRIPTION**
@@ -33,7 +33,7 @@ Future update may include a `-p --pastel` option for generating pastelle palette
 Aside from `Python`, the rest are python packages/libraries that are installable with pip.
 
 ### **_ENVIRONMENT VARIABLES_**
-Two shell environement variables `PYPALEX_CACHE_DIR` and `PYPALEX_CONFIG_DIR` can be set in terminal. PyPalEx, by default, will either store generated palettes into `PYWAL_CONFIG_DIR` __OR__ whereever (`XDG_CONFIG_HOME/palex` or `$HOME/.config/palex`) points to.  
+Two shell environement variables `PYPALEX_CACHE_DIR` and `PYPALEX_CONFIG_DIR` can be set in terminal. PyPalEx, by default, will either store generated palettes into `PYPALEX_CONFIG_DIR` __OR__ wherever (`XDG_CONFIG_HOME/palex` or `$HOME/.config/palex`) points to.  
 _This default storing location is, of course, overriden if pypalex is used with the `-o --Output` option._
 
 ### **_INSTALL_**
@@ -64,5 +64,5 @@ export PATH="${PATH}:${HOME}/.local/bin/"
 ```
 
 
-## **DOCUMENTATION**
+## **CODE DOCUMENTATION**
 \[[Documentation](https://docs.google.com/viewer?url=${https://github.com/AlTimofeyev/pypalex/Documentation-PyPalEx.pdf})]
