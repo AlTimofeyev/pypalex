@@ -7,7 +7,7 @@ Desc:     This project is for color palette extraction from an image.
 """
 
 # ---- IMPORTS ----
-from settings import CONF_DIR
+from .settings import CONF_DIR
 import sys
 import os
 import argparse # for CLI arguments.
@@ -98,7 +98,7 @@ def set_global_args(args):
     global OUTPUT_DIRS
     global PROPER_IMAGES
 
-    OUTPUT_DIR = args['Output'] if args['Output'] is None or args['Output'] == '' else CONF_DIR
+    OUTPUT_DIR = args['Output'] if args['Output'] is not None and args['Output'] != '' else CONF_DIR
     args_directory = args['Directory']
 
     for image_path in args['Files']:
@@ -248,7 +248,6 @@ def main():
         imutils.save_palette_to_file(extractor.color_palette_dict, extractor.output_path)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     setup_argument_parser()
     main()
