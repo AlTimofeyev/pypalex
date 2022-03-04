@@ -1,7 +1,9 @@
 """
+#######################################################################
 Author: Al Timofeyev
 Date:   March 3, 2022
 Desc:   Initialization file for PyPalEx.
+#######################################################################
 """
 
 from .settings import __version__, __cache_version__

@@ -1,4 +1,5 @@
 """
+#######################################################################
 Author: Al Timofeyev
 Date:   March 2, 2022
 Desc:   Settings for PyPalEx.
@@ -6,6 +7,7 @@ Desc:   Settings for PyPalEx.
 NOTE:
 This code has been borrowed from Dylan Araps PyWal
 on github: https://github.com/dylanaraps/pywal/blob/master/pywal/settings.py
+#######################################################################
 """
 
 import os
