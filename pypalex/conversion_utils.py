@@ -95,4 +95,3 @@ def rgb_to_hex(rgb_array):
     hex_string = '%02x%02x%02x' % (r, g, b)
 
     return hex_string
-
