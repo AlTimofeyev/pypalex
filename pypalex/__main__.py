@@ -7,16 +7,18 @@ Desc:     This project is for color palette extraction from an image.
 """
 
 # ---- IMPORTS ----
-from settings import CONF_DIR
 import sys
 import os
 import argparse
 import filetype
 from PIL import Image
 import multiprocessing
-from Extractor import Extractor
-import image_utils as imutils
-import arg_messages as argmsg
+
+from .settings import CONF_DIR
+from .Extractor import Extractor
+from . import image_utils as imutils
+from . import arg_messages as argmsg
+
 
 # ---- GLOBAL VARIABLES ----
 EXTRACTORS = []
