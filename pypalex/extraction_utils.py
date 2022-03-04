@@ -7,9 +7,9 @@ Desc:     Utilities for extracting colors from the image.
 """
 
 # ---- IMPORTS ----
-import random
 import numpy
-import constants as const
+import random
+from . import constants as const
 
 
 def extract_ratios(hsl_img_array):

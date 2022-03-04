@@ -8,8 +8,8 @@ Desc:     Extraction utility class for extracting colors from the image.
 
 # ---- IMPORTS ----
 import numpy
-import extraction_utils as exutil
-import conversion_utils as convert
+from . import extraction_utils as exutil
+from . import conversion_utils as convert
 
 
 class Extractor:

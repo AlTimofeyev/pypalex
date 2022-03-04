@@ -11,7 +11,7 @@ from PIL import Image
 import numpy
 import multiprocessing
 import json
-import conversion_utils as convert
+from . import conversion_utils as convert
 
 
 def process_image(image):
