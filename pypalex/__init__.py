@@ -1,8 +1,8 @@
-"""
+"""!
 #######################################################################
-Author: Al Timofeyev
-Date:   March 3, 2022
-Desc:   Initialization file for PyPalEx.
+@author Al Timofeyev
+@date   March 3, 2022
+@brief  Initialization file for PyPalEx.
 #######################################################################
 """
 

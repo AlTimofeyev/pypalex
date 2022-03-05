@@ -1,8 +1,8 @@
-"""
+"""!
 #######################################################################
-Author:   Al Timofeyev
-Date:     February 27, 2022
-Desc:     Utilities for processing image and file handling.
+@author Al Timofeyev
+@date   February 27, 2022
+@brief  Utilities for processing image and file handling.
 #######################################################################
 """
 
@@ -15,11 +15,11 @@ from . import conversion_utils as convert
 
 
 def process_image(image):
-    """
-    Processes PIL Image object.
-    Multiprocessing example from: https://stackoverflow.com/a/45555516
-    :param image:   PIL Image object.
-    :return:        List with the unique and full hsl arrays of image.
+    """!
+    @brief  Processes PIL Image object.
+    @details    Multiprocessing example from: https://stackoverflow.com/a/45555516
+    @param  image   PIL Image object.
+    @return List with the unique and full hsl arrays of image.
     """
     # Rescale image to reduce data sample.
     new_size = rescale_image(image)
@@ -51,10 +51,10 @@ def process_image(image):
 
 
 def rescale_image(img):
-    """
-    Rescales image to a smaller sampling size.
-    :param img: The PIL.Image object.
-    :return: Tuple of the new width and height of image.
+    """!
+    @brief  Rescales image to a smaller sampling size.
+    @param  img The PIL.Image object.
+    @return Tuple of the new width and height of image.
     """
     width, height = img.size
     default_480p = [854, 480]   # 480p SD resolution with 16:9 ratio.
@@ -81,11 +81,11 @@ def rescale_image(img):
 
 
 def thread_helper(flat_img_array):
-    """
-    Helper function for multiprocessing conversion operations.
-    Helps convert from [r, g, b] to [h, s, l].
-    :param flat_img_array:  A flattened rgb portion of the original image array.
-    :return:    A numpy array of converted hsl values.
+    """!
+    @brief  Helper function for multiprocessing conversion operations.
+    @details    Helps convert from [r, g, b] to [h, s, l].
+    @param  flat_img_array  A flattened rgb portion of the original image array.
+    @return A numpy array of converted hsl values.
     """
     return numpy.apply_along_axis(convert.rgb_to_hsl, 1, flat_img_array)
 
@@ -94,11 +94,11 @@ def thread_helper(flat_img_array):
 
 
 def save_palette_to_file(color_palette, output_file):
-    """
-    Saves color palette to json file. If a file with the
-    same name already exists, it is overwritten.
-    :param color_palette:   Dictionary of light, normal, and dark color palettes.
-    :param output_file:     The output path/directory with filename at the end.
+    """!
+    @brief  Saves color palette to json file.
+    @details    If a file with the same name already exists, it is overwritten.
+    @param  color_palette   Dictionary of light, normal, and dark color palettes.
+    @param  output_file The output path/directory with filename at the end.
     """
     with open(output_file, 'w') as outfile:
         json.dump(color_palette, outfile, indent=4)

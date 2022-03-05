@@ -1,8 +1,8 @@
-"""
+"""!
 #######################################################################
-Author:   Al Timofeyev
-Date:     February 10, 2022
-Desc:     Extraction utility class for extracting colors from the image.
+@author Al Timofeyev
+@date   February 10, 2022
+@brief  Extraction utility class for extracting colors from the image.
 #######################################################################
 """
 
@@ -13,20 +13,30 @@ from . import conversion_utils as convert
 
 
 class Extractor:
-    """ Extracts colors using ONLY the colors in the image. """
+    """! Extracts colors using ONLY the colors in the image. """
 
     # ---- CONSTRUCTOR ----
     def __init__(self, full_hsl_img_array, output_path):
+        """!
+        @brief  Extractor Constructor.
+        @param  full_hsl_img_array  A 2D numpy array of all the pixels from image, in hsl format.
+        @param  output_path Output path and filename of where to store color palette.
+        """
         self.ratio_dict: dict[str, float] = {}
         self.base_color_dict: dict[str, numpy.ndarray] = {}
         self.dom_color_dict: dict[str, list] = {}
         self.color_palette_dict: dict[str, dict[str, str]] = {}
+        ## Output path and filename of where to store color palette.
         self.output_path = output_path
+        ## A 2D numpy array of all the pixels from image, in hsl format.
         self.full_hsl_img_array = full_hsl_img_array
 
     # ---- MAIN ----
     def run(self):
-        """ Performs extraction of colors. """
+        """!
+        @brief  Performs extraction of colors.
+        @param  self    The object pointer.
+        """
         self.ratio_dict = exutil.extract_ratios(self.full_hsl_img_array)
         self.base_color_dict = exutil.construct_base_color_dictionary(self.full_hsl_img_array)
         exutil.check_missing_colors(self.base_color_dict)
@@ -37,7 +47,10 @@ class Extractor:
     # ***********************************************************************
 
     def construct_palette_dictionary(self):
-        """ Constructs color palette dictionary. """
+        """!
+        @brief  Constructs color palette dictionary.
+        @param  self    The object pointer.
+        """
         light_palette: dict[str, str] = {}
         normal_palette: dict[str, str] = {}
         dark_palette: dict[str, str] = {}

@@ -1,8 +1,8 @@
-"""
+"""!
 #######################################################################
-Author:   Al Timofeyev
-Date:     February 2, 2022
-Desc:     A collection of constants.
+@author Al Timofeyev
+@date   February 2, 2022
+@brief  A collection of constants.
 #######################################################################
 """
 
@@ -43,7 +43,7 @@ MAGENTA_HUE = 300
 
 # Lighting range [min, max] for grayscale/achromatic colors.
 BLACK_LIGHT_RANGE = [0, 40]     # Range of lighting for where a color can be considered black.
-GRAY_LIGHT_RANGE = [40, 60]
+GRAY_LIGHT_RANGE = [40, 60]     # Range of lighting for where a color can be considered gray.
 WHITE_LIGHT_RANGE = [60, 100]   # Range of lighting for where a color can be considered white.
 # -----------------------------------------------
 

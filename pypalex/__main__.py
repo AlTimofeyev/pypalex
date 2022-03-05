@@ -1,8 +1,8 @@
-"""
+"""!
 #######################################################################
-Author:   Al Timofeyev
-Date:     February 2, 2022
-Desc:     This project is for color palette extraction from an image.
+@author Al Timofeyev
+@date   February 2, 2022
+@brief  This project is for color palette extraction from an image.
 #######################################################################
 """
 
@@ -30,10 +30,10 @@ ARGUMENT_PARSER = None
 
 
 def thread_helper(extractor):
-    """
-    Supports multiprocess color extraction operations.
-    :param extractor:   The Extractor object for which to run extraction process.
-    :return:    The Extractor object.
+    """!
+    @brief  Supports multiprocess color extraction operations.
+    @param  extractor   The Extractor object for which to run extraction process.
+    @return The Extractor object.
     """
     extractor.run()
     return extractor
@@ -43,7 +43,7 @@ def thread_helper(extractor):
 
 
 def extract_color_palettes():
-    """ Handles multiprocess color extraction from image(s). """
+    """! Handles multiprocess color extraction from image(s). """
     global EXTRACTORS
 
     # Prepare Extractor object(s).
@@ -64,9 +64,9 @@ def extract_color_palettes():
 
 
 def set_global_args(args):
-    """
-    Sets the global variables using the arguments.
-    :param args:    User-supplied arguments.
+    """!
+    @brief  Sets the global variables using the arguments.
+    @param  args    User-supplied arguments.
     """
     global OUTPUT_DIR
     global OUTPUT_DIRS
@@ -91,10 +91,10 @@ def set_global_args(args):
 
 
 def check_source(image_path):
-    """
-    Checks to make sure the path is either a file or directory
-    :param image_path:
-    :return:
+    """!
+    @brief  Checks to make sure the path is either a file or directory
+    @param  image_path  Path to image with filename and file extension (.jpg, .png, etc.).
+    @return Boolean flag: True if file exists, False otherwise.
     """
     return os.path.exists(image_path) and os.path.isfile(image_path)
 
@@ -103,11 +103,11 @@ def check_source(image_path):
 
 
 def check_sources(image_paths, directory=None):
-    """
-    Checks each of the sources provided.
-    :param image_paths: Array of image paths.
-    :param directory:   A directory path to the images, if it is provided.
-    :return:    True if all/some sources are good, False if all sources are bad.
+    """!
+    @brief  Checks each of the sources provided.
+    @param  image_paths Array of image paths.
+    @param  directory   A directory path to the images, if it is provided.
+    @return Boolean flag: True if all/some sources are good, False if all sources are bad.
     """
     bad_image_paths = []
     for img_name in image_paths:
@@ -151,10 +151,10 @@ def check_sources(image_paths, directory=None):
 
 
 def check_path(full_path):
-    """
-    Check the full path to make sure the directory exists.
-    :param full_path:
-    :return:
+    """!
+    @brief  Check the full path to make sure the directory exists.
+    @param  full_path   The full path to directory.
+    @return Boolean flag: True if directory exists and is not a file, False otherwise.
     """
     return os.path.exists(full_path) and not os.path.isfile(full_path)
 
@@ -163,7 +163,7 @@ def check_path(full_path):
 
 
 def handle_args():
-    """ Handles the arguments passed to PyPalEx. """
+    """! Handles the arguments passed to PyPalEx. """
     # Converts arguments into a dictionary:
     # {'File': None, 'Directory': None, 'Output': None}
     args = vars(ARGUMENT_PARSER.parse_args())
@@ -191,7 +191,7 @@ def handle_args():
 
 
 def setup_argument_parser():
-    """ Sets up the argument parser for command line arguments. """
+    """! Sets up the argument parser for command line arguments. """
     global ARGUMENT_PARSER
 
     description = "PyPalEx is a color palette extraction tool "
@@ -216,7 +216,7 @@ def setup_argument_parser():
 # ---------------------------------- MAIN ----------------------------------
 # --------------------------------------------------------------------------
 def main():
-    """ Main script function. """
+    """! Main script function. """
     handle_args()
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     extract_color_palettes()

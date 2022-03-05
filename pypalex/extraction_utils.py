@@ -1,8 +1,8 @@
-"""
+"""!
 #######################################################################
-Author:   Al Timofeyev
-Date:     February 10, 2022
-Desc:     Utilities for extracting colors from the image.
+@author Al Timofeyev
+@date   February 10, 2022
+@brief  Utilities for extracting colors from the image.
 #######################################################################
 """
 
@@ -13,10 +13,10 @@ from . import constants as const
 
 
 def extract_ratios(hsl_img_array):
-    """
-    Extracts the ratios of hues per pixel.
-    :param hsl_img_array:   2D Array of pixels in hsl array format.
-    :return:    Dictionary of hue ratios (percentage) in set [0.000, 100.000]
+    """!
+    @brief  Extracts the ratios of hues per pixel.
+    @param  hsl_img_array   2D Array of pixels in hsl array format.
+    @return Dictionary of hue ratios (percentage) in set [0.000, 100.000]
     """
     pixels = 0
     red_pixel = 0
@@ -62,12 +62,12 @@ def extract_ratios(hsl_img_array):
 # ***********************************************************************
 
 def construct_base_color_dictionary(hsl_img_array):
+    """!
+    @brief  Constructs dictionary of base colors from array of hsl pixel values.
+    @param  hsl_img_array   2D Array of pixels in hsl array format.
+    @return Dictionary of base colors.
     """
-    Constructs dictionary of base colors from array of hsl pixel values.
-    :param hsl_img_array:   2D Array of pixels in hsl array format.
-    :return:    Dictionary of base colors.
-    """
-    # Using index slicing since array is sorted and it's much faster.
+    # Using index slicing since array is sorted, and it's much faster.
     start_idx, end_idx = 0, 0
     while end_idx < len(hsl_img_array) and (
             const.RED_HUE_RANGE_MIN[0] <= hsl_img_array[end_idx][0] < const.RED_HUE_RANGE_MIN[1]):
@@ -117,18 +117,17 @@ def construct_base_color_dictionary(hsl_img_array):
 # ***********************************************************************
 
 def check_missing_colors(base_color_dict):
-    """
-    Checks for any missing colors in the base color dictionary and
-    borrows them from the surrounding colors.
-    Example of colors on color wheel being shown in linear format.
-    ________________________________________________________
-    || (Left side)..........................(Right side)  ||
-    || ---⦧-------⦧-------⦧------⦧------⦧-------⦧-----  ||
-    || |.red...magenta...blue...cyan...green...yellow.|  ||
-    || ----⦧-------⦧-------⦧------⦧-------⦧-------⦧--- ||
-    || |.green...yellow...red...magenta...blue...cyan.| ||
-    ------------------------------------------------------
-    :param base_color_dict: Dictionary with arrays of all the base colors.
+    """!
+    @brief  Checks for any missing colors in the base color dictionary and borrows them from the surrounding colors.
+    @details    Example of colors on color wheel being shown in linear format.
+                ________________________________________________________
+                || (Left side)..........................(Right side)  ||
+                || ---⦧-------⦧-------⦧------⦧------⦧-------⦧-----  ||
+                || |.red...magenta...blue...cyan...green...yellow.|  ||
+                || ----⦧-------⦧-------⦧------⦧-------⦧-------⦧--- ||
+                || |.green...yellow...red...magenta...blue...cyan.| ||
+                ------------------------------------------------------
+    @param  base_color_dict Dictionary with arrays of all the base colors.
     """
     if len(base_color_dict['Red']) == 0:
         base_color_dict['Red'] = borrow_for_color_red(base_color_dict, False, False)
@@ -148,12 +147,12 @@ def check_missing_colors(base_color_dict):
 # ---------------------------------------------------------------
 
 def borrow_for_color_red(base_color_dict, from_left, from_right):
-    """
-    Borrows colors for the base color red.
-    :param base_color_dict: Dictionary with arrays of all the base colors.
-    :param from_left:   Boolean flag for recursive calls, if we came from the left.
-    :param from_right:  Boolean flag for recursive calls, if we came from the right.
-    :return:    A list/array sample of a potential color substitute.
+    """!
+    @brief  Borrows colors for the base color red.
+    @param  base_color_dict Dictionary with arrays of all the base colors.
+    @param  from_left   Boolean flag for recursive calls, if we came from the left.
+    @param  from_right  Boolean flag for recursive calls, if we came from the right.
+    @return A list/array sample of a potential color substitute.
     """
     potential_red_yel, potential_red_mag = [], []
 
@@ -226,12 +225,12 @@ def borrow_for_color_red(base_color_dict, from_left, from_right):
 # ---------------------------------------------------------------
 
 def borrow_for_color_yellow(base_color_dict, from_left, from_right):
-    """
-    Borrows colors for the base color yellow.
-    :param base_color_dict: Dictionary with arrays of all the base colors.
-    :param from_left:   Boolean flag for recursive calls, if we came from the left.
-    :param from_right:  Boolean flag for recursive calls, if we came from the right.
-    :return:    A list/array sample of a potential color substitute.
+    """!
+    @brief  Borrows colors for the base color yellow.
+    @param  base_color_dict Dictionary with arrays of all the base colors.
+    @param  from_left   Boolean flag for recursive calls, if we came from the left.
+    @param  from_right  Boolean flag for recursive calls, if we came from the right.
+    @return A list/array sample of a potential color substitute.
     """
     potential_yel_grn, potential_yel_red = [], []
 
@@ -304,12 +303,12 @@ def borrow_for_color_yellow(base_color_dict, from_left, from_right):
 # ---------------------------------------------------------------
 
 def borrow_for_color_green(base_color_dict, from_left, from_right):
-    """
-    Borrows colors for the base color green.
-    :param base_color_dict: Dictionary with arrays of all the base colors.
-    :param from_left:   Boolean flag for recursive calls, if we came from the left.
-    :param from_right:  Boolean flag for recursive calls, if we came from the right.
-    :return:    A list/array sample of a potential color substitute.
+    """!
+    @brief  Borrows colors for the base color green.
+    @param  base_color_dict Dictionary with arrays of all the base colors.
+    @param  from_left   Boolean flag for recursive calls, if we came from the left.
+    @param  from_right  Boolean flag for recursive calls, if we came from the right.
+    @return A list/array sample of a potential color substitute.
     """
     potential_grn_cyn, potential_grn_yel = [], []
 
@@ -382,12 +381,12 @@ def borrow_for_color_green(base_color_dict, from_left, from_right):
 # ---------------------------------------------------------------
 
 def borrow_for_color_cyan(base_color_dict, from_left, from_right):
-    """
-    Borrows colors for the base color cyan.
-    :param base_color_dict: Dictionary with arrays of all the base colors.
-    :param from_left:   Boolean flag for recursive calls, if we came from the left.
-    :param from_right:  Boolean flag for recursive calls, if we came from the right.
-    :return:    A list/array sample of a potential color substitute.
+    """!
+    @brief  Borrows colors for the base color cyan.
+    @param  base_color_dict Dictionary with arrays of all the base colors.
+    @param  from_left   Boolean flag for recursive calls, if we came from the left.
+    @param  from_right  Boolean flag for recursive calls, if we came from the right.
+    @return A list/array sample of a potential color substitute.
     """
     potential_cyn_blu, potential_cyn_grn = [], []
 
@@ -460,12 +459,12 @@ def borrow_for_color_cyan(base_color_dict, from_left, from_right):
 # ---------------------------------------------------------------
 
 def borrow_for_color_blue(base_color_dict, from_left, from_right):
-    """
-    Borrows colors for the base color blue.
-    :param base_color_dict: Dictionary with arrays of all the base colors.
-    :param from_left:   Boolean flag for recursive calls, if we came from the left.
-    :param from_right:  Boolean flag for recursive calls, if we came from the right.
-    :return:    A list/array sample of a potential color substitute.
+    """!
+    @brief  Borrows colors for the base color blue.
+    @param  base_color_dict Dictionary with arrays of all the base colors.
+    @param  from_left   Boolean flag for recursive calls, if we came from the left.
+    @param  from_right  Boolean flag for recursive calls, if we came from the right.
+    @return A list/array sample of a potential color substitute.
     """
     potential_blu_mag, potential_blu_cyn = [], []
 
@@ -538,12 +537,12 @@ def borrow_for_color_blue(base_color_dict, from_left, from_right):
 # ---------------------------------------------------------------
 
 def borrow_for_color_magenta(base_color_dict, from_left, from_right):
-    """
-    Borrows colors for the base color magenta.
-    :param base_color_dict: Dictionary with arrays of all the base colors.
-    :param from_left:   Boolean flag for recursive calls, if we came from the left.
-    :param from_right:  Boolean flag for recursive calls, if we came from the right.
-    :return:    A list/array sample of a potential color substitute.
+    """!
+    @brief  Borrows colors for the base color magenta.
+    @param  base_color_dict Dictionary with arrays of all the base colors.
+    @param  from_left   Boolean flag for recursive calls, if we came from the left.
+    @param  from_right  Boolean flag for recursive calls, if we came from the right.
+    @return A list/array sample of a potential color substitute.
     """
     potential_mag_red, potential_mag_blue = [], []
 
@@ -616,10 +615,10 @@ def borrow_for_color_magenta(base_color_dict, from_left, from_right):
 # ***********************************************************************
 
 def extract_dominant_colors(base_color_dict):
-    """
-    Extracts dominant light, normal, dark colors from each of the base colors.
-    :param base_color_dict: Dictionary with arrays of all the base colors.
-    :return:    Dictionary of light, normal, dark colors for each of the base colors.
+    """!
+    @brief  Extracts dominant light, normal, dark colors from each of the base colors.
+    @param  base_color_dict Dictionary with arrays of all the base colors.
+    @return Dictionary of light, normal, dark colors for each of the base colors.
     """
     dominant_red_colors = extract_colors(base_color_dict['Red'])
     dominant_yellow_colors = extract_colors(base_color_dict['Yellow'])
@@ -652,10 +651,10 @@ def extract_dominant_colors(base_color_dict):
 # ---------------------------------------------------------------
 
 def extract_colors(hsl_base_color_array):
-    """
-    Extracts the dominant light, normal, dark colors from the color array.
-    :param hsl_base_color_array:    2D Array of hsl colors from one of the base colors.
-    :return:    List/Array of dominant light, normal, dark colors in hsl format.
+    """!
+    @brief  Extracts the dominant light, normal, dark colors from the color array.
+    @param  hsl_base_color_array    2D Array of hsl colors from one of the base colors.
+    @return List/Array of dominant light, normal, dark colors in hsl format.
     """
     light_colors, norm_colors, dark_colors = sort_by_light_value(hsl_base_color_array)
     light_color = extract_dominant_color(light_colors)
@@ -673,11 +672,10 @@ def extract_colors(hsl_base_color_array):
 # ---------------------------------------------------------------
 
 def sort_by_light_value(hsl_base_color_array):
-    """
-    Sorts the colors array by the lightness value and returns three
-    separate color arrays.
-    :param hsl_base_color_array:    2D Array of hsl colors from one of the base colors.
-    :return:    List/Array of light, normal, and dark colors from the array of hsl colors.
+    """!
+    @brief  Sorts the colors array by the lightness value and returns three separate color arrays.
+    @param  hsl_base_color_array    2D Array of hsl colors from one of the base colors.
+    @return List/Array of light, normal, and dark colors from the array of hsl colors.
     """
     light_colors = []
     norm_colors = []
@@ -699,10 +697,10 @@ def sort_by_light_value(hsl_base_color_array):
 # ---------------------------------------------------------------
 
 def extract_dominant_color(hsl_colors):
-    """
-    Extracts the dominant color from the hsl color array.
-    :param hsl_colors:  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
-    :return:    A dominant color list/array in hsl format [h, s, l].
+    """!
+    @brief  Extracts the dominant color from the hsl color array.
+    @param  hsl_colors  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
+    @return A dominant color list/array in hsl format [h, s, l].
     """
     dom_colors = get_dom_hue_colors(hsl_colors) # Get colors with dominant hues from hsl_colors.
     dom_colors = dom_colors[dom_colors[:, 1].argsort(axis=0)]   # Sort by 2nd column (s).
@@ -723,14 +721,14 @@ def extract_dominant_color(hsl_colors):
 # ---------------------------------------------------------------
 
 def get_dom_hue_colors(hsl_colors):
-    """
-    Construct list/array of a base color with the dominant hue.
-    Example: From the hsl_colors array, there could be 10 hues that
-    appear 4 times each, while the rest of the hues appear only once or
-    twice. These 10 hues will be extracted and returned because they
-    appear the most and are therefore the dominant hues.
-    :param hsl_colors:  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
-    :return:    List/array of all hsl colors that had the dominant number of hue values.
+    """!
+    @brief  Construct list/array of a base color with the dominant hue.
+    @details    Example: From the hsl_colors array, there could be 10 hues that
+                appear 4 times each, while the rest of the hues appear only once or
+                twice. The hsl_colors with these 10 hues will be extracted and
+                returned because they appear the most and are therefore the dominant hues.
+    @param  hsl_colors  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
+    @return List/array of all hsl colors that had the dominant number of hue values.
     """
     hue_pixel_dict: dict[int, numpy.ndarray] = {}
     hue_dict: [int, int] = {}
@@ -769,15 +767,15 @@ def get_dom_hue_colors(hsl_colors):
 # ---------------------------------------------------------------
 
 def get_dom_sat_colors(hsl_colors):
-    """
-    Construct list/array of a base color with the dominant saturation.
-    Example: From the hsl_colors array, there could be 5 saturation values
-    that appear 12 times each, while the rest of the saturation values
-    appear only once or twice. These 5 saturation values will be extracted
-    and returned because they appear the most and are therefore the
-    dominant saturation values.
-    :param hsl_colors:  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
-    :return:    List/array of all hsl colors that had the dominant number of saturation values.
+    """!
+    @brief  Construct list/array of a base color with the dominant saturation.
+    @details    Example: From the hsl_colors array, there could be 5 saturation values
+                that appear 12 times each, while the rest of the saturation values
+                appear only once or twice. The hsl_colors with these 5 saturation
+                values will be extracted and returned because they appear the most
+                and are therefore the dominant saturation values.
+    @param  hsl_colors  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
+    @return List/array of all hsl colors that had the dominant number of saturation values.
     """
     sat_pixel_dict: dict[int, numpy.ndarray] = {}
     sat_dict: [int, int] = {}
@@ -816,15 +814,15 @@ def get_dom_sat_colors(hsl_colors):
 # ---------------------------------------------------------------
 
 def get_dom_lit_colors(hsl_colors):
-    """
-    Construct list/array of a base color with the dominant lightness.
-    Example: From the hsl_colors array, there could be 2 lightness values
-    that appear 8 times each, while the rest of the lightness values
-    appear only once or twice. These 2 lightness values will be extracted
-    and returned because they appear the most and are therefore the
-    dominant lightness values.
-    :param hsl_colors:  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
-    :return:    List/array of all hsl colors that had the dominant number of lightness values.
+    """!
+    @brief  Construct list/array of a base color with the dominant lightness.
+    @details    Example: From the hsl_colors array, there could be 2 lightness values
+                that appear 8 times each, while the rest of the lightness values
+                appear only once or twice. The hsl_colors with these 2 lightness
+                values will be extracted and returned because they appear the most
+                and are therefore the dominant lightness values.
+    @param  hsl_colors  2D Array of hsl colors from one of the base colors [Red, Green, Blue, etc.].
+    @return List/array of all hsl colors that had the dominant number of lightness values.
     """
     lit_pixel_dict: dict[int, numpy.ndarray] = {}
     lit_dict: [int, int] = {}
@@ -863,12 +861,11 @@ def get_dom_lit_colors(hsl_colors):
 # ---------------------------------------------------------------
 
 def check_colors(light_color, norm_color, dark_color):
-    """
-    Checks to make sure all the color types have been properly
-    set by <extract_colors()> function.
-    :param light_color: Light hsl color.
-    :param norm_color:  Normal hsl color.
-    :param dark_color:  Dark hsl color.
+    """!
+    @brief  Checks to make sure all the color types have been properly set by <extract_colors()> function.
+    @param  light_color Light hsl color.
+    @param  norm_color  Normal hsl color.
+    @param  dark_color  Dark hsl color.
     """
     has_light = light_color[0] != -1
     has_norm = norm_color[0] != -1
@@ -924,10 +921,10 @@ def check_colors(light_color, norm_color, dark_color):
 # ---------------------------------------------------------------
 
 def check_sat_and_light(hsl_color):
-    """
-    Normalize saturation and lightness so that saturation isn't
-    completely 0% and that lightness isn't 0% or 100%.
-    :param hsl_color:   An hsl color in list/array format [h, s, l].
+    """!
+    @brief  Normalize saturation and lightness so that saturation isn't
+            completely 0% and that lightness isn't 0% or 100%.
+    @param  hsl_color   An hsl color in list/array format [h, s, l].
     """
     # Edge case, don't do this for values of [-1, -1, -1]
     if hsl_color[0] == -1:
@@ -948,11 +945,10 @@ def check_sat_and_light(hsl_color):
 # ***********************************************************************
 
 def generate_remaining_colors(dom_color_dict, ratios):
-    """
-    Generate the remaining black and white, and background and
-    foreground colors.
-    :param dom_color_dict:  Dictionary of dominant light, normal, dark base colors.
-    :param ratios:  Dictionary of ratios of the base colors in image.
+    """!
+    @brief  Generate the remaining black and white, and background and foreground colors.
+    @param  dom_color_dict  Dictionary of dominant light, normal, dark base colors.
+    @param  ratios  Dictionary of ratios of the base colors in image.
     """
     # Get the most and least dominant colors.
     most_dom_color, least_dom_color = get_color_extremes(ratios)
@@ -984,10 +980,10 @@ def generate_remaining_colors(dom_color_dict, ratios):
 # ---------------------------------------------------------------
 
 def get_color_extremes(ratios):
-    """
-    Determines the most and least dominant color in the image.
-    :param ratios:  Dictionary of ratios of the base colors in image.
-    :return:    List/array of most and least dominant color as strings.
+    """!
+    @brief  Determines the most and least dominant color in the image.
+    @param  ratios  Dictionary of ratios of the base colors in image.
+    @return List/array of most and least dominant color as strings.
     """
     most_dom_color_percentage = 0.0
     least_dom_color_percentage = 100.0
@@ -1028,10 +1024,10 @@ def get_color_extremes(ratios):
 # ---------------------------------------------------------------
 
 def generate_black_and_white(hsl_color):
-    """
-    Generate a black and white color using the hsl_color.
-    :param hsl_color: The hsl color array from which to generate black and white.
-    :return:    List/array of light, normal, dark black and white hsl colors.
+    """!
+    @brief  Generate a black and white color using the hsl_color.
+    @param  hsl_color   The hsl color array from which to generate black and white.
+    @return List/array of light, normal, dark black and white hsl colors.
     """
     black_color = numpy.zeros(3, dtype=float)
     white_color = numpy.zeros(3, dtype=float)
@@ -1058,12 +1054,11 @@ def generate_black_and_white(hsl_color):
 # ---------------------------------------------------------------
 
 def generate_background_and_foreground(most_dom_hsl_color, least_dom_hsl_color):
-    """
-    Generates the background and foreground colors based on the most and
-    least dominant colors.
-    :param most_dom_hsl_color: The hsl color array from which to generate background.
-    :param least_dom_hsl_color: The hsl color array from which to generate foreground.
-    :return: List/array of background and foreground hsl colors.
+    """!
+    @brief  Generates the background and foreground colors based on the most and least dominant colors.
+    @param  most_dom_hsl_color  The hsl color array from which to generate background.
+    @param  least_dom_hsl_color The hsl color array from which to generate foreground.
+    @return List/array of background and foreground hsl colors.
     """
     light_background_color = numpy.zeros(3, dtype=float)
     light_foreground_color = numpy.zeros(3, dtype=float)

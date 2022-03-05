@@ -1,16 +1,16 @@
-"""
+"""!
 #######################################################################
-Author:   Al Timofeyev
-Date:     March 3, 2022
-Desc:     Archive of messages to display for arguments supplied by user.
+@author Al Timofeyev
+@date   March 3, 2022
+@brief  Archive of messages to display for arguments supplied by user.
 #######################################################################
 """
 
 
 def bad_source_message():
-    """
-    Returns an error message if the sources provided were not images.
-    :return: The "bad sources" message.
+    """!
+    @brief  Returns an error message if the sources provided were not images.
+    @return The "bad sources" message.
     """
     message = "**** Execution Terminated ****\n"
     message += "The image sources provided contained no valid images\n"
@@ -19,10 +19,9 @@ def bad_source_message():
 
 
 def bad_directory_message():
-    """
-    Returns an error message if the directory provided is not a
-    valid directory.
-    :return: The "bad directory" message.
+    """!
+    @brief  Returns an error message if the directory provided is not a valid directory.
+    @return The "bad directory" message.
     """
     message = "**** Execution Terminated ****\n"
     message += "The directory provided is not a valid directory\n"
@@ -31,9 +30,9 @@ def bad_directory_message():
 
 
 def no_args_help_message():
-    """
-    Returns a help message if no arguments were presented.
-    :return: The "no arguments" help message.
+    """!
+    @brief  Returns a help message if no arguments were presented.
+    @return The "no arguments" help message.
     """
     message = "**** Execution Terminated ****\n"
     message += "No Options were provided. Please use Options with PyPalEx.\n"
