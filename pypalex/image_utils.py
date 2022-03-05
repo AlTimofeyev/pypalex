@@ -19,7 +19,7 @@ def process_image(image):
     @brief  Processes PIL Image object.
     @details    Multiprocessing example from: https://stackoverflow.com/a/45555516
     @param  image   PIL Image object.
-    @return List with the unique and full hsl arrays of image.
+    @return List of full hsl arrays (pixels) of image.
     """
     # Rescale image to reduce data sample.
     new_size = rescale_image(image)
