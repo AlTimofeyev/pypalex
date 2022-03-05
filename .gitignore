@@ -2,3 +2,4 @@ pypalex/venv/
 .DS_Store
 .idea
 __pycache__
+Doxyfile
