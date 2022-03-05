@@ -119,14 +119,16 @@ def construct_base_color_dictionary(hsl_img_array):
 def check_missing_colors(base_color_dict):
     """!
     @brief  Checks for any missing colors in the base color dictionary and borrows them from the surrounding colors.
-    @details    Example of colors on color wheel being shown in linear format.\n
-                ________________________________________________________\n
-                || (Left side)..........................(Right side)  ||\n
-                || ---⦧-------⦧-------⦧------⦧------⦧-------⦧-----  ||\n
-                || |.red...magenta...blue...cyan...green...yellow.|  ||\n
-                || ----⦧-------⦧-------⦧------⦧-------⦧-------⦧--- ||\n
-                || |.green...yellow...red...magenta...blue...cyan.| ||\n
-                ------------------------------------------------------
+    @internal
+    Example of colors on color wheel being shown in linear format:
+    ________________________________________________________
+    || (Left side)..........................(Right side)  ||
+    || ---⦧-------⦧-------⦧------⦧------⦧-------⦧-----  ||
+    || |.red...magenta...blue...cyan...green...yellow.|  ||
+    || ----⦧-------⦧-------⦧------⦧-------⦧-------⦧--- ||
+    || |.green...yellow...red...magenta...blue...cyan.| ||
+    ------------------------------------------------------
+    @endinternal
     @param  base_color_dict Dictionary with arrays of all the base colors.
     """
     if len(base_color_dict['Red']) == 0:
