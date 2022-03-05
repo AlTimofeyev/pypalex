@@ -65,4 +65,4 @@ export PATH="${PATH}:${HOME}/.local/bin/"
 
 
 ## **CODE DOCUMENTATION**
-\[[Documentation](https://docs.google.com/viewer?url=${https://github.com/AlTimofeyev/pypalex/Documentation-PyPalEx.pdf})]
+\[[Documentation](https://docs.google.com/viewer?url=${https://github.com/AlTimofeyev/pypalex/pypalex_code_documentation.pdf})]
