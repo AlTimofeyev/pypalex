@@ -19,6 +19,7 @@ class Extractor:
     def __init__(self, full_hsl_img_array, output_path):
         """!
         @brief  Extractor Constructor.
+        @param  self    The object pointer.
         @param  full_hsl_img_array  A 2D numpy array of all the pixels from image, in hsl format.
         @param  output_path Output path and filename of where to store color palette.
         """
