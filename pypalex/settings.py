@@ -1,8 +1,8 @@
-"""
+"""!
 #######################################################################
-Author: Al Timofeyev
-Date:   March 2, 2022
-Desc:   Settings for PyPalEx.
+@author Al Timofeyev
+@date   March 2, 2022
+@brief  Settings for PyPalEx.
 
 NOTE:
 This code has been borrowed from Dylan Araps PyWal

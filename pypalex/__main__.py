@@ -3,7 +3,7 @@
 @author Al Timofeyev
 @date   February 2, 2022
 @brief  Main script for PyPalEx.
-@details    This utility tool extracts color palettes from images.
+@details    This tool is for extracting color palettes from images.
 #######################################################################
 """
 
