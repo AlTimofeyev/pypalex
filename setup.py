@@ -2,13 +2,12 @@
 palex - setup.py
 
 NOTE:
-This code has been borrowed from Dylan Araps PyWal
-on github: https://github.com/dylanaraps/pywal
+This code from Dylan Araps PyWal on github: https://github.com/dylanaraps/pywal
+has been borrowed and used as a template.
 """
 import sys
 import setuptools
-# NEEDS TO BE UPDATED LATER!!!!!
-# UPDATE PYTHON VERSION, KEYWORDS, AND TESTS (test if needed).
+
 try:
     import pypalex
 except ImportError:
@@ -24,10 +23,12 @@ setuptools.setup(
     version=VERSION,
     author="Al Timofeyev",
     author_email="al.timofeyev@outlook.com",
-    description="Extract color palettes from images into json files",
+    description="Python Palette Extractor: extracts color palettes from images into json files.",
     long_description_content_type="text/markdown",
     long_description=LONG_DESC,
-    keywords="palex color-palette colorscheme extract-colorscheme extractor colorscheme-generator",
+    install_requires=['Pillow', 'numpy', 'filetype'],
+    # keywords="python palex color-palette colorscheme extract-colorscheme extract-palette extractor",
+    keywords=['python', 'pypalex', 'palex', 'color-palette', 'colorscheme', 'extract-colorscheme', 'extract-palette', 'extractor'],
     license="MIT",
     url="https://github.com/AlTimofeyev/pypalex",
     download_url=DOWNLOAD,
@@ -45,6 +46,5 @@ setuptools.setup(
     packages=["pypalex"],
     entry_points={"console_scripts": ["palex=pypalex.__main__:main"]},
     python_requires=">=3.7",
-    # test_suite="tests",
     include_package_data=True,
     zip_safe=False)
