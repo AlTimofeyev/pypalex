@@ -13,7 +13,7 @@ on github: https://github.com/dylanaraps/pywal/blob/master/pywal/settings.py
 import os
 import platform
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __cache_version__ = "1.0.0"
 
 HOME = os.getenv("HOME", os.getenv("USERPROFILE"))

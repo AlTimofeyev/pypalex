@@ -167,6 +167,7 @@ def handle_args():
     """! Handles the arguments passed to PyPalEx. """
     # Converts arguments into a dictionary:
     # {'File': None, 'Directory': None, 'Output': None}
+    global ARGUMENT_PARSER
     args = vars(ARGUMENT_PARSER.parse_args())
 
     # Exit if no files/directories were provided.
