@@ -667,6 +667,10 @@ def extract_colors(hsl_base_color_array):
     check_sat_and_light(norm_color)
     check_sat_and_light(dark_color)
     check_colors(light_color, norm_color, dark_color)
+    check_sat_and_light(light_color)
+    check_sat_and_light(norm_color)
+    check_sat_and_light(dark_color)
+
     return [light_color, norm_color, dark_color]
 
 
@@ -883,11 +887,14 @@ def check_colors(light_color, norm_color, dark_color):
             dark_color[2] = 100 - light_color[2] + round(random.uniform(-5.0, 5.0), 1)
         elif has_norm:
             dark_color[0] = norm_color[0]
-            sat_diff = round(norm_color[1] / 2, 1)
-            dark_color[1] = norm_color[1] - sat_diff
-            diff_dark_norm = round(norm_color[2] / 2, 1)
-            dark_color[2] = norm_color[2] - diff_dark_norm
-        check_sat_and_light(dark_color)
+            sat_diff = norm_color[1] / 2 if norm_color[1] < 50 else (100 - norm_color[1]) / 2
+            sat_diff = round(sat_diff, 1)
+            dark_color[1] = norm_color[1] + sat_diff if norm_color[1] < 50 else norm_color[1] - sat_diff
+            # dark_color[1] = norm_color[1] - sat_diff
+            light_diff = norm_color[2] / 2 if norm_color[2] < 50 else (100 - norm_color[2]) / 2
+            light_diff = round(light_diff, 1)
+            dark_color[2] = norm_color[2] - light_diff
+        # check_sat_and_light(dark_color)
 
     # Check and set light color.
     if not has_light:
@@ -899,11 +906,14 @@ def check_colors(light_color, norm_color, dark_color):
             light_color[2] = 100 - dark_color[2] + round(random.uniform(-5.0, 5.0), 1)
         elif has_norm:
             light_color[0] = norm_color[0]
-            sat_diff = round((100 - norm_color[1]) / 2, 1)
-            light_color[1] = norm_color[1] + sat_diff
-            diff_light_norm = round(norm_color[2] / 2, 1)
-            light_color[2] = norm_color[2] + diff_light_norm
-        check_sat_and_light(light_color)
+            sat_diff = norm_color[1] / 2 if norm_color[1] < 50 else (100 - norm_color[1]) / 2
+            sat_diff = round(sat_diff, 1)
+            light_color[1] = norm_color[1] + sat_diff if norm_color[1] < 50 else norm_color[1] - sat_diff
+            # light_color[1] = norm_color[1] + sat_diff
+            light_diff = norm_color[2] / 2 if norm_color[2] < 50 else (100 - norm_color[2]) / 2
+            light_diff = round(light_diff, 1)
+            light_color[2] = norm_color[2] + light_diff
+        # check_sat_and_light(light_color)
 
     # Check and set normal color
     if not has_norm:
@@ -916,7 +926,7 @@ def check_colors(light_color, norm_color, dark_color):
         norm_color[1] = (dark_color[1] + sat_diff) if dark_color[1] < light_color[1] else (
                 light_color[1] + sat_diff)
         norm_color[2] = dark_color[2] + light_diff
-        check_sat_and_light(norm_color)
+        # check_sat_and_light(norm_color)
 
 
 # ---------------------------------------------------------------
@@ -1039,7 +1049,7 @@ def generate_black_and_white(hsl_color):
     black_color[2] = 10.0
     white_color[0] = hsl_color[0]
     white_color[1] = 10.0
-    white_color[2] = 90.0
+    white_color[2] = 85.0
 
     light_black_color = numpy.array([-1.0, -1.0, -1.0])
     dark_black_color = numpy.array([-1.0, -1.0, -1.0])
