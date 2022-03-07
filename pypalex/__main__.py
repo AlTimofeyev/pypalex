@@ -27,7 +27,7 @@ PROPER_IMAGES = []
 OUTPUT_DIRS = []
 OUTPUT_DIR = ''
 OUTPUT_TAIL = "-color_palette.json"
-ARGUMENT_PARSER = None
+ARGUMENT_PARSER = argparse.ArgumentParser("<Placeholder>")
 
 
 def thread_helper(extractor):
