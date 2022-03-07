@@ -4,3 +4,6 @@ pypalex/venv/
 __pycache__
 Doxyfile
 PyPalEx_Documentation_Files/
+build/
+dist/
+pypalex.egg-info/
