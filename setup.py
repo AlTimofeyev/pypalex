@@ -34,7 +34,7 @@ setuptools.setup(
     download_url=DOWNLOAD,
     classifiers=[
         "Environment :: X11 Applications",
-        "License :: MIT License",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: MacOS",
         "Operating System :: POSIX :: Linux",
         "Operating System :: Microsoft :: Windows",
