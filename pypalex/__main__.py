@@ -27,7 +27,6 @@ PROPER_IMAGES = []
 OUTPUT_DIRS = []
 OUTPUT_DIR = ''
 OUTPUT_TAIL = "-color_palette.json"
-ARGUMENT_PARSER = argparse.ArgumentParser("<Placeholder>")
 
 
 def thread_helper(extractor):
@@ -163,12 +162,40 @@ def check_path(full_path):
 # ***********************************************************************
 
 
+def setup_argument_parser():
+    """!
+    @brief  Sets up the argument parser for command line arguments.
+    @return A command line argument parsing object.
+    """
+    description = "PyPalEx is a color palette extraction tool "
+    description += "for extracting light, normal and dark color "
+    description += "palettes from images into json files."
+
+    argument_parser = argparse.ArgumentParser(description)
+
+    argument_parser.add_argument("-f", "--Files", metavar="FILES", nargs="*",
+                                 help="Specify the file path(s). (e.g. -f /path/to/images/image.png) "
+                                      "If used with '-d' directory option, you only need to list the filename(s). "
+                                      "(e.g. -f image1.png image2.jpeg -d /path/to/images/)")
+    argument_parser.add_argument("-d", "--Directory", metavar="",
+                                 help="Specify the directory from where to convert images. "
+                                      "(e.g. -d /path/to/images/)")
+    argument_parser.add_argument("-o", "--Output", metavar="",
+                                 help="Specify the output directory where to store the JSON color palette. "
+                                      "(e.g. -o /path/to/output/)")
+
+    return argument_parser
+
+# ***********************************************************************
+# ***********************************************************************
+
+
 def handle_args():
     """! Handles the arguments passed to PyPalEx. """
     # Converts arguments into a dictionary:
     # {'File': None, 'Directory': None, 'Output': None}
-    global ARGUMENT_PARSER
-    args = vars(ARGUMENT_PARSER.parse_args())
+    argument_parser = setup_argument_parser()
+    args = vars(argument_parser.parse_args())
 
     # Exit if no files/directories were provided.
     if (args['Files'] is None or args['Files'] == []) and args['Directory'] is None:
@@ -188,31 +215,6 @@ def handle_args():
 
     set_global_args(args)
 
-# ***********************************************************************
-# ***********************************************************************
-
-
-def setup_argument_parser():
-    """! Sets up the argument parser for command line arguments. """
-    global ARGUMENT_PARSER
-
-    description = "PyPalEx is a color palette extraction tool "
-    description += "for extracting light, normal and dark color "
-    description += "palettes from images into json files."
-
-    ARGUMENT_PARSER = argparse.ArgumentParser(description)
-
-    ARGUMENT_PARSER.add_argument("-f", "--Files", metavar="FILES", nargs="*",
-                                 help="Specify the file path(s). (e.g. -f /path/to/images/image.png) "
-                                      "If used with '-d' directory option, you only need to list the filename(s). "
-                                      "(e.g. -f image1.png image2.jpeg -d /path/to/images/)")
-    ARGUMENT_PARSER.add_argument("-d", "--Directory", metavar="",
-                                 help="Specify the directory from where to convert images. "
-                                      "(e.g. -d /path/to/images/)")
-    ARGUMENT_PARSER.add_argument("-o", "--Output", metavar="",
-                                 help="Specify the output directory where to store the JSON color palette. "
-                                      "(e.g. -o /path/to/output/)")
-
 
 # --------------------------------------------------------------------------
 # ---------------------------------- MAIN ----------------------------------
@@ -229,5 +231,4 @@ def main():
 
 
 if __name__ == '__main__':
-    setup_argument_parser()
     main()
