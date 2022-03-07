@@ -1,9 +1,9 @@
-pypalex/venv/
+venv/*
 .DS_Store
 .idea
 __pycache__
 Doxyfile
-PyPalEx_Documentation_Files/
-build/
-dist/
-pypalex.egg-info/
+PyPalEx_Documentation_Files/*
+build/*
+dist/*
+pypalex.egg-info/*
