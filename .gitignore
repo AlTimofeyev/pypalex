@@ -7,5 +7,4 @@ PyPalEx_Documentation_Files/*
 build/*
 dist/*
 pypalex.egg-info/*
-TestPyPi_PyPalEx_Testing_Token.txt
-Creating_Python_Package_Help.txt 
+Helpful_Resources/*
