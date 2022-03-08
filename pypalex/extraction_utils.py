@@ -1087,8 +1087,8 @@ def generate_background_and_foreground(most_dom_hsl_color, least_dom_hsl_color):
     light_foreground_color[2] = 15.0
 
     norm_background_color[0] = most_dom_hsl_color[0]
-    norm_background_color[1] = 10.0
-    norm_background_color[2] = 60.0
+    norm_background_color[1] = 15.0
+    norm_background_color[2] = 50.0
     norm_foreground_color[0] = least_dom_hsl_color[0]
     norm_foreground_color[1] = 42.0
     norm_foreground_color[2] = 88.0
