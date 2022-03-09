@@ -21,9 +21,9 @@ PyPalEx is a tool for extracting color palettes from images and generating a JSO
 
 PyPalEx picks out the most dominant light, normal, and dark color for each of the base colors [red, yellow, green, cyan, blue, magenta] in an image and constructs a color palette for each of these three variants. When a specific color is not present in an image, that color is borrowed from one of the colors that *is* present. (e.g. Colors red and cyan are missing from an image, so red and cyan are borrowed from the colors that are present in the image.)
 
-### [**_WIKI HOMEPAGE_**](https://github.com/AlTimofeyev/pypalex/wiki)
+### [**_WIKI HOMEPAGE_**](https://github.com/AlTimofeyev/pypalex/wiki/Welcome-to-the-PyPalEx-Wiki!)
 
-### [**_WIKI PALETTE EXAMPLES ARCHIVE_**](https://github.com/AlTimofeyev/pypalex/wiki/Palette-Examples-Archive)
+### [**_WIKI PALETTE EXAMPLES ARCHIVE_**](https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples)
 
 ### **_NOTE_**
 Future updates may include a `-p --pastel` option for generating pastel palettes from the extracted colors as well as a `-g --generate` option for generating missing colors from their respective hue range instead of borrowing missing colors from pre-existing colors in the image.
