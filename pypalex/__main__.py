@@ -15,11 +15,10 @@ import filetype
 from PIL import Image
 import multiprocessing
 
-from .settings import CONF_DIR
+from .settings import __version__, CONF_DIR
 from .Extractor import Extractor
 from . import image_utils as imutils
 from . import arg_messages as argmsg
-
 
 # ---- GLOBAL VARIABLES ----
 EXTRACTORS = []
@@ -72,10 +71,10 @@ def set_global_args(args):
     global OUTPUT_DIRS
     global PROPER_IMAGES
 
-    OUTPUT_DIR = args['Output'] if args['Output'] is not None and args['Output'] != '' else CONF_DIR
-    args_directory = args['Directory']
+    OUTPUT_DIR = args['output'] if args['output'] is not None and args['output'] != '' else CONF_DIR
+    args_directory = args['directory']
 
-    for image_path in args['Files']:
+    for image_path in args['files']:
         directory, filename = os.path.split(image_path)
         filename, extension = filename.split('.')
         if args_directory is not None:
@@ -167,22 +166,24 @@ def setup_argument_parser():
     @brief  Sets up the argument parser for command line arguments.
     @return A command line argument parsing object.
     """
-    description = "PyPalEx is a color palette extraction tool "
-    description += "for extracting light, normal and dark color "
-    description += "palettes from images into json files."
+    desc = "PyPalEx is a color palette extraction tool "
+    desc += "for extracting light, normal and dark color "
+    desc += "palettes from images into json files.\n"
 
-    argument_parser = argparse.ArgumentParser(description)
+    argument_parser = argparse.ArgumentParser(description=desc, usage="palex [options][arguments]")
 
-    argument_parser.add_argument("-f", "--Files", metavar="FILES", nargs="*",
+    argument_parser.add_argument("-f", "--files", metavar="FILES", type=str, nargs="*",
                                  help="Specify the file path(s). (e.g. -f /path/to/images/image.png) "
                                       "If used with '-d' directory option, you only need to list the filename(s). "
                                       "(e.g. -f image1.png image2.jpeg -d /path/to/images/)")
-    argument_parser.add_argument("-d", "--Directory", metavar="",
-                                 help="Specify the directory from where to convert images. "
+    argument_parser.add_argument("-d", "--directory", metavar="", type=str,
+                                 help="Specify the directory from where to use images. "
                                       "(e.g. -d /path/to/images/)")
-    argument_parser.add_argument("-o", "--Output", metavar="",
+    argument_parser.add_argument("-o", "--output", metavar="", type=str,
                                  help="Specify the output directory where to store the JSON color palette. "
                                       "(e.g. -o /path/to/output/)")
+    argument_parser.add_argument("-v", "--version", action="store_true",
+                                 help="Prints the PyPalEx version.")
 
     return argument_parser
 
@@ -193,24 +194,29 @@ def setup_argument_parser():
 def handle_args():
     """! Handles the arguments passed to PyPalEx. """
     # Converts arguments into a dictionary:
-    # {'File': None, 'Directory': None, 'Output': None}
+    # {'files': None, 'directory': None, 'output': None}
     argument_parser = setup_argument_parser()
     args = vars(argument_parser.parse_args())
 
+    # Check if pypalex version was requested.
+    if args['version']:
+        print("pypalex ", __version__, sep="")
+        sys.exit()
+
     # Exit if no files/directories were provided.
-    if (args['Files'] is None or args['Files'] == []) and args['Directory'] is None:
+    if (args['files'] is None or args['files'] == []) and args['directory'] is None:
         sys.exit(argmsg.no_args_help_message())
 
     # Check either the file(s) or the file(s) in directory to make sure
     # there are valid images to work with.
-    if args['Files']:
-        if not check_sources(args['Files'], args['Directory']):
+    if args['files']:
+        if not check_sources(args['files'], args['directory']):
             sys.exit(argmsg.bad_source_message())
-    elif args['Directory'] is not None:
-        if not check_path(args['Directory']):
+    elif args['directory'] is not None:
+        if not check_path(args['directory']):
             sys.exit(argmsg.bad_directory_message())
-        args['Files'] = os.listdir(args['Directory'])
-        if not check_sources(args['Files'], args['Directory']):
+        args['files'] = os.listdir(args['directory'])
+        if not check_sources(args['files'], args['directory']):
             sys.exit(argmsg.bad_source_message())
 
     set_global_args(args)

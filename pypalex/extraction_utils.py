@@ -947,10 +947,10 @@ def check_sat_and_light(hsl_color):
         hsl_color[1] = round(random.uniform(5.0, 10.0), 1)
 
     # Check and re-set lightness.
-    if hsl_color[2] > 95:
-        hsl_color[2] = round(random.uniform(85.0, 95.0), 1)
-    elif hsl_color[2] < 5:
-        hsl_color[2] = round(random.uniform(5.0, 10.0), 1)
+    if hsl_color[2] > 90:
+        hsl_color[2] = round(random.uniform(80.0, 90.0), 1)
+    elif hsl_color[2] < 15:
+        hsl_color[2] = round(random.uniform(15.0, 25.0), 1)
 
 
 # ***********************************************************************
@@ -1045,8 +1045,8 @@ def generate_black_and_white(hsl_color):
     white_color = numpy.zeros(3, dtype=float)
 
     black_color[0] = hsl_color[0]
-    black_color[1] = 60.0
-    black_color[2] = 10.0
+    black_color[1] = 50.0
+    black_color[2] = 15.0
     white_color[0] = hsl_color[0]
     white_color[1] = 10.0
     white_color[2] = 85.0
@@ -1091,7 +1091,7 @@ def generate_background_and_foreground(most_dom_hsl_color, least_dom_hsl_color):
     norm_background_color[2] = 50.0
     norm_foreground_color[0] = least_dom_hsl_color[0]
     norm_foreground_color[1] = 42.0
-    norm_foreground_color[2] = 88.0
+    norm_foreground_color[2] = 85.0
 
     dark_background_color[0] = most_dom_hsl_color[0]
     dark_background_color[1] = 10.0
