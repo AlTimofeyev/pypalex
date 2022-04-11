@@ -5,12 +5,15 @@
 - [**Description**](#description)
     - [Wiki Homepage](#wiki-homepage)
     - [Palette Examples Archive](#wiki-palette-examples-archive)
-    - [Note](#note)
+    - [Note](#note-1)
 - [**Installation**](#installation)
     - [Dependencies](#dependencies)
     - [Environment Variables](#environment-variables)
     - [Install](#install)
 - [**User Guide**](#user-guide)
+    - [Options List](#options-list)
+    - [Note](#note-2)
+    - [Example Usage](#example-usage)
 - [**Code Documentation**](#code-documentation)
 
 <br>
@@ -25,7 +28,7 @@ PyPalEx picks out the most dominant light, normal, and dark color for each of th
 
 ### [**_WIKI PALETTE EXAMPLES ARCHIVE_**](https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples)
 
-### **_NOTE_**
+### **_NOTE 1_**
 Future updates may include a `-p --pastel` option for generating pastel palettes from the extracted colors as well as a `-g --generate` option for generating missing colors from their respective hue range instead of borrowing missing colors from pre-existing colors in the image.
 
 
@@ -74,21 +77,34 @@ export PATH="${PATH}:${HOME}/.local/bin/"
 
 ## **USER GUIDE**
 Instructions on how to use PyPalEx.  
-There are three argument options: `-f --Files`, `-d --Directory`, `-o --Output`. When using PyPalEx, the use of either `-f --Files` and/or `-d --Directory` is a **MUST**. Without either, or both of, these two options being specified, PyPalEx will not work.
+
+### **_OPTIONS LIST_**
+- `-f --files`
+  - Specify the file path(s).
+  - If used with `-d --directory` option, you only need to list the filename(s).
+- `-d --directory`
+  - Specify the directory from where to use images.
+- `-o --output`
+  - Specify the output directory where to store the JSON color palette.
+- `-v --version`
+  -  Prints the PyPalEx version.
+
+### **_NOTE 2_**
+When using PyPalEx, the use of either `-f --files` and/or `-d --directory` is a **MUST**. Without either, or both of, these two options being specified, PyPalEx will not work.
 
 ### **_EXAMPLE USAGE_**
-#### **`-f --Files` Option**
+#### **`-f --files` Option**
 ```sh
 palex -f path/to/image/dir/image.jpeg
 ```
 ```sh
 palex -f path/to/image/dir/image.jpeg path/to/image/dir/image2.PNG
 ```
-The `-f --Files` option can be used with a singular image file or with multiple image files. When used without the `-d --Directory` option, the user must specify the full path to the image they want to use with PyPalEx.
+The `-f --files` option can be used with a singular image file or with multiple image files. When used without the `-d --directory` option, the user must specify the full path to the image they want to use with PyPalEx.
 
 <br>
 
-#### **`-d --Directory` Option**
+#### **`-d --directory` Option**
 ```sh
 palex -d path/to/image/dir/
 ```
@@ -98,11 +114,11 @@ palex -d path/to/image/dir/ -f image.png
 ```sh
 palex -f image1.png image2.jpg image3.jpeg -d path/to/image/dir/
 ```
-The `-d --Directory` option can be used with a whole directory of images and files or it be used as a reference point for the `-f --Files` option. PyPalEx will skip over files that are not images in the directory specified, if only the directory option is supplied by the user. The order of the options also does not matter, you can specify `-f --Files` first and then `-d --Directory` and vice versa. When the `-f --Files` option is used with `-d --Directory`, the user does not have to specify the full path to the images, just the image names, the directory that was provided will be searched for the image names specified.
+The `-d --directory` option can be used with a whole directory of images and files or it be used as a reference point for the `-f --files` option. PyPalEx will skip over files that are not images in the directory specified, if only the directory option is supplied by the user. The order of the options also does not matter, you can specify `-f --files` first and then `-d --directory` and vice versa. When the `-f --files` option is used with `-d --directory`, the user does not have to specify the full path to the images, just the image names, the directory that was provided will be searched for the image names specified.
 
 <br>
 
-#### **`-o --Output` Option**
+#### **`-o --output` Option**
 ```sh
 palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ 
 ```
@@ -115,7 +131,24 @@ palex -d path/to/image/dir/ -f image.png -o path/to/output/dir/
 ```sh
 palex -f image1.png image2.jpg image3.jpeg -o path/to/output/dir/ -d path/to/image/dir/
 ```
-The `-o --Output` option can be used with both the `-f --Files` and `-d --Directory` options. The order of the options also does not matter. The sole purpose of the `-o --Output` option is to let the user override the default save directory. As mentioned earlier, PyPalEx has a default save directory, where it can save all the extracted palettes to, which is either the global shell variable `PYPALEX_CONFIG_DIR` __or__ wherever (`XDG_CONFIG_HOME/palex` or `$HOME/.config/palex`) points to in the system.
+The `-o --output` option can be used with both the `-f --files` and `-d --directory` options. The order of the options also does not matter. The sole purpose of the `-o --output` option is to let the user override the default save directory. As mentioned earlier, PyPalEx has a default save directory, where it can save all the extracted palettes to, which is either the global shell variable `PYPALEX_CONFIG_DIR` __or__ wherever (`XDG_CONFIG_HOME/palex` or `$HOME/.config/palex`) points to in the system.
+
+<br>
+
+#### **`-v --version` Option**
+```sh
+palex -v
+```
+```sh
+palex --version
+```
+The `-v --version` option is used to print the PyPalEx version number.  
+Please note the following:
+
+```sh
+palex --version -f path/to/image/dir/image.jpeg
+```
+This will also **ONLY** print the version number. If other options are used with PyPalEx when `-v --version` is used, PyPalEx will only print the version number and stop execution.
 
 <br>
 
