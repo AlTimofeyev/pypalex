@@ -26,6 +26,10 @@ PROPER_IMAGES = []
 OUTPUT_DIRS = []
 OUTPUT_DIR = ''
 OUTPUT_TAIL = "-color_palette.json"
+PASTEL = False
+PASTEL_L = False
+PASTEL_N = False
+PASTEL_D = False
 
 
 def thread_helper(extractor):
@@ -49,7 +53,7 @@ def extract_color_palettes():
     for index, image_dir in enumerate(PROPER_IMAGES):
         image = Image.open(image_dir)
         full_hsl_img_array = imutils.process_image(image)
-        extractor = Extractor(full_hsl_img_array, OUTPUT_DIRS[index])
+        extractor = Extractor(full_hsl_img_array, OUTPUT_DIRS[index], PASTEL, PASTEL_L, PASTEL_N, PASTEL_D)
         EXTRACTORS.append(extractor)
 
     # Begin multiprocess extraction operations.
@@ -67,9 +71,18 @@ def set_global_args(args):
     @brief  Sets the global variables using the arguments.
     @param  args    User-supplied arguments.
     """
+    global PASTEL
+    global PASTEL_L
+    global PASTEL_N
+    global PASTEL_D
     global OUTPUT_DIR
     global OUTPUT_DIRS
     global PROPER_IMAGES
+
+    PASTEL = args['pastel']
+    PASTEL_L = args['pastel_light']
+    PASTEL_N = args ['pastel_normal']
+    PASTEL_D = args['pastel_dark']
 
     OUTPUT_DIR = args['output'] if args['output'] is not None and args['output'] != '' else CONF_DIR
     args_directory = args['directory']
@@ -182,6 +195,14 @@ def setup_argument_parser():
     argument_parser.add_argument("-o", "--output", metavar="", type=str,
                                  help="Specify the output directory where to store the JSON color palette. "
                                       "(e.g. -o /path/to/output/)")
+    argument_parser.add_argument("-p", "--pastel", action="store_true",
+                                 help="Converts all palettes to pastel.")
+    argument_parser.add_argument("--pastel-light", action="store_true",
+                                 help="Converts light palette to pastel.")
+    argument_parser.add_argument("--pastel-normal", action="store_true",
+                                 help="Converts normal palette to pastel.")
+    argument_parser.add_argument("--pastel-dark", action="store_true",
+                                 help="Converts dark palette to pastel.")
     argument_parser.add_argument("-v", "--version", action="store_true",
                                  help="Prints the PyPalEx version.")
 
