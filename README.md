@@ -13,6 +13,7 @@
 - [**User Guide**](#user-guide)
     - [Options List](#options-list)
     - [Note](#note-2)
+    - [Note](#note-3)
     - [Example Usage](#example-usage)
 - [**Code Documentation**](#code-documentation)
 
@@ -86,11 +87,22 @@ Instructions on how to use PyPalEx.
   - Specify the directory from where to use images.
 - `-o --output`
   - Specify the output directory where to store the JSON color palette.
+- `-p --pastel`
+  - Converts ALL extracted palettes to pastel.
+- `--pastel-light`
+  - Converts light palette to pastel.
+- `--pastel-normal`
+  - Converts normal palette to pastel.
+- `--pastel-dark`
+  - Converts dark palette to pastel.
 - `-v --version`
   -  Prints the PyPalEx version.
 
 ### **_NOTE 2_**
 When using PyPalEx, the use of either `-f --files` and/or `-d --directory` is a **MUST**. Without either, or both of, these two options being specified, PyPalEx will not work.
+
+### **_NOTE 3_**
+Please note that all the `--pastel` options only affect the 6 base colors (red, green, yellow, blue, magenta, cyan). Also please note that the user can individually select which palette to convert to pastel (do not mistake palette for "color scheme/color theme"). For more details, please refer to the PyPalEx wiki homepage to identify which "color scheme/color theme" contains the palette you wish to convert to pastel.
 
 ### **_EXAMPLE USAGE_**
 #### **`-f --files` Option**
@@ -132,6 +144,38 @@ palex -d path/to/image/dir/ -f image.png -o path/to/output/dir/
 palex -f image1.png image2.jpg image3.jpeg -o path/to/output/dir/ -d path/to/image/dir/
 ```
 The `-o --output` option can be used with both the `-f --files` and `-d --directory` options. The order of the options also does not matter. The sole purpose of the `-o --output` option is to let the user override the default save directory. As mentioned earlier, PyPalEx has a default save directory, where it can save all the extracted palettes to, which is either the global shell variable `PYPALEX_CONFIG_DIR` __or__ wherever (`XDG_CONFIG_HOME/palex` or `$HOME/.config/palex`) points to in the system.
+
+<br>
+
+#### **`-p --pastel` Option**
+```sh
+palex -p -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Converts all the extracted color palettes from image(s) into pastel. This option does **NOT** affect the background, foreground, black, and white colors.
+
+<br>
+
+#### **`--pastel-light` Option**
+```sh
+palex --pastel-light -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Converts light color palette into pastel. This option does **NOT** affect the background, foreground, black, and white colors.
+
+<br>
+
+#### **`--pastel-normal` Option**
+```sh
+palex --pastel-normal -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Converts normal color palette into pastel. This option does **NOT** affect the background, foreground, black, and white colors.
+
+<br>
+
+#### **`--pastel-dark` Option**
+```sh
+palex --pastel-dark -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Converts dark color palette into pastel. This option does **NOT** affect the background, foreground, black, and white colors.
 
 <br>
 
