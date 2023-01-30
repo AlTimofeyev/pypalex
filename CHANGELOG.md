@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <br>
 
+## [1.2.1] - 2023-01-29
+
+- Added GitHub Action to automate the publication of PyPalEx to PyPI upon new releases for future updates.
+- Changed the README to include icons and reorganized general structure of document.
+
+
 ## [1.2.0] - 2022-04-21
 
 - Added `-p --pastel` option to convert all extracted color palettes to pastel.
@@ -45,6 +51,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[1.2.1]: https://github.com/AlTimofeyev/pypalex/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/AlTimofeyev/pypalex/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/AlTimofeyev/pypalex/compare/1.0.6...1.1.0
 [1.0.6]: https://github.com/AlTimofeyev/pypalex/releases/tag/1.0.6
