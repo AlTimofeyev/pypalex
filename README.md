@@ -1,37 +1,45 @@
-## <div align="center">PyPalEx</div>
-### <div align="center">Python Palette Extractor</div>
+<h1 align="center">PyPalEx</h1>
+
+<h3 align="center">Python Palette Extractor</h3>
+
+<p align="center">
+  <a href="https://github.com/AlTimofeyev/pypalex/releases"><img src="https://img.shields.io/github/v/release/AlTimofeyev/pypalex.svg?colorA=151515&colorB=8C977D&style=for-the-badge"></a>
+  <a href="https://github.com/AlTimofeyev/pypalex/stargazers"><img src="https://img.shields.io/github/stars/AlTimofeyev/pypalex?colorA=151515&colorB=D9BC8C&style=for-the-badge"></a>
+  <a href="https://github.com/AlTimofeyev/pypalex/network/members"><img src="https://img.shields.io/github/forks/AlTimofeyev/pypalex?colorA=151515&colorB=8DA3B9&style=for-the-badge"></a>
+  <a href="https://github.com/AlTimofeyev/pypalex/blob/main/LICENSE"><img src="https://img.shields.io/static/v1?label=license&message=MIT&color=B66467&labelColor=151515&style=for-the-badge"></a>
+</p>
+
+<p>
+PyPalEx is a tool for extracting color palettes from images and generating a JSON format file with light, normal, and dark color palettes. This tool is intended to be non-OS dependent, for use by the tech community for developing their own custom theme managers or by artists who want to extract color palettes for their art from images/pictures/wallpapers they adore.
+</p>
+<p>
+PyPalEx picks out the most dominant light, normal, and dark color for each of the base colors [red, yellow, green, cyan, blue, magenta] in an image and constructs a color palette for each of these three variants. When a specific color is not present in an image, that color is borrowed from one of the colors that *is* present. (e.g. Colors red and cyan are missing from an image, so red and cyan are borrowed from the colors that are present in the image.)
+</p>
+
+<br>
 
 ## Table of Contents
-- [**Description**](#description)
+- [**PyPalEx Archives**](#pypalex-archives)
     - [Wiki Homepage](#wiki-homepage)
     - [Palette Examples Archive](#wiki-palette-examples-archive)
-    - [Note](#note-1)
+    - [Code Documentation](#code-documentation)
 - [**Installation**](#installation)
     - [Dependencies](#dependencies)
     - [Environment Variables](#environment-variables)
     - [Install](#install)
 - [**User Guide**](#user-guide)
     - [Options List](#options-list)
+    - [Note](#note-1)
     - [Note](#note-2)
-    - [Note](#note-3)
     - [Example Usage](#example-usage)
-- [**Code Documentation**](#code-documentation)
 
 <br>
 <br>
 
-## **DESCRIPTION**
-PyPalEx is a tool for extracting color palettes from images and generating a JSON format file with light, normal, and dark color palettes. This tool is intended to be non-OS dependent, for use by the tech community for developing their own custom theme managers or by artists who want to extract color palettes for their art from images/pictures/wallpapers they adore.
+## **PYPALEX ARCHIVES**
+### \[ [**_WIKI HOMEPAGE_**](https://github.com/AlTimofeyev/pypalex/wiki/Welcome-to-the-PyPalEx-Wiki!) \] \[ [**_WIKI PALETTE EXAMPLES ARCHIVE_**](https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples) \] \[ [**_CODE DOCUMENTATION_**](https://github.com/AlTimofeyev/pypalex/blob/main/pypalex_code_documentation.pdf) \]
 
-PyPalEx picks out the most dominant light, normal, and dark color for each of the base colors [red, yellow, green, cyan, blue, magenta] in an image and constructs a color palette for each of these three variants. When a specific color is not present in an image, that color is borrowed from one of the colors that *is* present. (e.g. Colors red and cyan are missing from an image, so red and cyan are borrowed from the colors that are present in the image.)
-
-### [**_WIKI HOMEPAGE_**](https://github.com/AlTimofeyev/pypalex/wiki/Welcome-to-the-PyPalEx-Wiki!)
-
-### [**_WIKI PALETTE EXAMPLES ARCHIVE_**](https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples)
-
-### **_NOTE 1_**
-Future updates may include a `-p --pastel` option for generating pastel palettes from the extracted colors as well as a `-g --generate` option for generating missing colors from their respective hue range instead of borrowing missing colors from pre-existing colors in the image.
-
+<br>
 
 ## **INSTALLATION**
 ### **_DEPENDENCIES_**
@@ -98,10 +106,10 @@ Instructions on how to use PyPalEx.
 - `-v --version`
   -  Prints the PyPalEx version.
 
-### **_NOTE 2_**
+### **_NOTE 1_**
 When using PyPalEx, the use of either `-f --files` and/or `-d --directory` is a **MUST**. Without either, or both of, these two options being specified, PyPalEx will not work.
 
-### **_NOTE 3_**
+### **_NOTE 2_**
 Please note that all the `--pastel` options only affect the 6 base colors (red, green, yellow, blue, magenta, cyan). Also please note that the user can individually select which palette to convert to pastel (do not mistake palette for "color scheme/color theme"). For more details, please refer to the PyPalEx wiki homepage to identify which "color scheme/color theme" contains the palette you wish to convert to pastel.
 
 ### **_EXAMPLE USAGE_**
@@ -193,7 +201,3 @@ Please note the following:
 palex --version -f path/to/image/dir/image.jpeg
 ```
 This will also **ONLY** print the version number. If other options are used with PyPalEx when `-v --version` is used, PyPalEx will only print the version number and stop execution.
-
-<br>
-
-## [**CODE DOCUMENTATION**](https://github.com/AlTimofeyev/pypalex/blob/main/pypalex_code_documentation.pdf)
