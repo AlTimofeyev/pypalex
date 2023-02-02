@@ -18,21 +18,3 @@
 !/CHANGELOG.md
 !/MANIFEST.in
 !/pypalex_code_documentation.pdf
-
-# Old Exclusion Patterns
-# ---- Environmental
-#venv/*
-#.DS_Store
-#.idea
-#__pycache__
-#Doxyfile
-
-# ---- Project
-# PyPalEx_Documentation_Files/*
-# Helpful_Resources/*
-# GITHUB_RELEASES_ARCHIVE/*
-
-# ---- Build
-# build/*
-# dist/*
-# pypalex.egg-info/*
