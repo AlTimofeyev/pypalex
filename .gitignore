@@ -1,17 +1,38 @@
+# Exclude everything under project directory
+# But still allow git to process contents
+/*
+
+# Unexclude package code base
+!/pypalex/
+
+# Exclude the project cache
+/pypalex/__pycache__/
+
+# Unexclude example resources
+!/Resources/
+
+# Unexclude other necessary files
+!/setup.py
+!/LICENSE
+!/README.md
+!/CHANGELOG.md
+!/MANIFEST.in
+!/pypalex_code_documentation.pdf
+
+# Old Exclusion Patterns
 # ---- Environmental
-venv/*
-.DS_Store
-.idea
-__pycache__
-Doxyfile
+#venv/*
+#.DS_Store
+#.idea
+#__pycache__
+#Doxyfile
 
 # ---- Project
-PyPalEx_Documentation_Files/*
-Helpful_Resources/*
-GITHUB_RELEASES_ARCHIVE/*
+# PyPalEx_Documentation_Files/*
+# Helpful_Resources/*
+# GITHUB_RELEASES_ARCHIVE/*
 
 # ---- Build
-build/*
-dist/*
-pypalex.egg-info/*
-
+# build/*
+# dist/*
+# pypalex.egg-info/*
