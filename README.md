@@ -1,6 +1,8 @@
-<h1 style="text-align: center;">PyPalEx<br><small>(Python Palette Extractor)</small></h1>
+<h1 align=center>PyPalEx</h1>
 
-<p style="text-align: center;">
+<h3 align=center>Python Palette Extractor</h3>
+
+<p align=center>
   <a href="https://github.com/AlTimofeyev/pypalex/releases"><img src="https://img.shields.io/github/v/release/AlTimofeyev/pypalex.svg?colorA=151515&colorB=8C977D&style=for-the-badge"></a>
   <a href="https://github.com/AlTimofeyev/pypalex/stargazers"><img src="https://img.shields.io/github/stars/AlTimofeyev/pypalex?colorA=151515&colorB=D9BC8C&style=for-the-badge"></a>
   <a href="https://github.com/AlTimofeyev/pypalex/network/members"><img src="https://img.shields.io/github/forks/AlTimofeyev/pypalex?colorA=151515&colorB=8DA3B9&style=for-the-badge"></a>
