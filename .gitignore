@@ -8,8 +8,8 @@
 # Exclude the project cache
 /pypalex/__pycache__/
 
-# Unexclude example resources
-!/Resources/
+# Unexclude project assets
+!/Assets/
 
 # Unexclude other necessary files
 !/setup.py
