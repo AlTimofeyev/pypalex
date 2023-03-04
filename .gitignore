@@ -2,6 +2,9 @@
 # But still allow git to process contents
 /*
 
+# Exclude folder meta-information
+.DS_Store
+
 # Unexclude package code base
 !/pypalex/
 
