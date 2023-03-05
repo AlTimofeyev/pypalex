@@ -9,7 +9,7 @@
   <a href="https://github.com/AlTimofeyev/pypalex/blob/main/LICENSE"><img src="https://img.shields.io/static/v1?label=license&message=MIT&color=B66467&labelColor=151515&style=for-the-badge"></a>
 </p>
 
-<img src="https://github.com/AlTimofeyev/pypalex/blob/main/Assets/README_EXAMPLE-tsujin_bohboh-Holiday.PNG" alt="img" align="center">
+<img src="https://github.com/AlTimofeyev/pypalex/blob/main/Assets/README_EXAMPLE-tsujin_bohboh-Holiday.PNG" alt="Package Example with Background Image by tsujin_bohboh on Twitter" align="center">
 
 <p>
 PyPalEx is a tool for extracting color palettes from images and generating a JSON format file with light, normal, and dark color palettes. This tool is intended to be non-OS dependent, for use by the tech community for developing their own custom theme managers or by artists who want to extract color palettes for their art from images/pictures/wallpapers they adore.
