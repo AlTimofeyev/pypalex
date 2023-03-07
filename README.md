@@ -30,6 +30,7 @@ PyPalEx is a tool for extracting color palettes from images and generating a JSO
   - [PIP Install](#pip-install)
   - [Manual/Git Install](#manualgit-install)
 - [**User Guide**](#user-guide)
+  - [Disclosure](#disclosure)
   - [Options List](#options-list)
   - [Notes](#notes)
   - [Example Usage](#example-usage)
@@ -41,7 +42,7 @@ PyPalEx is a tool for extracting color palettes from images and generating a JSO
 <h2 align=center id="pypalex-archives">PYPALEX ARCHIVES</h2>
 
 <h3 align=center>
-  [<a href="https://github.com/AlTimofeyev/pypalex/wiki/Welcome-to-the-PyPalEx-Wiki!">Wiki Homepage</a>]
+  [<a href="https://github.com/AlTimofeyev/pypalex/wiki">Wiki Homepage</a>]
   [<a href="https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples">Palette Examples Archive</a>]
   [<a href="https://github.com/AlTimofeyev/pypalex/blob/main/pypalex_code_documentation.pdf">Codebase Documentation</a>]
 </h3>
@@ -60,7 +61,7 @@ Aside from Python, the rest are Python packages that are installable with pip.
     - To confirm filetypes are images file types.
 
 ### ENVIRONMENT VARIABLES
-There are two environement variables that can be set by the user:
+There are two optional environement variables that can be set by the user:
 - `PYPALEX_CACHE_DIR`
 - `PYPALEX_CONFIG_DIR`
 
@@ -69,7 +70,7 @@ By default, PyPalEx will try to store extracted color palettes into one of three
 - `XDG_CONFIG_HOME/palex` 
 - `$HOME/.config/palex`
 
-If the user does not set the `PYPALEX_CONFIG_DIR` environment variable, then PyPalEx will default to saving wherever `XDG_CONFIG_HOME/palex` points to in thier system. And if the `XDG_CONFIG_HOME` environment variable is not set, then PyPalEx will default to saving extracted color palettes into `$HOME/.config/palex`.  
+By default, PyPalEx will try to save extracted color palettes wherever `PYPALEX_CONFIG_DIR` points to in the user's system. If the user does not set the `PYPALEX_CONFIG_DIR` environment variable, then PyPalEx will default to saving extracted color palettes wherever `XDG_CONFIG_HOME/palex` points to in the user's system. And if the `XDG_CONFIG_HOME` environment variable is not set, then PyPalEx will default to saving extracted color palettes into `$HOME/.config/palex`.  
 _This default output location is, of course, overriden if PyPalEx is used with the `-o --output` option._
 
 <h2 align=center id="installation">INSTALLATION</h2>
@@ -102,10 +103,20 @@ export PATH="${PATH}:${HOME}/.local/bin/"
 
 <h2 align=center id="user-guide">USER GUIDE</h2> 
 
+### DISCLOSURE
+- PyPalEx takes about ~5 seconds on average to process an image and extract color palettes.
+- When using PyPalEx on a directory of images, you can calculate the time it takes to process all the images by multiplying the number of images by 5 seconds.
+  - Example: You have a directory of 20 images. So the time it will take to process all the images is  
+  20 x 5 = ~100 seconds
+
+<p align=justify>
+Some images may take 2-3 seconds to be processed while other images may take 4-5 seconds to be processed. But the average wait time for an image to be processed and for color palettes to be extracted is about ~5 seconds.
+</p>
+
 ### OPTIONS LIST
 - `-f --files`
-  - Specify the file path(s).
-  - If used with `-p --path` option, you only need to list the filename(s).
+  - Specify the absolute file path(s).
+  - If used with `-p --path` option, you only need to specify the relative file path(s).
 - `-p --path`
   - Specify the path from where to use images.
   - Absolute path is preferred, but relative path can also be used.
@@ -124,6 +135,7 @@ export PATH="${PATH}:${HOME}/.local/bin/"
 
 ### NOTES
 - When using PyPalEx, the use of either `-f --files` and/or `-p --path` is a **MUST**. Without either, or both of, these two options being specified, PyPalEx will not work.
+- PyPalEx will skip over any files that are not images.
 - Please note that all the `--pastel` options only affect the 6 base colors (red, green, yellow, blue, magenta, cyan) and does **NOT** affect the background, foreground, black, and white colors.
 - Please note that the user can individually select which palette to convert to pastel (do not mistake palette for "color scheme/color theme"). For more details, please refer to the PyPalEx wiki homepage to identify which "color scheme/color theme" contains the palette you wish to convert to pastel.
 
@@ -135,7 +147,7 @@ palex -f path/to/image/dir/image.jpeg
 ```sh
 palex -f path/to/image/dir/image.jpeg path/to/image/dir/image2.PNG
 ```
-The `-f --files` option can be used with a singular image file or with multiple image files. When used without the `-p --path` option, the user must specify the absolute path to the image they want to use with PyPalEx. While using the CLI, if the user is already within the directory where the images are located, then a relative path is also acceptable.
+The `-f --files` option can be used with a singular image file or with multiple image files. The user must specify the absolute file path to the image they want to use with PyPalEx. However, if the user is already within the directory where the images are located, then a relative file path is also acceptable.
 ```sh
 ~ > cd path/to
 ~/path/to >
@@ -151,7 +163,7 @@ The `-f --files` option can be used with a singular image file or with multiple 
 ~/path/to/image/dir >
 ~/path/to/image/dir > palex -f image.JPEG image2.png
 ```
-The above examples are meant to show how a user can navigate to a direcotry with images, or at least relatively close to a directory with images, and then use PyPalEx with the `-f --files` option.
+The above examples are meant to show how a user can navigate to a direcotry with images, or at least relatively close to a directory with images, and then use PyPalEx with the `-f --files` option and relative file path(s).
 
 <br>
 
@@ -168,7 +180,7 @@ palex -p path/to/image/dir/ -f image.png
 ```sh
 palex -f image1.png image2.jpg image3.jpeg -p path/to/image/dir/
 ```
-The `-p --path` option can be used with a whole directory of images and files or it can be used as a reference point for the `-f --files` option. When the `-f --files` option is used with `-p --path`, the user does not have to specify the absolute path to the images, just the relative image names/filepath(s), the directory that was provided will be searched for the image names/filepath(s) specified. PyPalEx will skip over files that are not images.
+The `-p --path` option can be used with a whole directory of images and files or it can be used as a reference point for the `-f --files` option. When the `-f --files` option is used with `-p --path`, the user does not have to specify the absolute path to the images, just the relative image names/filepath(s). The directory that was provided with `-p --path` will be searched for the image names/filepath(s) specified.
 
 <br>
 
@@ -185,7 +197,7 @@ palex -p path/to/image/dir/ -f image.png -o path/to/output/dir/
 ```sh
 palex -f image1.png image2.jpg image3.jpeg -o path/to/output/dir/ -p path/to/image/dir/
 ```
-The `-o --output` option can be used with both the `-f --files` and `-p --path` options. The sole purpose of the `-o --output` option is to let the user override the default output directory. Please refer to [Environment Variables](#environment-variables).
+The `-o --output` option can be used with both the `-f --files` and `-p --path` options. The sole purpose of the `-o --output` option is to let the user override the default output directory. Please refer to [Environment Variables](#environment-variables) for details about the default output directory.
 
 <br>
 
