@@ -104,6 +104,7 @@ export PATH="${PATH}:${HOME}/.local/bin/"
 <h2 align=center id="user-guide">USER GUIDE</h2> 
 
 ### DISCLOSURE
+- PyPalEx can only work on images that are in the RBG color space, so any images that you supply to PyPalEx that are not already in RGB will automatically be converted into RGB color space before the extraction process begins.
 - PyPalEx takes about ~5 seconds on average to process an image and extract color palettes.
 - When using PyPalEx on a directory of images, you can calculate the time it takes to process all the images by multiplying the number of images by 5 seconds.
   - Example: You have a directory of 20 images. So the time it will take to process all the images is  
