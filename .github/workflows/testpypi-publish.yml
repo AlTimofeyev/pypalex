@@ -3,8 +3,6 @@ name: Publish Python Package to PyPI and TestPyPI
 on:
   push:
     branches: [ main ]
-    tags:
-      - '*'
 
 jobs:
   deploy:
@@ -30,8 +28,3 @@ jobs:
         password: ${{ secrets.TEST_PYPI_PYPALEX_API_TOKEN }}
         repository_url: https://test.pypi.org/legacy/
         skip_existing: true
-    - name: Publish Distribution to PyPI
-      if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.PYPI_PYPALEX_API_TOKEN }}
