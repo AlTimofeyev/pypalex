@@ -1,19 +1,21 @@
-"""!
-#######################################################################
-@author Al Timofeyev
-@date   March 2, 2022
-@brief  Settings for PyPalEx.
+##  @file   settings.py
+#   @brief  The settings for PyPalEx.
+#   @details    Used to set up the version numbers and
+#               default output locations.
+#
+#   @section authors Author(s)
+#   - Created by Al Timofeyev on March 2, 2022
+#   - Modified by Al Timofeyev on April 21, 2022.
+#   - Modified by Al Timofeyev on March 11, 2023.
+#
+#   @note   This code has been borrowed from Dylan Araps
+#           PyWal on github: https://github.com/dylanaraps/pywal/blob/master/pywal/settings.py
 
-NOTE:
-This code has been borrowed from Dylan Araps PyWal
-on github: https://github.com/dylanaraps/pywal/blob/master/pywal/settings.py
-#######################################################################
-"""
 
 import os
 import platform
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 __cache_version__ = "1.0.0"
 
 HOME = os.getenv("HOME", os.getenv("USERPROFILE"))

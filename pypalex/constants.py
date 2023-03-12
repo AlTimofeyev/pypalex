@@ -1,10 +1,11 @@
-"""!
-#######################################################################
-@author Al Timofeyev
-@date   February 2, 2022
-@brief  A collection of constants.
-#######################################################################
-"""
+##  @file   constants.py
+#   @brief  A collection of constants for PyPalEx.
+#
+#   @section authors Author(s)
+#   - Created by Al Timofeyev on February 2, 2022.
+#   - Modified by Al Timofeyev on April 21, 2022.
+#   - Modified by Al Timofeyev on March 6, 2023.
+
 
 # RGB values for base colors.
 BLACK_RGB = [0, 0, 0]
@@ -31,8 +32,7 @@ MAGENTA_HEX = 0xFF00FF
 # -----------------------------------------------
 
 # Hue values for base colors.
-RED_HUE_MIN = 0
-RED_HUE_MAX = 359
+RED_HUE = 0
 # YELLOW_HUE = 60 # Original hue for yellow.
 YELLOW_HUE = 55 # Adjusted for brightness.
 GREEN_HUE = 120
@@ -41,18 +41,28 @@ BLUE_HUE = 240
 MAGENTA_HUE = 300
 # -----------------------------------------------
 
-# Lighting range [min, max] for grayscale/achromatic colors.
-BLACK_LIGHT_RANGE = [0, 40]     # Range of lighting for where a color can be considered black.
-GRAY_LIGHT_RANGE = [40, 60]     # Range of lighting for where a color can be considered gray.
-WHITE_LIGHT_RANGE = [60, 100]   # Range of lighting for where a color can be considered white.
-# -----------------------------------------------
-
 # Hue range [min, max) for base colors.
 RED_HUE_RANGE_MAX = [330, 360]
 RED_HUE_RANGE_MIN = [0, 25]
-YELLOW_HUE_RANGE = [25, 60]
-GREEN_HUE_RANGE = [60, 170]
-CYAN_HUE_RANGE = [170, 205]
-BLUE_HUE_RANGE = [205, 260]
+YELLOW_HUE_RANGE = [25, 64]
+GREEN_HUE_RANGE = [64, 170]
+CYAN_HUE_RANGE = [170, 210]
+BLUE_HUE_RANGE = [210, 260]
 MAGENTA_HUE_RANGE = [260, 330]
+# -----------------------------------------------
+
+# Brightness Value range [min, max] for grayscale/achromatic colors.
+BLACK_BRIGHTNESS_RANGE = [0.0, 50.0]    # Range of brightness for where a color can be considered dark.
+GRAY_BRIGHTNESS_RANGE = [50.0, 75.0]    # Range of brightness for where a color can be considered normal.
+WHITE_BRIGHTNESS_RANGE = [75.0, 100.0]  # Range of brightness for where a color can be considered light.
+# -----------------------------------------------
+
+# Saturation and Brightness Value ranges [min, max] that are tolerable for extracted colors
+SATURATION_RANGE = [5.0, 100.0]
+BRIGHTNESS_RANGE = [25.0, 100.0]
+# -----------------------------------------------
+
+# Pastel Saturation and Brightness Value ranges [min, max]
+PASTEL_SATURATION_RANGE = [15.0, 75.0]
+PASTEL_BRIGHTNESS_RANGE = [50.0, 100.0]
 # -----------------------------------------------
