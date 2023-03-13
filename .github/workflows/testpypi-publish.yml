@@ -3,7 +3,7 @@ name: Publish Python Package to TestPyPI
 on:
   push:
     branches:
-    - testpypi
+    - 'testpypi'
     - '!main'
 
 jobs:
