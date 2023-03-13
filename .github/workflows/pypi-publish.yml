@@ -1,9 +1,6 @@
 name: Upload Python Package to PyPI
 
 on:
-  push:
-    tags:
-    - '*.*.*'
   release:
     types: [created, published]
 
