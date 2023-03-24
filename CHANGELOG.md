@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <br>
 
 ## [1.3.1] - 2023-03-23
-- Added saturation preferrence options to PyPalEx for those that prefer more saturated colors.
+- Added saturation preference options to PyPalEx for those that prefer more saturated colors.
 - Added `--sat_pref` option to extract more saturated colors of all color palettes.
 - Added `--sat_pref-light` option to extract more saturated colors of the light color palette.
 - Added `--sat_pref-normal` option to extract more saturated colors of the normal color palette.
