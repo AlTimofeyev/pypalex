@@ -24,6 +24,7 @@
 #   - Created by Al Timofeyev on February 2, 2022.
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
+#   - Modified by Al Timofeyev on March 22, 2023.
 
 
 # ---- IMPORTS ----
@@ -51,14 +52,18 @@ OUTPUT_FILEPATHS = []
 OUTPUT_PATH = ''
 ## The tail to append to each output filepath.
 OUTPUT_TAIL = "-color_palette.json"
-## Flag for pastel option.
-PASTEL = False
-## Flag for light pastel option.
+## Flag to convert light color palette to pastel.
 PASTEL_L = False
-## Flag for normal pastel option.
+## Flag to convert normal color palette to pastel.
 PASTEL_N = False
-## Flag for dark pastel option.
+## Flag to convert dark color palette to pastel.
 PASTEL_D = False
+## Flag that gives preference to more saturated colors of the light color palette.
+SAT_PREF_L = False
+## Flag that gives preference to more saturated colors of the normal color palette.
+SAT_PREF_N = False
+## Flag that gives preference to more saturated colors of the dark color palette.
+SAT_PREF_D = False
 
 
 # **************************************************************************
@@ -122,7 +127,7 @@ def extract_color_palettes():
         hsv_img_matrix_2d = imutils.process_image(image)
         print("COMPLETED")
         print("Extracting Colors : ", sep='', end='')
-        extractor = Extractor(hsv_img_matrix_2d, OUTPUT_FILEPATHS[index], PASTEL, PASTEL_L, PASTEL_N, PASTEL_D)
+        extractor = Extractor(hsv_img_matrix_2d, OUTPUT_FILEPATHS[index], PASTEL_L, PASTEL_N, PASTEL_D, SAT_PREF_L, SAT_PREF_N, SAT_PREF_D)
         extractor.run()
         EXTRACTORS.append(extractor)
         print("COMPLETED")
@@ -150,13 +155,21 @@ def setup_argument_parser():
     argument_parser.add_argument("-o", "--output", metavar="", type=str,
                                  help="Specify the output path where to store the JSON color palette.")
     argument_parser.add_argument("--pastel", action="store_true",
-                                 help="Converts all color types to pastel.")
+                                 help="Converts all color palettes into pastel.")
     argument_parser.add_argument("--pastel-light", action="store_true",
-                                 help="Converts light colors to pastel.")
+                                 help="Converts light color palette into pastel.")
     argument_parser.add_argument("--pastel-normal", action="store_true",
-                                 help="Converts normal colors to pastel.")
+                                 help="Converts normal color palette into pastel.")
     argument_parser.add_argument("--pastel-dark", action="store_true",
-                                 help="Converts dark colors to pastel.")
+                                 help="Converts dark color palette into pastel.")
+    argument_parser.add_argument("--sat_pref", action="store_true",
+                                 help="Gives preference to more saturated colors of all color palettes.")
+    argument_parser.add_argument("--sat_pref-light", action="store_true",
+                                 help="Gives preference to more saturated colors of the light color palette.")
+    argument_parser.add_argument("--sat_pref-normal", action="store_true",
+                                 help="Gives preference to more saturated colors of the normal color palette.")
+    argument_parser.add_argument("--sat_pref-dark", action="store_true",
+                                 help="Gives preference to more saturated colors of the dark color palette.")
     argument_parser.add_argument("-v", "--version", action="store_true",
                                  help="Prints the PyPalEx version.")
 
@@ -232,19 +245,23 @@ def check_path(path):
 #
 #   @param  args    User-supplied arguments.
 def set_global_args(args):
-    global PASTEL
     global PASTEL_L
     global PASTEL_N
     global PASTEL_D
+    global SAT_PREF_L
+    global SAT_PREF_N
+    global SAT_PREF_D
     global OUTPUT_PATH
     global OUTPUT_FILEPATHS
     global PROPER_IMAGES
     global FILENAMES
 
-    PASTEL = args['pastel']
-    PASTEL_L = args['pastel_light']
-    PASTEL_N = args['pastel_normal']
-    PASTEL_D = args['pastel_dark']
+    PASTEL_L = args['pastel_light'] or args['pastel']
+    PASTEL_N = args['pastel_normal'] or args['pastel']
+    PASTEL_D = args['pastel_dark'] or args['pastel']
+    SAT_PREF_L = args['sat_pref_light'] or args['sat_pref']
+    SAT_PREF_N = args['sat_pref_normal'] or args['sat_pref']
+    SAT_PREF_D = args['sat_pref_dark'] or args['sat_pref']
 
     OUTPUT_PATH = args['output'] if args['output'] is not None and args['output'] != '' else CONF_DIR
     args_path = args['path']

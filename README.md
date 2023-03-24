@@ -124,20 +124,28 @@ Some images may take 2-3 seconds to be processed while other images may take 4-5
 - `-o --output`
   - Specify the output path where to store the JSON color palette.
 - `--pastel`
-  - Converts all extracted palettes to pastel.
+  - Converts all color palettes into pastel.
 - `--pastel-light`
-  - Converts light palette to pastel.
+  - Converts light color palette into pastel.
 - `--pastel-normal`
-  - Converts normal palette to pastel.
+  - Converts normal color palette into pastel.
 - `--pastel-dark`
-  - Converts dark palette to pastel.
+  - Converts dark color palette into pastel.
+- `--sat_pref`
+  - Gives preference to more saturated colors of all color palettes.
+- `--sat_pref-light`
+  - Gives preference to more saturated colors of the light color palette.
+- `--sat_pref-normal`
+  - Gives preference to more saturated colors of the normal color palette.
+- `--sat_pref-dark`
+  - Gives preference to more saturated colors of the dark color palette.
 - `-v --version`
   -  Prints the PyPalEx version.
 
 ### NOTES
 - When using PyPalEx, the use of either `-f --files` and/or `-p --path` is a **MUST**. Without either, or both of, these two options being specified, PyPalEx will not work.
 - PyPalEx will skip over any files that are not images.
-- Please note that all the `--pastel` options only affect the 6 base colors (red, green, yellow, blue, magenta, cyan) and does **NOT** affect the background, foreground, black, and white colors.
+- Please note that all the `--pastel` and `--sat_pref` options only affect the 6 base colors (red, green, yellow, blue, magenta, cyan) and do **NOT** affect the background, foreground, black, and white colors.
 - Please note that the user can individually select which palette to convert to pastel (do not mistake palette for "color scheme/color theme"). For more details, please refer to the PyPalEx wiki homepage to identify which "color scheme/color theme" contains the palette you wish to convert to pastel.
 
 ### EXAMPLE USAGE
@@ -206,7 +214,7 @@ The `-o --output` option can be used with both the `-f --files` and `-p --path` 
 ```sh
 palex --pastel -f path/to/image/dir/image.jpeg -o path/to/output/dir/
 ```
-Converts all the extracted color palettes from image(s) into pastel.
+Converts all the extracted color palettes into pastel.
 
 <br>
 
@@ -234,6 +242,38 @@ Converts dark color palette into pastel.
 
 <br>
 
+#### **`--sat_pref` Option**
+```sh
+palex --sat_pref -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Gives preference to more saturated colors of all color palettes during the extraction process.
+
+<br>
+
+#### **`--sat_pref-light` Option**
+```sh
+palex --sat_pref-light -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Gives preference to more saturated colors of the light color palette during the extraction process.
+
+<br>
+
+#### **`--sat_pref-normal` Option**
+```sh
+palex --sat_pref-normal -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Gives preference to more saturated colors of the normal color palette during the extraction process.
+
+<br>
+
+#### **`--sat_pref-dark` Option**
+```sh
+palex --sat_pref-dark -f path/to/image/dir/image.jpeg -o path/to/output/dir/
+```
+Gives preference to more saturated colors of the dark color palette during the extraction process.
+
+<br>
+
 #### **`-v --version` Option**
 ```sh
 palex -v
@@ -247,7 +287,7 @@ The `-v --version` option is used to print the PyPalEx version number.
 <h2 align=center id="feedback">FEEDBACK</h2>
 
 <p align=justify>
-Any and all feedback is greatly appreciated and welcomed. On the PyPalEx GitHub repository, there is a discussion post that is available for each Release version of PyPalEx and open to everyone for any comments or feedback on the version of PyPalEx you are using.
+Any and all feedback is greatly appreciated and welcomed. On the PyPalEx GitHub repository, there is a <b><a href="https://github.com/AlTimofeyev/pypalex/discussions">Discussion</a></b> post that is available for each Release version of PyPalEx and open to everyone for any comments or feedback on the version of PyPalEx you are using.
 </p>
 
-[//]: # (Include Contributions Later)
+[//]: # (Include Contributions Section Later)

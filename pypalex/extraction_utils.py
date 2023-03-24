@@ -5,6 +5,7 @@
 #   - Created by Al Timofeyev on February 10, 2022.
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
+#   - Modified by Al Timofeyev on March 22, 2023.
 
 
 # ---- IMPORTS ----
@@ -121,14 +122,15 @@ def construct_base_color_dictionary(hsv_img_matrix_2d):
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 
-##  Extracts dominant light, normal, dark colors types from each of the base colors.
+##  Extracts dominant light, normal, dark color palettes from each of the base colors.
 #
 #   @param  base_color_dict A dictionary of 2D numpy arrays for each of the base colors.
+#   @param  sat_pref_list   List of saturation preference flags for light, normal, dark color palettes.
 #
-#   @return Dictionary of light, normal, dark color types for each of the base colors.
-def extract_colors(base_color_dict):
-    base_colors = [base_color_dict['Red'], base_color_dict['Yellow'], base_color_dict['Green'],
-                   base_color_dict['Cyan'], base_color_dict['Blue'], base_color_dict['Magenta']]
+#   @return Dictionary of light, normal, dark color palettes for each of the base colors.
+def extract_color_palettes(base_color_dict, sat_pref_list):
+    base_colors = [(base_color_dict['Red'], sat_pref_list), (base_color_dict['Yellow'], sat_pref_list), (base_color_dict['Green'], sat_pref_list),
+                   (base_color_dict['Cyan'], sat_pref_list), (base_color_dict['Blue'], sat_pref_list), (base_color_dict['Magenta'], sat_pref_list)]
 
     # Multi-thread the extraction process.
     pool = multiprocessing.Pool(6)
@@ -270,19 +272,22 @@ def generate_remaining_colors(extracted_colors_dict, ratios):
 
 ##  Extracts the dominant color types from a base color.
 #   @details    A color type is either a light, normal, or
-#               dark version of one of the base colors.
+#               dark version of a base color.
 #
-#   @param  hsv_base_color_matrix   A 2D numpy array of a base color in [h,s,v] format.
+#   @param  hsv_base_color_matrix_and_sat_prefs     A tuple of a 2D numpy array of a base color in [h,s,v] format and a list of saturation preference flags for light, normal, dark color palettes.
 #
 #   @return List of dominant numpy array color types in [h,s,v] format.
-def extract_color_types(hsv_base_color_matrix):
+def extract_color_types(hsv_base_color_matrix_and_sat_prefs):
+    hsv_base_color_matrix, sat_pref_list = hsv_base_color_matrix_and_sat_prefs
+    sat_pref_light, sat_pref_normal, sat_pref_dark = sat_pref_list
+
     if len(hsv_base_color_matrix) == 0:
-        return [[], [], []]
+        return [numpy.array([]), numpy.array([]), numpy.array([])]
 
     light_colors, norm_colors, dark_colors = sort_by_bright_value(hsv_base_color_matrix)
-    light_color = extract_dominant_color(light_colors)
-    norm_color = extract_dominant_color(norm_colors)
-    dark_color = extract_dominant_color(dark_colors)
+    light_color = extract_dominant_color(light_colors, sat_pref_light)
+    norm_color = extract_dominant_color(norm_colors, sat_pref_normal)
+    dark_color = extract_dominant_color(dark_colors, sat_pref_dark)
 
     check_missing_color_types(light_color, norm_color, dark_color)
     check_sat_and_bright(light_color)
@@ -521,7 +526,7 @@ def generate_background_and_foreground(dominant_hue, complementary_hue):
 
 ##  Sorts the colors by the brightness value.
 #   @details    A color type is either a light, normal, or
-#               dark version of one of the base colors.
+#               dark version of a base color.
 #
 #   @param  hsv_base_color_matrix   A 2D numpy array of a base color in [h,s,v] format.
 #
@@ -548,19 +553,20 @@ def sort_by_bright_value(hsv_base_color_matrix):
 
 ##  Extracts the dominant color from a color type.
 #   @details    A color type is either a light, normal, or
-#               dark version of one of the base colors.
+#               dark version of a base color.
 #
 #   @param  hsv_color_type_matrix   A 2D numpy array of a color type in [h,s,v] format.
+#   @para   sat_pref                A saturation preference flag for one of the light, normal, dark color palettes.
 #
 #   @return A numpy array of a dominant color from a color type in [h,s,v] format.
-def extract_dominant_color(hsv_color_type_matrix):
+def extract_dominant_color(hsv_color_type_matrix, sat_pref):
     # Calculate centroid.
     centroid = calculate_centroid(hsv_color_type_matrix)
 
     # Find color that is closest to centroid by 3-dimensional distance.
-    dom_colors = find_closest_to_centroid(hsv_color_type_matrix, centroid)
+    dom_colors = find_closest_to_centroid(hsv_color_type_matrix, centroid, sat_pref)
 
-    dom_color = numpy.array([-1.0, -1.0, -1.0])
+    dom_color = numpy.array([-1, -1.0, -1.0])
     if len(dom_colors) > 0:
         dom_color[:] = dom_colors[numpy.random.choice(len(dom_colors))]
 
@@ -570,7 +576,7 @@ def extract_dominant_color(hsv_color_type_matrix):
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 
-##  Checks to make sure all the color types have been properly set by.
+##  Checks to make sure all the color types have been properly set.
 #   @details    If a color type is missing, then it will
 #               be derived from the existing color types.
 #
@@ -641,7 +647,7 @@ def check_missing_color_types(light_color, norm_color, dark_color):
 #
 #   @param  hsv_color   A numpy array of a color type in [h,s,v] format.
 def check_sat_and_bright(hsv_color):
-    # Edge case, don't do this for values of [-1, -1, -1]
+    # Edge case, don't do this for values of [-1, -1.0, -1.0 ]
     if hsv_color[0] == -1:
         return
 
@@ -670,7 +676,7 @@ def check_sat_and_bright(hsv_color):
 #   @return List of centroid color values in [h,s,l] format.
 def calculate_centroid(hsv_color_type_matrix):
     if len(hsv_color_type_matrix) == 0:
-        return hsv_color_type_matrix
+        return [-1, -1.0, -1.0]
 
     average_saturation, average_brightness = 0.0, 0.0
     cos_hues, sin_hues = [], []
@@ -695,33 +701,55 @@ def calculate_centroid(hsv_color_type_matrix):
 # --------------------------------------------------------------------------
 
 ##  Finds a color from a color type that is closest to the centroid.
-#   @details    The distance between the centroid color and the other
-#               colors of the color type are calculated in 3-dimensional
-#               space using formulas from the following sources:
+#   @details    The distance between the centroid color and each of the
+#               other individual colors is calculated in 3-dimensional
+#               space using the Euclidean Distance formula from the following sources:
 #               https://stackoverflow.com/a/35114586/17047816 and
-#               https://byjus.com/maths/distance-between-two-points-3d/
+#               https://byjus.com/maths/distance-between-two-points-3d/.
+#               Preference is given to saturated color when the sat_pref
+#               parameter is set by using a parabola formula:
+#               f(x) = ((x - point_of_symmetry_of_parabola) / 6) ^ 2
+#               where 0 <= x <= 100. In this formula, x is our current
+#               saturation and point_of_symmetry_of_parabola is our
+#               preferred saturation. The source used to find and graph
+#               this formula: https://www.graphfree.com/grapher.html
+#
+#   @note   Possible feature addition in the future, where the user
+#           can have the option to input their preferred saturation
+#           (e.g. pref_sat) and it can be used to replace the
+#           point_of_symmetry_of_parabola in the parabola formula.
+#           If saturation is preferred (e.g. sat_pref) but no preferred
+#           saturation is set by the user, then the default should be 60.
+#           And if saturation is not preferred, then that value should
+#           be set to None.
 #
 #   @param  hsv_color_type_matrix   A 2D numpy array of a color type in [h,s,v] format.
 #   @param  centroid                List of centroid color values in [h,s,l] format.
+#   @para   sat_pref                A saturation preference flag for one of the light, normal, dark color palettes.
 #
 #   @return List of all the colors in [h,s,v] format that are the shortest distance away from the centroid.
-def find_closest_to_centroid(hsv_color_type_matrix, centroid):
+def find_closest_to_centroid(hsv_color_type_matrix, centroid, sat_pref):
     if len(hsv_color_type_matrix) == 0:
-        return hsv_color_type_matrix
+        return []
 
     distances_from_centroid = []
     shortest_distance = math.inf
 
     # Calculate the distance between each color and the centroid.
-    # All values are normalized to be in the range [0, 1] for this process.
+    # All values are normalized to be in the range [0.0, 1.0] for this process.
     for hsv_color in hsv_color_type_matrix:
         hue, sat, bright = hsv_color
         hue_dist = min(abs(hue-centroid[0]), 360-abs(hue-centroid[0])) / 180.0
         sat_dist = abs(sat - centroid[1]) / 100.0
         bright_dist = abs(bright - centroid[2]) / 100.0
 
+        # Substitute the saturation distance with a preference
+        # value from the parabola if saturation is preferred.
+        if sat_pref:
+            sat_dist = ((sat - 60.0) / 6.0) ** 2.0
+            sat_dist = max(sat_dist / 100.0, 0.0)
+
         distance = math.sqrt(hue_dist**2 + sat_dist**2 + bright_dist**2)
-        distance = round(distance, 2)   # More precision means less variance in closest colors to centroid.
 
         distances_from_centroid.append(distance)
         shortest_distance = min(shortest_distance, distance)
@@ -731,5 +759,10 @@ def find_closest_to_centroid(hsv_color_type_matrix, centroid):
         if dist != shortest_distance:
             continue
         closest.append(hsv_color_type_matrix[idx])
+
+    if sat_pref and len(closest) > 0:                   # If saturation is preferred.
+        closest = sorted(closest,key=lambda x: x[2])    # Sort by brightness value.
+        closest = sorted(closest, key=lambda x: x[1])   # Sort by Saturation.
+        closest = [closest[-1]]                         # Last element is the most saturated.
 
     return closest

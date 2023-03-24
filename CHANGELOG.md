@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <br>
 
+## [1.3.1] - 2023-03-23
+- Added saturation preferrence options to PyPalEx for those that prefer more saturated colors.
+- Added `--sat_pref` option to extract more saturated colors of all color palettes.
+- Added `--sat_pref-light` option to extract more saturated colors of the light color palette.
+- Added `--sat_pref-normal` option to extract more saturated colors of the normal color palette.
+- Added `--sat_pref-dark` option to extract more saturated colors of the dark color palette.
+
+<br>
+
 ## [1.3.0] - 2023-03-11
 
 - Refactored codebase.
@@ -17,11 +26,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added `hsv_to_hex()` function to **palex.conversion\_utils.py**.
 - Added enforcement of RGB color space in `process_image()` function of **palex.image\_utils.py**.
 - Added constants for Pastel color range to **palex.constants.py**.
+- Added CI/CD automation with GitHub Actions to automatically build and publish new release versions of PyPalEx to PyPI and TestPyPI.
 - Changed color space that is used in the extraction process from HSL to HSV.
 - Changed `-d --directory` option to `-p --path` option.
 - Changed `-p --pastel` option to `--pastel`.
 - Removed normal palette scheme.
-- Added CI/CD automation with GitHub Actions to automatically build and publish new release versions of PyPalEx to PyPI.
 
 ## [1.2.0] - 2022-04-21
 
@@ -61,6 +70,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[1.3.1]: https://github.com/AlTimofeyev/pypalex/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/AlTimofeyev/pypalex/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/AlTimofeyev/pypalex/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/AlTimofeyev/pypalex/compare/1.0.6...1.1.0
