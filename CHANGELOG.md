@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <br>
 
+## [1.3.2] - 2023-03-26
+- Changed `__main__.py`:
+    - Fixed bug where `extractor.color_palette_dict` was not renamed to `extractor.color_schemes_dict` when changes were made in PyPalEx 1.3.1.
+
+<br>
+
 ## [1.3.1] - 2023-03-23
 - Added saturation preference options to PyPalEx for those that prefer more saturated colors.
 - Added `--sat_pref` option to extract more saturated colors of all color palettes.
@@ -70,6 +76,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[1.3.2]: https://github.com/AlTimofeyev/pypalex/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/AlTimofeyev/pypalex/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/AlTimofeyev/pypalex/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/AlTimofeyev/pypalex/compare/1.1.0...1.2.0

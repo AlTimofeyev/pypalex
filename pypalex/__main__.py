@@ -25,6 +25,7 @@
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on March 22, 2023.
+#   - Modified by Al Timofeyev on March 26, 2023.
 
 
 # ---- IMPORTS ----
@@ -78,7 +79,7 @@ def main():
 
     # Save extracted palettes to file.
     for extractor in EXTRACTORS:
-        imutils.save_palette_to_file(extractor.color_palette_dict, extractor.output_filepath)
+        imutils.save_palette_to_file(extractor.color_schemes_dict, extractor.output_filepath)
 
 
 # **************************************************************************
