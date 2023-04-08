@@ -26,6 +26,7 @@
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on March 22, 2023.
 #   - Modified by Al Timofeyev on March 26, 2023.
+#   - Modified by Al Timofeyev on April 7, 2023.
 
 
 # ---- IMPORTS ----
@@ -39,6 +40,8 @@ from .settings import __version__, CONF_DIR
 from .Extractor import Extractor
 from . import image_utils as imutils
 from . import arg_messages as argmsg
+from . import file_utils as futils
+from . import print_utils as prn
 
 # ---- GLOBAL VARIABLES ----
 ## List of Extractor class objects for each individual image.
@@ -53,6 +56,10 @@ OUTPUT_FILEPATHS = []
 OUTPUT_PATH = ''
 ## The tail to append to each output filepath.
 OUTPUT_TAIL = "-color_palette.json"
+## Flag to check if user wants to save extracted color palettes.
+SAVE_CHECK = False
+## Flag to show a preview of extracted palettes.
+SHOW_PREVIEW = False
 ## Flag to convert light color palette to pastel.
 PASTEL_L = False
 ## Flag to convert normal color palette to pastel.
@@ -79,7 +86,7 @@ def main():
 
     # Save extracted palettes to file.
     for extractor in EXTRACTORS:
-        imutils.save_palette_to_file(extractor.color_schemes_dict, extractor.output_filepath)
+        futils.save_default_scheme_to_file(extractor.palette_dict, extractor.output_filepath)
 
 
 # **************************************************************************
@@ -130,8 +137,26 @@ def extract_color_palettes():
         print("Extracting Colors : ", sep='', end='')
         extractor = Extractor(hsv_img_matrix_2d, OUTPUT_FILEPATHS[index], PASTEL_L, PASTEL_N, PASTEL_D, SAT_PREF_L, SAT_PREF_N, SAT_PREF_D)
         extractor.run()
-        EXTRACTORS.append(extractor)
         print("COMPLETED")
+
+        if SHOW_PREVIEW:
+            prn.print_default_scheme_preview(extractor.palette_dict)
+
+        save_file = True
+        if SAVE_CHECK:
+            save_message = "Do you want to save this palette to " + OUTPUT_FILEPATHS[index] + "? [y/n]: "
+            while True:
+                user_choice = input(save_message)
+                user_choice = user_choice.lower()
+
+                if user_choice in ('y', 'yes'):
+                    break
+                elif user_choice in ('n', 'no'):
+                    save_file = False
+                    break
+
+        if save_file:
+            EXTRACTORS.append(extractor)
 
 
 # **************************************************************************
@@ -155,6 +180,12 @@ def setup_argument_parser():
                                       "Absolute path is preferred, but relative path can also be used.")
     argument_parser.add_argument("-o", "--output", metavar="", type=str,
                                  help="Specify the output path where to store the JSON color palette.")
+    argument_parser.add_argument("--save-check", action="store_true",
+                                 help="Asks if the user wants to save the extracted color palettes.")
+    argument_parser.add_argument("--preview", action="store_true",
+                                 help="Shows a preview of the extracted color palettes before saving.")
+    argument_parser.add_argument("--preview-check", action="store_true",
+                                 help="Shows a preview of, and asks if the user wants to save, the extracted color palettes.")
     argument_parser.add_argument("--pastel", action="store_true",
                                  help="Converts all color palettes into pastel.")
     argument_parser.add_argument("--pastel-light", action="store_true",
@@ -246,6 +277,8 @@ def check_path(path):
 #
 #   @param  args    User-supplied arguments.
 def set_global_args(args):
+    global SAVE_CHECK
+    global SHOW_PREVIEW
     global PASTEL_L
     global PASTEL_N
     global PASTEL_D
@@ -257,6 +290,8 @@ def set_global_args(args):
     global PROPER_IMAGES
     global FILENAMES
 
+    SAVE_CHECK = args['save_check'] or args['preview_check']
+    SHOW_PREVIEW = args['preview'] or args['preview_check']
     PASTEL_L = args['pastel_light'] or args['pastel']
     PASTEL_N = args['pastel_normal'] or args['pastel']
     PASTEL_D = args['pastel_dark'] or args['pastel']

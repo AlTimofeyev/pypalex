@@ -5,6 +5,7 @@
 #   - Created by Al Timofeyev on February 2, 2022.
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
+#   - Modified by Al Timofeyev on April 5, 2023.
 
 
 ##  Converts RGB array [r,g,b] to HSV array [h,s,v].
@@ -58,6 +59,23 @@ def rgb_to_hsv(rgb_array):
 def hsv_to_hex(hsv_array):
     rgb_array = hsv_to_rgb(hsv_array)
     return rgb_to_hex(rgb_array)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Convert HEX string 'ffffff' to RGB array [r,g,b].
+#   @details    HEX string is in the set ["000000", "ffffff"].
+#               RGB where [r,g,b] are in the set [0, 255].
+#   @param  hex_str HEX string 'ffffff'.
+#
+#   @return RGB array [r,g,b].
+def hex_to_rgb(hex_str):
+    rgb_array = []
+    for hex_digit1, hex_digit2 in zip(hex_str[0::2], hex_str[1::2]):
+        rgb_array.append(int(hex_digit1+hex_digit2, 16))
+
+    return rgb_array
 
 
 # **************************************************************************

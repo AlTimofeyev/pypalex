@@ -52,7 +52,7 @@ PyPalEx is a tool for extracting color palettes from images and generating a JSO
 <h2 align=center id="dependencies">DEPENDENCIES</h2>
 
 Aside from Python, the rest are Python packages that are installable with pip.
-- `Python 3.7+`
+- `Python 3.6+`
 - `Pillow (PIL) 9.0+`
     - For performing operations on images.
 - `NumPy 1.21+`
@@ -123,6 +123,12 @@ Some images may take 2-3 seconds to be processed while other images may take 4-5
   - Absolute path is preferred, but relative path can also be used.
 - `-o --output`
   - Specify the output path where to store the JSON color palette.
+- `--save-check`
+  - Asks if the user wants to save the extracted color palettes.
+- `--preview`
+  - Shows a preview of the extracted color palettes before saving.
+- `--preview-check`
+  - Shows a preview of, and asks if the user wants to save, the extracted color palettes.
 - `--pastel`
   - Converts all color palettes into pastel.
 - `--pastel-light`
@@ -207,6 +213,30 @@ palex -p path/to/image/dir/ -f image.png -o path/to/output/dir/
 palex -f image1.png image2.jpg image3.jpeg -o path/to/output/dir/ -p path/to/image/dir/
 ```
 The `-o --output` option can be used with both the `-f --files` and `-p --path` options. The sole purpose of the `-o --output` option is to let the user override the default output directory. Please refer to [Environment Variables](#environment-variables) for details about the default output directory.
+
+<br>
+
+#### **`--save-check` Option**
+```sh
+palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ --save-check
+```
+Asks if the user wants to save the extracted color palettes after the extraction process is completed.
+
+<br>
+
+#### **`--preview` Option**
+```sh
+palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ --preview
+```
+Shows a preview of the extracted color palettes before saving. This option requires that the user's terminal has the capability to show ASCII characters and ANSI colors. A future update may include a GUI variation of this preview option to avoid this issue.
+
+<br>
+
+#### **`--preview-check` Option**
+```sh
+palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ --preview-check
+```
+Shows a preview of, and asks if the user wants to save, the extracted color palettes. This option is a combination of the `--preview` and `--save-check` options. This option requires that the user's terminal has the capability to show ASCII characters and ANSI colors. A future update may include a GUI variation of this preview option to avoid this issue.
 
 <br>
 

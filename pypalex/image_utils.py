@@ -5,10 +5,10 @@
 #   - Created by Al Timofeyev on February 27, 2022.
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
+#   - Modified by Al Timofeyev on April 5, 2023.
 
 
 # ---- IMPORTS ----
-import json
 import numpy
 import multiprocessing
 from PIL import Image
@@ -53,19 +53,6 @@ def process_image(image):
     hsv_matrix_2d = hsv_matrix_2d[numpy.lexsort((hsv_matrix_2d[:, 2], hsv_matrix_2d[:, 1], hsv_matrix_2d[:, 0]))]
 
     return hsv_matrix_2d
-
-
-# --------------------------------------------------------------------------
-# --------------------------------------------------------------------------
-
-##  Saves color palette to json file.
-#   @details    If a file with the same name already exists, it is overwritten.
-#
-#   @param  color_palette   Dictionary of light, normal, and dark color palettes.
-#   @param  output_filepath Output file path with filename of where to store color palette.
-def save_palette_to_file(color_palette, output_filepath):
-    with open(output_filepath, 'w') as outfile:
-        json.dump(color_palette, outfile, indent=4)
 
 
 # **************************************************************************

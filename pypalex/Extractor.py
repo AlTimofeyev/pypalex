@@ -6,6 +6,7 @@
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on March 22, 2023.
+#   - Modified by Al Timofeyev on April 5, 2023.
 
 
 # ---- IMPORTS ----
@@ -38,7 +39,7 @@ class Extractor:
         self.ratio_dict = {}
         self.base_color_dict = {}
         self.extracted_colors_dict = {}
-        self.color_schemes_dict = {}
+        self.palette_dict = {}
 
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
@@ -60,8 +61,8 @@ class Extractor:
         # Check for pastel option(s).
         self.check_pastel_conversion()
 
-        # Construct color scheme dictionary with a mix of all 3 color palettes.
-        self.construct_scheme_dictionary()
+        # Construct a basic palette dictionary.
+        self.construct_palette_dictionary()
 
     # **************************************************************************
     # **************************************************************************
@@ -82,12 +83,56 @@ class Extractor:
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
 
+    ##  Constructs a dictionary of all the extracted color palettes in hex format.
+    #   @details    The extracted color palettes are organized in
+    #               the dictionary as follows: light background,
+    #               light foreground, dark background, dark foreground,
+    #               light palette, normal palette, dark palette.
+    #
+    #   @param  self    The object pointer.
+    def construct_palette_dictionary(self):
+        self.palette_dict = {
+            'light background': convert.hsv_to_hex(self.extracted_colors_dict['Light Background']),
+            'light foreground': convert.hsv_to_hex(self.extracted_colors_dict['Light Foreground']),
+            'dark background': convert.hsv_to_hex(self.extracted_colors_dict['Dark Background']),
+            'dark foreground': convert.hsv_to_hex(self.extracted_colors_dict['Dark Foreground']),
+            'light black': convert.hsv_to_hex(self.extracted_colors_dict['Light Black']),
+            'light red': convert.hsv_to_hex(self.extracted_colors_dict['Light Red']),
+            'light green': convert.hsv_to_hex(self.extracted_colors_dict['Light Green']),
+            'light yellow': convert.hsv_to_hex(self.extracted_colors_dict['Light Yellow']),
+            'light blue': convert.hsv_to_hex(self.extracted_colors_dict['Light Blue']),
+            'light magenta': convert.hsv_to_hex(self.extracted_colors_dict['Light Magenta']),
+            'light cyan': convert.hsv_to_hex(self.extracted_colors_dict['Light Cyan']),
+            'light white': convert.hsv_to_hex(self.extracted_colors_dict['Light White']),
+            'normal black': convert.hsv_to_hex(self.extracted_colors_dict['Normal Black']),
+            'normal red': convert.hsv_to_hex(self.extracted_colors_dict['Normal Red']),
+            'normal green': convert.hsv_to_hex(self.extracted_colors_dict['Normal Green']),
+            'normal yellow': convert.hsv_to_hex(self.extracted_colors_dict['Normal Yellow']),
+            'normal blue': convert.hsv_to_hex(self.extracted_colors_dict['Normal Blue']),
+            'normal magenta': convert.hsv_to_hex(self.extracted_colors_dict['Normal Magenta']),
+            'normal cyan': convert.hsv_to_hex(self.extracted_colors_dict['Normal Cyan']),
+            'normal white': convert.hsv_to_hex(self.extracted_colors_dict['Normal White']),
+            'dark black': convert.hsv_to_hex(self.extracted_colors_dict['Dark Black']),
+            'dark red': convert.hsv_to_hex(self.extracted_colors_dict['Dark Red']),
+            'dark green': convert.hsv_to_hex(self.extracted_colors_dict['Dark Green']),
+            'dark yellow': convert.hsv_to_hex(self.extracted_colors_dict['Dark Yellow']),
+            'dark blue': convert.hsv_to_hex(self.extracted_colors_dict['Dark Blue']),
+            'dark magenta': convert.hsv_to_hex(self.extracted_colors_dict['Dark Magenta']),
+            'dark cyan': convert.hsv_to_hex(self.extracted_colors_dict['Dark Cyan']),
+            'dark white': convert.hsv_to_hex(self.extracted_colors_dict['Dark White']),
+        }
+
+    # --------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
+
     ##  Constructs a dictionary of color schemes by combining color palettes.
     #   @details    Light color scheme contains the normal and dark
     #               color palettes. Dark color scheme contains the
     #               normal and light color palettes.
     #
     #   @param  self    The object pointer.
+    #
+    #   @return A dictionary of light and dark color schemes.
     def construct_scheme_dictionary(self):
         light_scheme = {
             'background': convert.hsv_to_hex(self.extracted_colors_dict['Light Background']),
@@ -131,8 +176,12 @@ class Extractor:
             'bright white': convert.hsv_to_hex(self.extracted_colors_dict['Light White'])
         }
 
-        self.color_schemes_dict['light'] = light_scheme
-        self.color_schemes_dict['dark'] = dark_scheme
+        color_schemes_dict = {
+            'light': light_scheme,
+            'dark': dark_scheme
+        }
+
+        return color_schemes_dict
 
     # **************************************************************************
     # **************************************************************************
@@ -222,7 +271,6 @@ class Extractor:
     ##  @var    base_color_dict
     #   A dictionary of 2D numpy arrays for each of the 6 base colors.
     ##  @var    extracted_colors_dict
-    #   A Dictionary of extracted colors in [h,s,v] format.
-    ##  @var    color_schemes_dict
-    #   A Dictionary of dictionaries for light and dark color schemes
-    #   that are in HEX string format.
+    #   A dictionary of extracted colors in [h,s,v] format.
+    ##  @var    palette_dict
+    #   A dictionary of light, normal, and dark color palettes in hex format.

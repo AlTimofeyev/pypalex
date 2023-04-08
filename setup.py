@@ -1,17 +1,20 @@
-"""
-palex - setup.py
+##  @file   setup.py
+#   @brief  palex - setup.py
+#
+#   @note   This code from Dylan Araps PyWal on github: https://github.com/dylanaraps/pywal
+#           has been borrowed and used as a template.
+#
+#   @section authors Author(s)
+#   - Created by Al Timofeyev on February 20, 2022.
+#   - Modified by Al Timofeyev on April 7, 2023.
 
-NOTE:
-This code from Dylan Araps PyWal on github: https://github.com/dylanaraps/pywal
-has been borrowed and used as a template.
-"""
 import sys
 import setuptools
 
 try:
     import pypalex
 except ImportError:
-    print("error: pypalex requires Python 3.7 or greater.")
+    print("error: pypalex requires Python 3.6 or greater.")
     sys.exit(1)
 
 LONG_DESC = open('README.md').read()
@@ -39,12 +42,13 @@ setuptools.setup(
         "Operating System :: POSIX :: Linux",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
     packages=["pypalex"],
     entry_points={"console_scripts": ["palex=pypalex.__main__:main"]},
-    python_requires=">=3.7",
+    python_requires=">=3.6",
     include_package_data=True,
     zip_safe=False)

@@ -6,6 +6,7 @@
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on March 22, 2023.
+#   - Modified by Al Timofeyev on April 6, 2023.
 
 
 # ---- IMPORTS ----
@@ -512,8 +513,8 @@ def generate_black_and_white(dominant_hue):
 #
 #   @return Numpy array of light and dark background and foreground colors in [h,s,v] format.
 def generate_background_and_foreground(dominant_hue, complementary_hue):
-    light_background_color = numpy.array([dominant_hue, 3.0, 94.0])
-    light_foreground_color = numpy.array([complementary_hue, 4.0, 92.0])
+    light_background_color = numpy.array([dominant_hue, 3.0, 95.0])
+    light_foreground_color = numpy.array([complementary_hue, 3.0, 95.0])
 
     dark_background_color = numpy.array([dominant_hue, 20.0, 17.0])
     dark_foreground_color = numpy.array([complementary_hue, 45.0, 20.0])

@@ -7,9 +7,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <br>
 
+## [1.3.3] - 2023-04-07
+- ADDED: Added a `--save-check` option to ask if the user wants to save the extracted color palettes.
+- ADDED: Added a `--preview` option to show a preview of extracted color palette.
+- ADDED: Added a `--preview-check` option to show preview AND ask if the user wants to save extracted the color palette.
+- ADDED: Added a `hex_to_rgb()` function to the `conversion_utils.py` file.
+- ADDED: Added a `print_utils.py` file to handle printing previews to the screen and a `file_utils.py` file to handle different file saving options..
+    - This is a potential point for contributors to add different printing and file saving options.
+    - **NOTE**: The terminal needs to be able to display ANSI colors and ASCII characters to properly use the default preview option (this issue could be avoided by showing preview in separate GUI).
+- CHANGED: Tested package against Python 3.6.15 and confirmed everything works as it should, added compatibility for Python 3.6 to `setup.py` file.
+- CHANGED: `Extractor` class no longer organizes the extracted color palettes into color schemes, that will be done by the saving options in `file_utils.py`.
+    - The `Extractor` class x will orgnaize the color palettes into a dictionary of default format that looks like this: {light background, light foreground, dark background, dark foreground, light palette, normal palette, dark palette}
+- CHANGED: Changed the light background brightness from 94% to 95%.
+- CHANGED: Changed the light foreground saturation and brightness from (4%, 92%) to (3%, 95%).
+- REMOVED: Removed file saving function from `image_utils.py` file.
+    - This function was moved to the `file_utils.py` file.
+
+<br>
+
 ## [1.3.2] - 2023-03-26
-- Changed `__main__.py`:
-    - Fixed bug where `extractor.color_palette_dict` was not renamed to `extractor.color_schemes_dict` when changes were made in PyPalEx 1.3.1.
+- FIXED: Fixed bug where `extractor.color_palette_dict` was not renamed to `extractor.color_schemes_dict` in the `__main__.py` file when changes were made in PyPalEx 1.3.1.
 
 <br>
 
@@ -76,6 +93,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[1.3.3]: https://github.com/AlTimofeyev/pypalex/compare/1.3.2...1.3.3
 [1.3.2]: https://github.com/AlTimofeyev/pypalex/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/AlTimofeyev/pypalex/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/AlTimofeyev/pypalex/compare/1.2.0...1.3.0
