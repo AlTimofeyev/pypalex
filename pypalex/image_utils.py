@@ -6,6 +6,7 @@
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on April 5, 2023.
+#   - Modified by Al Timofeyev on May 16, 2024.
 
 
 # ---- IMPORTS ----
@@ -58,7 +59,10 @@ def process_image(image):
 # **************************************************************************
 # **************************************************************************
 
-##  Rescales image to a smaller sampling size.
+##  Rescales image to a smaller sampling size while maintaining aspect ration.
+#
+#   @note   The math behind rescaling the image came
+#           from: https://math.stackexchange.com/a/3078131
 #
 #   @param  image   PIL Image object.
 #
@@ -68,21 +72,28 @@ def rescale_image(image):
     default_480p = [854, 480]   # 480p SD resolution with 16:9 ratio.
     default_360p = [640, 360]   # 360p SD resolution with 16:9 ratio.
 
-    # Try scaling images down to 480p with 16:9 ratio.
-    if height < width:      # ---- Landscape, 16:9 ratio.
-        percent_change_width = default_480p[0] / width
-        percent_change_height = default_480p[1] / height
-    elif width < height:    # ---- Portrait, 9:16 ratio.
-        percent_change_width = default_480p[1] / width
-        percent_change_height = default_480p[0] / height
-    else:                   # ---- Square, 1:1 ratio.
-        percent_change_width = default_360p[0] / width
-        percent_change_height = default_360p[0] / height
+    # Try scaling images down to 480p.
+    # new_width = (width/height) * new_height
+    # new_height = (height/width) * new_width
+    if height < width:  # ---- Landscape.
+        new_width = default_480p[0]
+        new_height = round((height / width) * new_width)
 
-    width *= percent_change_width
-    height *= percent_change_height
+        if new_height > default_480p[1]:
+            new_height = default_480p[1]
+            new_width = round((width / height) * new_height)
+    elif width < height:  # ---- Portrait.
+        new_height = default_480p[0]
+        new_width = round((width / height) * new_height)
 
-    return round(width), round(height)
+        if new_width > default_480p[1]:
+            new_width = default_480p[1]
+            new_height = round((height / width) * new_width)
+    else:  # ---- Square, 1:1 ratio.
+        new_width = default_360p[0]
+        new_height = round((width / height) * new_width)
+
+    return round(new_width), round(new_height)
 
 
 # --------------------------------------------------------------------------

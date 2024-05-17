@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <br>
 
+## Unreleased
+- ...
+
+
+
+<br>
+
+## [1.3.4] - 2024-05-16
+- CHANGED: The image rescale function in `image_utils.py`.
+    - Images are now rescaled according to a proper mathematical formula and maintain their aspect ratio instead of hard-rescaling images to 480p with a 16:9 or 9:16 aspect ratio.
+    - The math behind rescaling the image came from: https://math.stackexchange.com/a/3078131
+    - If an image is smaller the required sampling size of 480p, it is not rescaled.
+
+<br>
+
 ## [1.3.3] - 2023-04-07
 - ADDED: Added a `--save-check` option to ask if the user wants to save the extracted color palettes.
 - ADDED: Added a `--preview` option to show a preview of extracted color palette.
@@ -93,6 +108,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[1.3.4]: https://github.com/AlTimofeyev/pypalex/compare/1.3.3...1.3.4
 [1.3.3]: https://github.com/AlTimofeyev/pypalex/compare/1.3.2...1.3.3
 [1.3.2]: https://github.com/AlTimofeyev/pypalex/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/AlTimofeyev/pypalex/compare/1.3.0...1.3.1
