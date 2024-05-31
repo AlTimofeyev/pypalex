@@ -8,9 +8,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <br>
 
 ## Unreleased
-- ...
+-  . . . 
 
 
+<br>
+
+## [1.3.5] - 2024-05-31
+- ADDED: Added a black and dark brightness range as well as a saturation tolerance range to the `constants.py` file.
+  - This was added to isolate black or indistinguishable colors from dark colors and achromatic/grayscale colors from saturated colors.
+- CHANGED: Changed the name of `sort_by_bright_value()` to `sort_by_sat_and_bright_value()` as it now sorts by the saturation tolerance range as well.
+- CHANGED: Changed `extract_color_types()`, `sort_by_sat_and_bright_value()` and `check_missing_color_types()` to account for the added black color range and saturation tolerance range from the `constants.py` file.
+- REMOVED: Removed the `check_sat_and_bright()` function.
+  - Everything this function did is now being done by the `check_missing_color_types()` function and the new constant variables in `constants.py`.
+- REMOVED: Removed the `SATURATION_RANGE` and `BRIGHTNESS_RANGE` from the `constants.py` file.
 
 <br>
 
@@ -108,6 +118,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[1.3.5]: https://github.com/AlTimofeyev/pypalex/compare/1.3.4...1.3.5
 [1.3.4]: https://github.com/AlTimofeyev/pypalex/compare/1.3.3...1.3.4
 [1.3.3]: https://github.com/AlTimofeyev/pypalex/compare/1.3.2...1.3.3
 [1.3.2]: https://github.com/AlTimofeyev/pypalex/compare/1.3.1...1.3.2

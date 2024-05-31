@@ -5,6 +5,7 @@
 #   - Created by Al Timofeyev on February 2, 2022.
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
+#   - Modified by Al Timofeyev on May 31, 2024.
 
 
 # RGB values for base colors.
@@ -52,14 +53,16 @@ MAGENTA_HUE_RANGE = [260, 330]
 # -----------------------------------------------
 
 # Brightness Value range [min, max] for grayscale/achromatic colors.
-BLACK_BRIGHTNESS_RANGE = [0.0, 50.0]    # Range of brightness for where a color can be considered dark.
-GRAY_BRIGHTNESS_RANGE = [50.0, 75.0]    # Range of brightness for where a color can be considered normal.
-WHITE_BRIGHTNESS_RANGE = [75.0, 100.0]  # Range of brightness for where a color can be considered light.
+BLACK_BRIGHTNESS_RANGE = [0.0, 35.0]    # Range of brightness for where a color can be considered black or indistinguishable.
+DARK_BRIGHTNESS_RANGE = [35.0, 55.0]    # Range of brightness for where a color can be considered dark.
+NORM_BRIGHTNESS_RANGE = [55.0, 80.0]    # Range of brightness for where a color can be considered normal.
+LIGHT_BRIGHTNESS_RANGE = [80.0, 100.0]  # Range of brightness for where a color can be considered light.
 # -----------------------------------------------
 
-# Saturation and Brightness Value ranges [min, max] that are tolerable for extracted colors
-SATURATION_RANGE = [5.0, 100.0]
-BRIGHTNESS_RANGE = [25.0, 100.0]
+# The tolerance range [min, max] for grayscale/achromatic colors.
+# If a color is less saturated than the min value in this range then it's considered grayscale/achromatic.
+# If a grayscale/achromatic color is borrowed from, then it's first normalized to be within this range
+SATURATION_TOLERANCE_RANGE = [10.0, 15.0]
 # -----------------------------------------------
 
 # Pastel Saturation and Brightness Value ranges [min, max]

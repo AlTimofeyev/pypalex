@@ -14,12 +14,13 @@
 #   - Modified by Al Timofeyev on March 26, 2023.
 #   - Modified by Al Timofeyev on April 7, 2023.
 #   - Modified by Al Timofeyev on May 16, 2024.
+#   - Modified by Al Timofeyev on May 31, 2024.
 
 
 import os
 import platform
 
-__version__ = "1.3.4"
+__version__ = "1.3.5"
 __cache_version__ = "1.0.0"
 
 HOME = os.getenv("HOME", os.getenv("USERPROFILE"))

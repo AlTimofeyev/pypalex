@@ -7,6 +7,7 @@
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on March 22, 2023.
 #   - Modified by Al Timofeyev on April 6, 2023.
+#   - Modified by Al Timofeyev on May 31, 2024.
 
 
 # ---- IMPORTS ----
@@ -285,15 +286,21 @@ def extract_color_types(hsv_base_color_matrix_and_sat_prefs):
     if len(hsv_base_color_matrix) == 0:
         return [numpy.array([]), numpy.array([]), numpy.array([])]
 
-    light_colors, norm_colors, dark_colors = sort_by_bright_value(hsv_base_color_matrix)
+    light_colors, norm_colors, dark_colors, black_colors, achromatic_light_colors, \
+    achromatic_norm_colors, achromatic_dark_colors, achromatic_black_colors = sort_by_sat_and_bright_value(hsv_base_color_matrix)
+
     light_color = extract_dominant_color(light_colors, sat_pref_light)
     norm_color = extract_dominant_color(norm_colors, sat_pref_normal)
     dark_color = extract_dominant_color(dark_colors, sat_pref_dark)
+    black_color = extract_dominant_color(black_colors, sat_pref_dark)
 
-    check_missing_color_types(light_color, norm_color, dark_color)
-    check_sat_and_bright(light_color)
-    check_sat_and_bright(norm_color)
-    check_sat_and_bright(dark_color)
+    achromatic_light = extract_dominant_color(achromatic_light_colors, sat_pref_light)
+    achromatic_norm = extract_dominant_color(achromatic_norm_colors, sat_pref_normal)
+    achromatic_dark = extract_dominant_color(achromatic_dark_colors, sat_pref_dark)
+    achromatic_black = extract_dominant_color(achromatic_black_colors, sat_pref_dark)
+
+    check_missing_color_types(light_color, norm_color, dark_color, black_color,
+                              achromatic_light, achromatic_norm, achromatic_dark, achromatic_black)
 
     return [light_color, norm_color, dark_color]
 
@@ -525,28 +532,44 @@ def generate_background_and_foreground(dominant_hue, complementary_hue):
 # **************************************************************************
 # **************************************************************************
 
-##  Sorts the colors by the brightness value.
-#   @details    A color type is either a light, normal, or
-#               dark version of a base color.
+##  Sorts the colors by their saturation and brightness values.
+#   @details    A color type is either a light, normal, dark,
+#               black or achromatic version of a base color.
 #
-#   @param  hsv_base_color_matrix   A 2D numpy array of a base color in [h,s,v] format.
+#   @param  hsv_base_color_matrix   A 2D numpy array of a base color, where
+#                                   each element is a list in [h,s,v] format.
 #
-#   @return List of numpy array color types in [h,s,v] format.
-def sort_by_bright_value(hsv_base_color_matrix):
-    light_colors = []
-    norm_colors = []
-    dark_colors = []
+#   @return A list of color types, where each element is a 2D numpy array
+#           of a color type whose elements are a list in [h,s,v] format.
+def sort_by_sat_and_bright_value(hsv_base_color_matrix):
+    light_colors, norm_colors, dark_colors, black_colors = [], [], [], []
+    achromatic_light, achromatic_norm, achromatic_dark, achromatic_black = [], [], [], []
 
     for pixel in hsv_base_color_matrix:
-        brightness = pixel[2]
-        if brightness > const.WHITE_BRIGHTNESS_RANGE[0]:    # -------- If light color.
-            light_colors.append(pixel)
-        elif brightness > const.GRAY_BRIGHTNESS_RANGE[0]:   # -------- If normal color.
-            norm_colors.append(pixel)
-        else:                                               # -------- If dark color.
-            dark_colors.append(pixel)
+        _, saturation, brightness = pixel
+        if brightness > const.LIGHT_BRIGHTNESS_RANGE[0]:    # -------- If light color.
+            if saturation < const.SATURATION_TOLERANCE_RANGE[0]:
+                achromatic_light.append(pixel)
+            else:
+                light_colors.append(pixel)
+        elif brightness > const.NORM_BRIGHTNESS_RANGE[0]:   # -------- If normal color.
+            if saturation < const.SATURATION_TOLERANCE_RANGE[0]:
+                achromatic_norm.append(pixel)
+            else:
+                norm_colors.append(pixel)
+        elif brightness > const.DARK_BRIGHTNESS_RANGE[0]:   # -------- If dark color.
+            if saturation < const.SATURATION_TOLERANCE_RANGE[0]:
+                achromatic_dark.append(pixel)
+            else:
+                dark_colors.append(pixel)
+        else:                                               # -------- If black color.
+            if saturation < const.SATURATION_TOLERANCE_RANGE[0]:
+                achromatic_black.append(pixel)
+            else:
+                black_colors.append(pixel)
 
-    return [numpy.asarray(light_colors), numpy.asarray(norm_colors), numpy.asarray(dark_colors)]
+    return [numpy.asarray(light_colors), numpy.asarray(norm_colors), numpy.asarray(dark_colors), numpy.asarray(black_colors),
+            numpy.asarray(achromatic_light), numpy.asarray(achromatic_norm), numpy.asarray(achromatic_dark), numpy.asarray(achromatic_black)]
 
 
 # --------------------------------------------------------------------------
@@ -580,85 +603,185 @@ def extract_dominant_color(hsv_color_type_matrix, sat_pref):
 ##  Checks to make sure all the color types have been properly set.
 #   @details    If a color type is missing, then it will
 #               be derived from the existing color types.
+#   @note   I'm using the normalization formula from https://stats.stackexchange.com/a/281164
 #
-#   @param  light_color A numpy array of a light color type in [h,s,v] format.
-#   @param  norm_color  A numpy array of a normal color type in [h,s,v] format.
-#   @param  dark_color  A numpy array of a dark color type in [h,s,v] format.
-def check_missing_color_types(light_color, norm_color, dark_color):
-    has_light = light_color[0] != -1
-    has_norm = norm_color[0] != -1
-    has_dark = dark_color[0] != -1
+#   @param  light_color         A numpy array of a light color type in [h,s,v] format.
+#   @param  norm_color          A numpy array of a normal color type in [h,s,v] format.
+#   @param  dark_color          A numpy array of a dark color type in [h,s,v] format.
+#   @param  black_color         A numpy array of a black color type in [h,s,v] format.
+#   @param  achromatic_light    A numpy array of an achromatic light color type in [h,s,v] format.
+#   @param  achromatic_norm     A numpy array of an achromatic normal color type in [h,s,v] format.
+#   @param  achromatic_dark     A numpy array of an achromatic dark color type in [h,s,v] format.
+#   @param  achromatic_black    A numpy array of an achromatic black color type in [h,s,v] format.
+def check_missing_color_types(light_color, norm_color, dark_color, black_color,
+                              achromatic_light, achromatic_norm, achromatic_dark, achromatic_black):
+    has_light = light_set = light_color[0] != -1
+    has_norm = norm_set = norm_color[0] != -1
+    has_dark = dark_set = dark_color[0] != -1
+    has_black = black_set = black_color[0] != -1
 
-    # Check and set dark color.
+    has_achro_light = achromatic_light[0] != -1
+    has_achro_norm = achromatic_norm[0] != -1
+    has_achro_dark = achromatic_dark[0] != -1
+    has_achro_black = achromatic_black[0] != -1
+
+    # Check and set black color using existing color types.
+    if not has_black:
+        if has_achro_black:
+            black_color[0], black_color[2] = achromatic_black[0], achromatic_black[2]
+            old_bounds = [0, const.SATURATION_TOLERANCE_RANGE[0]]
+            new_bounds = [const.SATURATION_TOLERANCE_RANGE[0], const.SATURATION_TOLERANCE_RANGE[1]]
+            black_color[1] = new_bounds[0] + (((achromatic_black[1] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                              * (new_bounds[1] - new_bounds[0]))
+            black_set = True
+
+    # Check and set dark color using existing color types.
     if not has_dark:
-        if has_light:
+        if has_black:
+            dark_color[0] = black_color[0]
+            dark_color[1] = black_color[1]
+            old_bounds = [const.BLACK_BRIGHTNESS_RANGE[0], const.BLACK_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            dark_color[2] = new_bounds[0] + (((black_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
+        elif has_light:
             dark_color[0] = light_color[0]
             dark_color[1] = light_color[1]
-            brightness_range = const.WHITE_BRIGHTNESS_RANGE[1] - const.WHITE_BRIGHTNESS_RANGE[0]
-            percent = (light_color[2] - const.WHITE_BRIGHTNESS_RANGE[0]) / brightness_range
-            brightness_offset = (const.BLACK_BRIGHTNESS_RANGE[1] - const.BLACK_BRIGHTNESS_RANGE[0]) * percent
-            dark_color[2] = const.BLACK_BRIGHTNESS_RANGE[1] - brightness_offset
+            old_bounds = [const.LIGHT_BRIGHTNESS_RANGE[0], const.LIGHT_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            dark_color[2] = new_bounds[1] - (((light_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
         elif has_norm:
             dark_color[0] = norm_color[0]
             sat_diff = math.sqrt(100 - norm_color[1]) if norm_color[1] < 50 else math.sqrt(norm_color[1])
             dark_color[1] = norm_color[1] + sat_diff if norm_color[1] < 50 else norm_color[1] - sat_diff
-            brightness_range = const.GRAY_BRIGHTNESS_RANGE[1] - const.GRAY_BRIGHTNESS_RANGE[0]
-            percent = (norm_color[2] - const.GRAY_BRIGHTNESS_RANGE[0]) / brightness_range
-            brightness_offset = (const.BLACK_BRIGHTNESS_RANGE[1] - const.BLACK_BRIGHTNESS_RANGE[0]) * percent
-            dark_color[2] = const.BLACK_BRIGHTNESS_RANGE[0] + brightness_offset
+            old_bounds = [const.NORM_BRIGHTNESS_RANGE[0], const.NORM_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            dark_color[2] = new_bounds[0] + (((norm_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
+        elif has_achro_dark:
+            dark_color[0], dark_color[2] = achromatic_dark[0], achromatic_dark[2]
+            old_bounds = [0, const.SATURATION_TOLERANCE_RANGE[0]]
+            new_bounds = [const.SATURATION_TOLERANCE_RANGE[0], const.SATURATION_TOLERANCE_RANGE[1]]
+            dark_color[1] = new_bounds[0] + (((achromatic_dark[1] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
 
-    # Check and set light color.
+        if dark_color[0] != -1:     # If the dark color has been set by one of the options above.
+            dark_set = True
+
+    # Check and set light color using existing color types.
     if not has_light:
         if has_dark:
             light_color[0] = dark_color[0]
             light_color[1] = dark_color[1]
-            brightness_range = const.BLACK_BRIGHTNESS_RANGE[1] - const.BLACK_BRIGHTNESS_RANGE[0]
-            percent = (dark_color[2] - const.BLACK_BRIGHTNESS_RANGE[0]) / brightness_range
-            brightness_offset = (const.WHITE_BRIGHTNESS_RANGE[1] - const.WHITE_BRIGHTNESS_RANGE[0]) * percent
-            light_color[2] = const.WHITE_BRIGHTNESS_RANGE[1] - brightness_offset
+            old_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.LIGHT_BRIGHTNESS_RANGE[0], const.LIGHT_BRIGHTNESS_RANGE[1]]
+            light_color[2] = new_bounds[1] - (((dark_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                              * (new_bounds[1] - new_bounds[0]))
         elif has_norm:
             light_color[0] = norm_color[0]
             sat_diff = math.sqrt(100 - norm_color[1]) if norm_color[1] < 50 else math.sqrt(norm_color[1])
             light_color[1] = norm_color[1] + sat_diff if norm_color[1] < 50 else norm_color[1] - sat_diff
-            brightness_range = const.GRAY_BRIGHTNESS_RANGE[1] - const.GRAY_BRIGHTNESS_RANGE[0]
-            percent = (norm_color[2] - const.GRAY_BRIGHTNESS_RANGE[0]) / brightness_range
-            brightness_offset = (const.WHITE_BRIGHTNESS_RANGE[1] - const.WHITE_BRIGHTNESS_RANGE[0]) * percent
-            light_color[2] = const.WHITE_BRIGHTNESS_RANGE[0] + brightness_offset
+            old_bounds = [const.NORM_BRIGHTNESS_RANGE[0], const.NORM_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.LIGHT_BRIGHTNESS_RANGE[0], const.LIGHT_BRIGHTNESS_RANGE[1]]
+            light_color[2] = new_bounds[0] + (((norm_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                              * (new_bounds[1] - new_bounds[0]))
+        elif has_achro_light:
+            light_color[0], light_color[2] = achromatic_light[0], achromatic_light[2]
+            old_bounds = [0, const.SATURATION_TOLERANCE_RANGE[0]]
+            new_bounds = [const.SATURATION_TOLERANCE_RANGE[0], const.SATURATION_TOLERANCE_RANGE[1]]
+            light_color[1] = new_bounds[0] + (((achromatic_light[1] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                              * (new_bounds[1] - new_bounds[0]))
 
-    # Check and set normal color, using averages.
+        if light_color[0] != -1:    # If the light color has been set by one of the options above.
+            light_set = True
+
+    # Check and set normal color using existing color types.
     if not has_norm:
+        if has_dark and has_light:
+            cos_light_hue, cos_dark_hue = math.cos(math.radians(light_color[0])), math.cos(math.radians(dark_color[0]))
+            sin_light_hue, sin_dark_hue = math.sin(math.radians(light_color[0])), math.sin(math.radians(dark_color[0]))
+            norm_color[0] = math.atan2(stats.mean([sin_light_hue, sin_dark_hue]), stats.mean([cos_light_hue, cos_dark_hue]))
+            norm_color[0] = round(math.degrees(norm_color[0])) % 360
+            norm_color[1] = (light_color[1] + dark_color[1]) / 2
+            light_percent = (light_color[2] - const.LIGHT_BRIGHTNESS_RANGE[0]) / (const.LIGHT_BRIGHTNESS_RANGE[1] - const.LIGHT_BRIGHTNESS_RANGE[0])
+            dark_percent = (dark_color[2] - const.DARK_BRIGHTNESS_RANGE[0]) / (const.DARK_BRIGHTNESS_RANGE[1] - const.DARK_BRIGHTNESS_RANGE[0])
+            avg_light_dark_brightness = (light_percent + dark_percent) / 2
+            norm_color[2] = const.NORM_BRIGHTNESS_RANGE[0] + (
+                    (const.NORM_BRIGHTNESS_RANGE[1] - const.NORM_BRIGHTNESS_RANGE[0]) * avg_light_dark_brightness)
+        elif has_achro_norm:
+            norm_color[0], norm_color[2] = achromatic_norm[0], achromatic_norm[2]
+            old_bounds = [0, const.SATURATION_TOLERANCE_RANGE[0]]
+            new_bounds = [const.SATURATION_TOLERANCE_RANGE[0], const.SATURATION_TOLERANCE_RANGE[1]]
+            norm_color[1] = new_bounds[0] + (((achromatic_norm[1] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
+
+        if norm_color[0] != -1:     # If the normal color has been set by one of the options above.
+            norm_set = True
+
+    # Double check for color types that haven't been set yet by using
+    # color types that have been set with the previous checks above.
+    # Check and set dark color using borrowed color types.
+    if not dark_set:
+        if black_set:
+            dark_color[0] = black_color[0]
+            dark_color[1] = black_color[1]
+            old_bounds = [const.BLACK_BRIGHTNESS_RANGE[0], const.BLACK_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            dark_color[2] = new_bounds[0] + (((black_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
+        elif light_set:
+            dark_color[0] = light_color[0]
+            dark_color[1] = light_color[1]
+            old_bounds = [const.LIGHT_BRIGHTNESS_RANGE[0], const.LIGHT_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            dark_color[2] = new_bounds[1] - (((light_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
+        elif norm_set:
+            dark_color[0] = norm_color[0]
+            sat_diff = math.sqrt(100 - norm_color[1]) if norm_color[1] < 50 else math.sqrt(norm_color[1])
+            dark_color[1] = norm_color[1] + sat_diff if norm_color[1] < 50 else norm_color[1] - sat_diff
+            old_bounds = [const.NORM_BRIGHTNESS_RANGE[0], const.NORM_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            dark_color[2] = new_bounds[0] + (((norm_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                             * (new_bounds[1] - new_bounds[0]))
+
+        if dark_color[0] != -1:     # If the dark color has been set by one of the options above.
+            dark_set = True
+
+    # Check and set light color using borrowed color types.
+    if not light_set:
+        if dark_set:
+            light_color[0] = dark_color[0]
+            light_color[1] = dark_color[1]
+            old_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.DARK_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.LIGHT_BRIGHTNESS_RANGE[0], const.LIGHT_BRIGHTNESS_RANGE[1]]
+            light_color[2] = new_bounds[1] - (((dark_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                              * (new_bounds[1] - new_bounds[0]))
+        elif norm_set:
+            light_color[0] = norm_color[0]
+            sat_diff = math.sqrt(100 - norm_color[1]) if norm_color[1] < 50 else math.sqrt(norm_color[1])
+            light_color[1] = norm_color[1] + sat_diff if norm_color[1] < 50 else norm_color[1] - sat_diff
+            old_bounds = [const.NORM_BRIGHTNESS_RANGE[0], const.NORM_BRIGHTNESS_RANGE[1]]
+            new_bounds = [const.LIGHT_BRIGHTNESS_RANGE[0], const.LIGHT_BRIGHTNESS_RANGE[1]]
+            light_color[2] = new_bounds[0] + (((norm_color[2] - old_bounds[0]) / (old_bounds[1] - old_bounds[0]))
+                                              * (new_bounds[1] - new_bounds[0]))
+
+        if light_color[0] != -1:    # If the light color has been set by one of the options above.
+            light_set = True
+
+    # Check and set normal color using borrowed color types.
+    if not norm_set:
         cos_light_hue, cos_dark_hue = math.cos(math.radians(light_color[0])), math.cos(math.radians(dark_color[0]))
         sin_light_hue, sin_dark_hue = math.sin(math.radians(light_color[0])), math.sin(math.radians(dark_color[0]))
         norm_color[0] = math.atan2(stats.mean([sin_light_hue, sin_dark_hue]), stats.mean([cos_light_hue, cos_dark_hue]))
         norm_color[0] = round(math.degrees(norm_color[0])) % 360
         norm_color[1] = (light_color[1] + dark_color[1]) / 2
-        norm_color[2] = (light_color[2] + dark_color[2]) / 2
-
-
-# --------------------------------------------------------------------------
-# --------------------------------------------------------------------------
-
-##  Normalize saturation and brightness value.
-#   @details    The normalization process is to make sure
-#               that colors are visible, distinguishable and
-#               tolerable to look at. These ranges for saturation
-#               and brightness values are defined in constants.py.
-#               This step can be removed if it is not needed
-#               as it does not impact the extraction process.
-#
-#   @param  hsv_color   A numpy array of a color type in [h,s,v] format.
-def check_sat_and_bright(hsv_color):
-    # Edge case, don't do this for values of [-1, -1.0, -1.0 ]
-    if hsv_color[0] == -1:
-        return
-
-    # Check and normalize saturation.
-    if hsv_color[1] < const.SATURATION_RANGE[0]:
-        hsv_color[1] = random.uniform(const.SATURATION_RANGE[0], const.SATURATION_RANGE[0]+5)
-
-    # Check and normalize brightness value.
-    if hsv_color[2] < const.BRIGHTNESS_RANGE[0]:
-        hsv_color[2] = random.uniform(const.BRIGHTNESS_RANGE[0], const.BRIGHTNESS_RANGE[0]+5)
+        light_percent = (light_color[2] - const.LIGHT_BRIGHTNESS_RANGE[0]) / (const.LIGHT_BRIGHTNESS_RANGE[1] - const.LIGHT_BRIGHTNESS_RANGE[0])
+        dark_percent = (dark_color[2] - const.DARK_BRIGHTNESS_RANGE[0]) / (const.DARK_BRIGHTNESS_RANGE[1] - const.DARK_BRIGHTNESS_RANGE[0])
+        avg_light_dark_brightness = (light_percent + dark_percent) / 2
+        norm_color[2] = const.NORM_BRIGHTNESS_RANGE[0] + (
+                (const.NORM_BRIGHTNESS_RANGE[1] - const.NORM_BRIGHTNESS_RANGE[0]) * avg_light_dark_brightness)
 
 
 # **************************************************************************
