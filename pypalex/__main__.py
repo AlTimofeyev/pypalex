@@ -27,6 +27,7 @@
 #   - Modified by Al Timofeyev on March 22, 2023.
 #   - Modified by Al Timofeyev on March 26, 2023.
 #   - Modified by Al Timofeyev on April 7, 2023.
+#   - Modified by Al Timofeyev on June 10, 2024.
 
 
 # ---- IMPORTS ----
@@ -66,12 +67,6 @@ PASTEL_L = False
 PASTEL_N = False
 ## Flag to convert dark color palette to pastel.
 PASTEL_D = False
-## Flag that gives preference to more saturated colors of the light color palette.
-SAT_PREF_L = False
-## Flag that gives preference to more saturated colors of the normal color palette.
-SAT_PREF_N = False
-## Flag that gives preference to more saturated colors of the dark color palette.
-SAT_PREF_D = False
 
 
 # **************************************************************************
@@ -135,7 +130,7 @@ def extract_color_palettes():
         hsv_img_matrix_2d = imutils.process_image(image)
         print("COMPLETED")
         print("Extracting Colors : ", sep='', end='')
-        extractor = Extractor(hsv_img_matrix_2d, OUTPUT_FILEPATHS[index], PASTEL_L, PASTEL_N, PASTEL_D, SAT_PREF_L, SAT_PREF_N, SAT_PREF_D)
+        extractor = Extractor(hsv_img_matrix_2d, OUTPUT_FILEPATHS[index], PASTEL_L, PASTEL_N, PASTEL_D)
         extractor.run()
         print("COMPLETED")
 
@@ -156,7 +151,11 @@ def extract_color_palettes():
                     break
 
         if save_file:
+            print("SAVED : ", OUTPUT_FILEPATHS[index], sep='')
             EXTRACTORS.append(extractor)
+
+        if index < len(PROPER_IMAGES)-1:    # Print blank line separator if there are more images.
+            print()
 
 
 # **************************************************************************
@@ -194,14 +193,6 @@ def setup_argument_parser():
                                  help="Converts normal color palette into pastel.")
     argument_parser.add_argument("--pastel-dark", action="store_true",
                                  help="Converts dark color palette into pastel.")
-    argument_parser.add_argument("--sat_pref", action="store_true",
-                                 help="Gives preference to more saturated colors of all color palettes.")
-    argument_parser.add_argument("--sat_pref-light", action="store_true",
-                                 help="Gives preference to more saturated colors of the light color palette.")
-    argument_parser.add_argument("--sat_pref-normal", action="store_true",
-                                 help="Gives preference to more saturated colors of the normal color palette.")
-    argument_parser.add_argument("--sat_pref-dark", action="store_true",
-                                 help="Gives preference to more saturated colors of the dark color palette.")
     argument_parser.add_argument("-v", "--version", action="store_true",
                                  help="Prints the PyPalEx version.")
 
@@ -282,9 +273,6 @@ def set_global_args(args):
     global PASTEL_L
     global PASTEL_N
     global PASTEL_D
-    global SAT_PREF_L
-    global SAT_PREF_N
-    global SAT_PREF_D
     global OUTPUT_PATH
     global OUTPUT_FILEPATHS
     global PROPER_IMAGES
@@ -295,9 +283,6 @@ def set_global_args(args):
     PASTEL_L = args['pastel_light'] or args['pastel']
     PASTEL_N = args['pastel_normal'] or args['pastel']
     PASTEL_D = args['pastel_dark'] or args['pastel']
-    SAT_PREF_L = args['sat_pref_light'] or args['sat_pref']
-    SAT_PREF_N = args['sat_pref_normal'] or args['sat_pref']
-    SAT_PREF_D = args['sat_pref_dark'] or args['sat_pref']
 
     OUTPUT_PATH = args['output'] if args['output'] is not None and args['output'] != '' else CONF_DIR
     args_path = args['path']

@@ -8,24 +8,38 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 <br>
 
 ## Unreleased
--  . . . 
+- . . .
 
+
+<br>
+
+## [2.0.0] - 2024-06-10
+- ADDED: Updated **setup.py** to include project links on the official PyPI Package Homepage.
+- FIXED: Fixed a bug where the `--pastel, /light/normal/dark` options were broken because they were still reliant on the old `SATURATION_RANGE` and `BRIGHTNESS_RANGE` constants in the **constants.py** file.
+    - Changed the `convert_pastel()` function in **Extractor.py** file to use the new constant values that were introduced in version 1.3.5.
+- CHANGED: A color palette's saturation value is only converted to pastel if it is outside the pastel saturation range that is defined in the **constants.py** file.
+- CHANGED: The `PASTEL_BRIGHTNESS_RANGE` is now set to be between 65.0 and 95.0 instead of 50.0 to 100.0 in the **constants.py** file.
+- REMOVED: Removed the saturation preference options from package.
+    - Removed any mention of saturation preference from **\_\_main\_\_.py** file.
+    - Removed `sat_pref_light/norm/dark` and `sat_pref_list` variables from **Extractor.py** file.
+    - Removed any use or mention of`sat_pref_list` from **extraction_utils.py** file:
+        - Removed it from `extract_color_palettes()`, `extract_color_types()`, `extract_dominant_color()` and `find_closest_to_centroid()`.
 
 <br>
 
 ## [1.3.5] - 2024-05-31
-- ADDED: Added a black and dark brightness range as well as a saturation tolerance range to the `constants.py` file.
+- ADDED: Added a black and dark brightness range as well as a saturation tolerance range to the **constants.py** file.
   - This was added to isolate black or indistinguishable colors from dark colors and achromatic/grayscale colors from saturated colors.
 - CHANGED: Changed the name of `sort_by_bright_value()` to `sort_by_sat_and_bright_value()` as it now sorts by the saturation tolerance range as well.
-- CHANGED: Changed `extract_color_types()`, `sort_by_sat_and_bright_value()` and `check_missing_color_types()` to account for the added black color range and saturation tolerance range from the `constants.py` file.
+- CHANGED: Changed `extract_color_types()`, `sort_by_sat_and_bright_value()` and `check_missing_color_types()` to account for the added black color range and saturation tolerance range from the **constants.py** file.
 - REMOVED: Removed the `check_sat_and_bright()` function.
-  - Everything this function did is now being done by the `check_missing_color_types()` function and the new constant variables in `constants.py`.
-- REMOVED: Removed the `SATURATION_RANGE` and `BRIGHTNESS_RANGE` from the `constants.py` file.
+  - Everything this function did is now being done by the `check_missing_color_types()` function and the new constant variables in **constants.py**.
+- REMOVED: Removed the `SATURATION_RANGE` and `BRIGHTNESS_RANGE` from the **constants.py** file.
 
 <br>
 
 ## [1.3.4] - 2024-05-16
-- CHANGED: The image rescale function in `image_utils.py`.
+- CHANGED: The image rescale function in **image_utils.py**.
     - Images are now rescaled according to a proper mathematical formula and maintain their aspect ratio instead of hard-rescaling images to 480p with a 16:9 or 9:16 aspect ratio.
     - The math behind rescaling the image came from: https://math.stackexchange.com/a/3078131
     - If an image is smaller the required sampling size of 480p, it is not rescaled.
@@ -36,22 +50,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - ADDED: Added a `--save-check` option to ask if the user wants to save the extracted color palettes.
 - ADDED: Added a `--preview` option to show a preview of extracted color palette.
 - ADDED: Added a `--preview-check` option to show preview AND ask if the user wants to save extracted the color palette.
-- ADDED: Added a `hex_to_rgb()` function to the `conversion_utils.py` file.
-- ADDED: Added a `print_utils.py` file to handle printing previews to the screen and a `file_utils.py` file to handle different file saving options..
+- ADDED: Added a `hex_to_rgb()` function to the **conversion_utils.py** file.
+- ADDED: Added a **print_utils.py** file to handle printing previews to the screen and a **file_utils.py** file to handle different file saving options..
     - This is a potential point for contributors to add different printing and file saving options.
     - **NOTE**: The terminal needs to be able to display ANSI colors and ASCII characters to properly use the default preview option (this issue could be avoided by showing preview in separate GUI).
-- CHANGED: Tested package against Python 3.6.15 and confirmed everything works as it should, added compatibility for Python 3.6 to `setup.py` file.
-- CHANGED: `Extractor` class no longer organizes the extracted color palettes into color schemes, that will be done by the saving options in `file_utils.py`.
-    - The `Extractor` class x will orgnaize the color palettes into a dictionary of default format that looks like this: {light background, light foreground, dark background, dark foreground, light palette, normal palette, dark palette}
+- CHANGED: Tested package against Python 3.6.15 and confirmed everything works as it should, added compatibility for Python 3.6 to **setup.py** file.
+- CHANGED: `Extractor` class no longer organizes the extracted color palettes into color schemes, that will be done by the saving options in **file_utils.py**.
+    - The `Extractor` class x will organize the color palettes into a dictionary of default format that looks like this: {light background, light foreground, dark background, dark foreground, light palette, normal palette, dark palette}
 - CHANGED: Changed the light background brightness from 94% to 95%.
 - CHANGED: Changed the light foreground saturation and brightness from (4%, 92%) to (3%, 95%).
-- REMOVED: Removed file saving function from `image_utils.py` file.
-    - This function was moved to the `file_utils.py` file.
+- REMOVED: Removed file saving function from **image_utils.py** file.
+    - This function was moved to the **file_utils.py** file.
 
 <br>
 
 ## [1.3.2] - 2023-03-26
-- FIXED: Fixed bug where `extractor.color_palette_dict` was not renamed to `extractor.color_schemes_dict` in the `__main__.py` file when changes were made in PyPalEx 1.3.1.
+- FIXED: Fixed bug where `extractor.color_palette_dict` was not renamed to `extractor.color_schemes_dict` in the **\_\_main\_\_.py** file when changes were made in PyPalEx 1.3.1.
 
 <br>
 
@@ -118,6 +132,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[2.0.0]: https://github.com/AlTimofeyev/pypalex/compare/1.3.5...2.0.0
 [1.3.5]: https://github.com/AlTimofeyev/pypalex/compare/1.3.4...1.3.5
 [1.3.4]: https://github.com/AlTimofeyev/pypalex/compare/1.3.3...1.3.4
 [1.3.3]: https://github.com/AlTimofeyev/pypalex/compare/1.3.2...1.3.3

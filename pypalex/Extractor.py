@@ -7,6 +7,7 @@
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on March 22, 2023.
 #   - Modified by Al Timofeyev on April 5, 2023.
+#   - Modified by Al Timofeyev on June 10, 2024.
 
 
 # ---- IMPORTS ----
@@ -26,16 +27,12 @@ class Extractor:
     #   @param  pastel_light        Flag to convert light color palette to pastel.
     #   @param  pastel_normal       Flag to convert normal color palette to pastel.
     #   @param  pastel_dark         Flag to convert dark color palette to pastel.
-    #   @param  sat_pref_light      Flag that gives preference to more saturated colors of the light color palette.
-    #   @param  sat_pref_normal     Flag that gives preference to more saturated colors of the normal color palette.
-    #   @param  sat_pref_dark       Flag that gives preference to more saturated colors of the dark color palette.
-    def __init__(self, hsv_img_matrix_2d, output_filepath, pastel_light=False, pastel_normal=False, pastel_dark=False, sat_pref_light=False, sat_pref_normal=False, sat_pref_dark=False):
+    def __init__(self, hsv_img_matrix_2d, output_filepath, pastel_light=False, pastel_normal=False, pastel_dark=False):
         self.hsv_img_matrix_2d = hsv_img_matrix_2d
         self.output_filepath = output_filepath
         self.pastel_light = pastel_light
         self.pastel_normal = pastel_normal
         self.pastel_dark = pastel_dark
-        self.sat_pref_list = [sat_pref_light, sat_pref_normal, sat_pref_dark]
         self.ratio_dict = {}
         self.base_color_dict = {}
         self.extracted_colors_dict = {}
@@ -54,7 +51,7 @@ class Extractor:
         self.base_color_dict = exutil.construct_base_color_dictionary(self.hsv_img_matrix_2d)
 
         # Extract colors.
-        self.extracted_colors_dict = exutil.extract_color_palettes(self.base_color_dict, self.sat_pref_list)
+        self.extracted_colors_dict = exutil.extract_color_palettes(self.base_color_dict)
         exutil.check_missing_colors(self.base_color_dict, self.extracted_colors_dict)
         exutil.generate_remaining_colors(self.extracted_colors_dict, self.ratio_dict)
 
@@ -229,25 +226,29 @@ class Extractor:
     # **************************************************************************
 
     ##  Converts/normalizes HSV color to pastel.
-    #   @details    For values x in range [a, b], values x can be converted
+    #   @details    For values x in range [a, b], values x can be normalized
     #               to the new range [y, z] with the following equation:
-    #               new_x = (z-y) * ((x-a) / (b-a)) + y
+    #               new_x = y + ( ((x-a) / (b-a)) * (z-y) )
+    #   @note   I'm using the normalization formula from https://stats.stackexchange.com/a/281164
     #
     #   @param  self        The object pointer.
     #   @param  hsv_color   List HSV color to be converted to pastel.
     def convert_pastel(self, hsv_color):
-        # Define the old and new ranges.
-        old_sat, new_sat = const.SATURATION_RANGE, const.PASTEL_SATURATION_RANGE
-        old_sat_range = old_sat[1] - old_sat[0]
-        new_sat_range = new_sat[1] - new_sat[0]
+        # Define the old and new bounds for the saturation and brightness ranges.
+        old_sat_bounds = [const.SATURATION_TOLERANCE_RANGE[0], 100.0]
+        new_sat_bounds = [const.PASTEL_SATURATION_RANGE[0], const.PASTEL_SATURATION_RANGE[1]]
+        old_bright_bounds = [const.DARK_BRIGHTNESS_RANGE[0], const.LIGHT_BRIGHTNESS_RANGE[1]]
+        new_bright_bounds = [const.PASTEL_BRIGHTNESS_RANGE[0], const.PASTEL_BRIGHTNESS_RANGE[1]]
 
-        old_brightness, new_brightness = const.BRIGHTNESS_RANGE, const.PASTEL_BRIGHTNESS_RANGE
-        old_bright_range = old_brightness[1] - old_brightness[0]
-        new_bright_range = new_brightness[1] - new_brightness[0]
+        # Only convert saturation to pastel if it is outside the pastel saturation range.
+        if hsv_color[1] < new_sat_bounds[0] or hsv_color[1] > new_sat_bounds[1]:
+            hsv_color[1] = new_sat_bounds[0] + (
+                    ((hsv_color[1] - old_sat_bounds[0]) / (old_sat_bounds[1] - old_sat_bounds[0]))
+                    * (new_sat_bounds[1] - new_sat_bounds[0]))
 
-        # Convert saturation and brightness to pastel range.
-        hsv_color[1] = new_sat_range * ((hsv_color[1] - old_sat[0]) / old_sat_range) + new_sat[0]
-        hsv_color[2] = new_bright_range * ((hsv_color[2] - old_brightness[0]) / old_bright_range) + new_brightness[0]
+        hsv_color[2] = new_bright_bounds[0] + (
+                ((hsv_color[2] - old_bright_bounds[0]) / (old_bright_bounds[1] - old_bright_bounds[0]))
+                * (new_bright_bounds[1] - new_bright_bounds[0]))
 
     # **************************************************************************
     # ********************* GLOBAL VARIABLE DOCUMENTATION **********************
@@ -263,8 +264,6 @@ class Extractor:
     #   Flag to convert normal color palette to pastel.
     ##  @var    pastel_dark
     #   Flag to convert dark color palette to pastel.
-    ##  @var    sat_pref_list
-    #   List of saturation preference flags for light, normal, dark color palettes.
     ##  @var    ratio_dict
     #   A dictionary that holds the ratio of base colors in an image and is
     #   used to identify the dominant color in an image.

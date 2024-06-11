@@ -61,7 +61,7 @@ Aside from Python, the rest are Python packages that are installable with pip.
     - To confirm filetypes are images file types.
 
 ### ENVIRONMENT VARIABLES
-There are two optional environement variables that can be set by the user:
+There are two optional environment variables that can be set by the user:
 - `PYPALEX_CACHE_DIR`
 - `PYPALEX_CONFIG_DIR`
 
@@ -70,7 +70,7 @@ By default, PyPalEx will try to store extracted color palettes into one of three
 - `XDG_CONFIG_HOME/palex` 
 - `$HOME/.config/palex`
 
-By default, PyPalEx will try to save extracted color palettes wherever `PYPALEX_CONFIG_DIR` points to in the user's system. If the user does not set the `PYPALEX_CONFIG_DIR` environment variable, then PyPalEx will default to saving extracted color palettes wherever `XDG_CONFIG_HOME/palex` points to in the user's system. And if the `XDG_CONFIG_HOME` environment variable is not set, then PyPalEx will default to saving extracted color palettes into `$HOME/.config/palex`.  
+By default, PyPalEx will first try to save extracted color palettes wherever `PYPALEX_CONFIG_DIR` points to in the user's system. If the user does not set the `PYPALEX_CONFIG_DIR` environment variable, then PyPalEx will default to saving extracted color palettes wherever `XDG_CONFIG_HOME/palex` points to in the user's system. And if the `XDG_CONFIG_HOME` environment variable is not set, then PyPalEx will default to saving extracted color palettes into `$HOME/.config/palex`.  
 _This default output location is, of course, overriden if PyPalEx is used with the `-o --output` option._
 
 <h2 align=center id="installation">INSTALLATION</h2>
@@ -137,14 +137,6 @@ Some images may take 2-3 seconds to be processed while other images may take 4-5
   - Converts normal color palette into pastel.
 - `--pastel-dark`
   - Converts dark color palette into pastel.
-- `--sat_pref`
-  - Gives preference to more saturated colors of all color palettes.
-- `--sat_pref-light`
-  - Gives preference to more saturated colors of the light color palette.
-- `--sat_pref-normal`
-  - Gives preference to more saturated colors of the normal color palette.
-- `--sat_pref-dark`
-  - Gives preference to more saturated colors of the dark color palette.
 - `-v --version`
   -  Prints the PyPalEx version.
 
@@ -178,7 +170,7 @@ The `-f --files` option can be used with a singular image file or with multiple 
 ~/path/to/image/dir >
 ~/path/to/image/dir > palex -f image.JPEG image2.png
 ```
-The above examples are meant to show how a user can navigate to a direcotry with images, or at least relatively close to a directory with images, and then use PyPalEx with the `-f --files` option and relative file path(s).
+The above examples are meant to show how a user can navigate to a directory with images, or at least relatively close to a directory with images, and then use PyPalEx with the `-f --files` option and relative file path(s).
 
 <br>
 
@@ -272,38 +264,6 @@ Converts dark color palette into pastel.
 
 <br>
 
-#### **`--sat_pref` Option**
-```sh
-palex --sat_pref -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Gives preference to more saturated colors of all color palettes during the extraction process.
-
-<br>
-
-#### **`--sat_pref-light` Option**
-```sh
-palex --sat_pref-light -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Gives preference to more saturated colors of the light color palette during the extraction process.
-
-<br>
-
-#### **`--sat_pref-normal` Option**
-```sh
-palex --sat_pref-normal -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Gives preference to more saturated colors of the normal color palette during the extraction process.
-
-<br>
-
-#### **`--sat_pref-dark` Option**
-```sh
-palex --sat_pref-dark -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Gives preference to more saturated colors of the dark color palette during the extraction process.
-
-<br>
-
 #### **`-v --version` Option**
 ```sh
 palex -v
@@ -317,7 +277,7 @@ The `-v --version` option is used to print the PyPalEx version number.
 <h2 align=center id="feedback">FEEDBACK</h2>
 
 <p align=justify>
-Any and all feedback is greatly appreciated and welcomed. On the PyPalEx GitHub repository, there is a <b><a href="https://github.com/AlTimofeyev/pypalex/discussions">Discussion</a></b> post that is available for each Release version of PyPalEx and open to everyone for any comments or feedback on the version of PyPalEx you are using.
+Any and all feedback is greatly appreciated and welcomed! On the PyPalEx GitHub repository, there is a <b><a href="https://github.com/AlTimofeyev/pypalex/discussions">Discussion</a></b> post that is available for each Release version of PyPalEx and open to everyone for any comments or feedback on the version of PyPalEx you are using.
 </p>
 
 [//]: # (Include Contributions Section Later)

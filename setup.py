@@ -7,6 +7,7 @@
 #   @section authors Author(s)
 #   - Created by Al Timofeyev on February 20, 2022.
 #   - Modified by Al Timofeyev on April 7, 2023.
+#   - Modified by Al Timofeyev on June 10, 2024.
 
 import sys
 import setuptools
@@ -20,6 +21,11 @@ except ImportError:
 LONG_DESC = open('README.md').read()
 VERSION = pypalex.__version__
 DOWNLOAD = "https://github.com/AlTimofeyev/pypalex/archive/%s.tar.gz" % VERSION
+REQUIREMENTS = [
+    'pillow >= 9.0',
+    'numpy >= 1.21',
+    'filetype >= 1.0'
+]
 
 setuptools.setup(
     name="pypalex",
@@ -29,12 +35,18 @@ setuptools.setup(
     description="Python Palette Extractor: extracts color palettes from images into json files.",
     long_description_content_type="text/markdown",
     long_description=LONG_DESC,
-    install_requires=['Pillow', 'numpy', 'filetype'],
+    install_requires=REQUIREMENTS,
     # keywords="python palex color-palette colorscheme extract-colorscheme extract-palette extractor",
     keywords=['python', 'pypalex', 'palex', 'color-palette', 'colorscheme', 'extract-colorscheme', 'extract-palette', 'extractor'],
     license="MIT",
     url="https://github.com/AlTimofeyev/pypalex",
     download_url=DOWNLOAD,
+    project_urls={
+        'Changelog': "https://github.com/AlTimofeyev/pypalex/blob/main/CHANGELOG.md",
+        'Documentation': "https://github.com/AlTimofeyev/pypalex/blob/main/pypalex_code_documentation.pdf",
+        'Wiki': "https://github.com/AlTimofeyev/pypalex/wiki",
+        'Showcase': "https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples",
+    },
     classifiers=[
         "Environment :: X11 Applications",
         "License :: OSI Approved :: MIT License",

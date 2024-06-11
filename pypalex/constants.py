@@ -6,6 +6,7 @@
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on May 31, 2024.
+#   - Modified by Al Timofeyev on June 10, 2024.
 
 
 # RGB values for base colors.
@@ -67,5 +68,5 @@ SATURATION_TOLERANCE_RANGE = [10.0, 15.0]
 
 # Pastel Saturation and Brightness Value ranges [min, max]
 PASTEL_SATURATION_RANGE = [15.0, 75.0]
-PASTEL_BRIGHTNESS_RANGE = [50.0, 100.0]
+PASTEL_BRIGHTNESS_RANGE = [65.0, 95.0]
 # -----------------------------------------------
