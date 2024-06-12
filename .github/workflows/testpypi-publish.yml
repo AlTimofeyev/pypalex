@@ -21,7 +21,7 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install Pillow numpy filetype setuptools wheel twine
+        python -m pip install pillow numpy filetype PyYAML setuptools wheel twine
         
     - name: Build Source and Wheel Distributions
       run: |
