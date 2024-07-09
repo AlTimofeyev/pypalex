@@ -53,7 +53,8 @@ def rgb_to_hsv(rgb_array):
 
 ##  Convert HSV array [h,s,v] to HEX string 'ffffff'.
 #   @details    HSV where h is in the set [0, 359] and s, v are in the set [0.0, 100.0].
-#               HEX string is in the set ["000000", "ffffff"].
+#               HEX string is in the set ["#000000", "#ffffff"].
+#
 #   @param  hsv_array   HSV array [h,s,v].
 #
 #   @return A HEX string.
@@ -65,15 +66,16 @@ def hsv_to_hex(hsv_array):
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 
-##  Convert HEX string 'ffffff' to RGB array [r,g,b].
-#   @details    HEX string is in the set ["000000", "ffffff"].
+##  Convert HEX string '#ffffff' to RGB array [r,g,b].
+#   @details    HEX string is in the set ["#000000", "#ffffff"].
 #               RGB where [r,g,b] are in the set [0, 255].
-#   @param  hex_str HEX string 'ffffff'.
+#
+#   @param  hex_str HEX string '#ffffff'.
 #
 #   @return RGB array [r,g,b].
 def hex_to_rgb(hex_str):
     rgb_array = []
-    for hex_digit1, hex_digit2 in zip(hex_str[0::2], hex_str[1::2]):
+    for hex_digit1, hex_digit2 in zip(hex_str[1::2], hex_str[2::2]):    # Hex strings now contain a hashtag '#'.
         rgb_array.append(int(hex_digit1+hex_digit2, 16))
 
     return rgb_array
@@ -173,15 +175,15 @@ def hsv_to_rgb(hsv_array):
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 
-##  Convert RGB array [r,g,b] to HEX string 'ffffff'.
+##  Convert RGB array [r,g,b] to HEX string '#ffffff'.
 #   @details    RGB where [r,g,b] are in the set [0, 255].
-#               HEX string is in the set ["000000", "ffffff"].
+#               HEX string is in the set ["#000000", "#ffffff"].
 #
 #   @param  rgb_array   RGB array [r,g,b].
 #
 #   @return A HEX string.
 def rgb_to_hex(rgb_array):
     r, g, b = rgb_array
-    hex_string = '%02x%02x%02x' % (r, g, b)
+    hex_string = '#%02x%02x%02x' % (r, g, b)
 
     return hex_string

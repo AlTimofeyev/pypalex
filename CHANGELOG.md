@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 
+
+<br>
+
+## [2.1.1] - 2024-07-08
+- CHANGED: Changed the hex functions in **conversion_utils.py** file to use a `#` character before the hex string.
+    - Changed the `rgb_to_hex()` and `hex_to_rgb()` functions.
+
 <br>
 
 ## [2.1.0] - 2024-07-08
@@ -165,6 +172,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[2.1.1]: https://github.com/AlTimofeyev/pypalex/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/AlTimofeyev/pypalex/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/AlTimofeyev/pypalex/compare/1.3.5...2.0.0
 [1.3.5]: https://github.com/AlTimofeyev/pypalex/compare/1.3.4...1.3.5
