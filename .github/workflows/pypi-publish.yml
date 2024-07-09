@@ -9,6 +9,8 @@ jobs:
   publish:
 
     runs-on: ubuntu-latest
+    # force the action to stop
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v3

@@ -12,6 +12,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 
+- MOVE IMAGE PROCESSING INTO EXTRACTOR CLASS!!!
+    - Make constructor Empty : `Extractor()`.
+    - Make a load function in Extractor class that will process the image:
+        - `extractor.load(img_dir, image_name)`
+        - The image name is optional.
+        - This function saves the image name in the Extractor object if it is specified, otherwise it will be `None`.
+- MAKE AN ADAPTIVE PALETTE OPTION FOR PYPALEX WHEN ADDING THE EXTRA COLORS!!!!!
+    - The most dominant 6 colors in the image are set as the 6 colors of a "adaptive" palette.
+    - e.g. [red, orange, azure, violet, magenta, rose] and their light/dark variations.
+************************************************************************************
+***** THIS IS OLD, JUST USE IT FOR REFERENCE, THESE AREN'T IN THE MAIN PACKAGE *****
+
+- CHANGED: Updated extraction algorithm to use standard deviation and account for any outlying color data.
+    - This will help with ignoring colors that are not part of clusters/groups of colors.
+- CHANGED: Added a check for edge cases in `extract_color_types()` and `check_missing_color_types()` functions.
+    - !!!!! This doesn't need to be changed !!!!!
+- CHANGED: Isolated saturation preference to a single function called `get_saturated_sample()`.
+    - This function retrieves a saturated sample to use for extraction to avoid skewed results.
+- CHANGED: Changed the lower bound of `BRIGHTNESS_RANGE` in `constants.py` from 25.0 to 30.0.
+
+***** THIS IS OLD, JUST USE IT FOR REFERENCE, THESE AREN'T IN THE MAIN PACKAGE *****
+************************************************************************************
+
+
 
 <br>
 
