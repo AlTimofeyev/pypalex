@@ -26,7 +26,7 @@ DOWNLOAD = "https://github.com/AlTimofeyev/pypalex/archive/%s.tar.gz" % VERSION
 REQUIREMENTS = [
     'pillow >= 9.0',
     'numpy >= 1.21',
-    'filetype >= 1.0'
+    'filetype >= 1.0',
     'PyYAML >= 5.4.1'
 ]
 
