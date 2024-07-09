@@ -11,6 +11,63 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - . . .
 
 
+- MOVE IMAGE PROCESSING INTO EXTRACTOR CLASS!!!
+    - Make constructor Empty : `Extractor()`.
+    - Make a load function in Extractor class that will process the image:
+        - `extractor.load(img_dir, image_name)`
+        - The image name is optional.
+        - This function saves the image name in the Extractor object if it is specified, otherwise it will be `None`.
+- MAKE AN ADAPTIVE PALETTE OPTION FOR PYPALEX WHEN ADDING THE EXTRA COLORS!!!!!
+    - The most dominant 6 colors in the image are set as the 6 colors of a "adaptive" palette.
+    - e.g. [red, orange, azure, violet, magenta, rose] and their light/dark variations.
+************************************************************************************
+***** THIS IS OLD, JUST USE IT FOR REFERENCE, THESE AREN'T IN THE MAIN PACKAGE *****
+
+- CHANGED: Updated extraction algorithm to use standard deviation and account for any outlying color data.
+    - This will help with ignoring colors that are not part of clusters/groups of colors.
+- CHANGED: Added a check for edge cases in `extract_color_types()` and `check_missing_color_types()` functions.
+    - !!!!! This doesn't need to be changed !!!!!
+- CHANGED: Isolated saturation preference to a single function called `get_saturated_sample()`.
+    - This function retrieves a saturated sample to use for extraction to avoid skewed results.
+- CHANGED: Changed the lower bound of `BRIGHTNESS_RANGE` in `constants.py` from 25.0 to 30.0.
+
+***** THIS IS OLD, JUST USE IT FOR REFERENCE, THESE AREN'T IN THE MAIN PACKAGE *****
+************************************************************************************
+
+
+
+<br>
+
+## [2.1.0] - 2024-07-08
+- ADDED: Added PyYAML to the package requirements and the GitHub Actions Workflows.
+- ADDED: Added default output locations for extracted color palettes.
+    - Added `DEFAULT_EXTRACTED_DIR`, `PASTEL_EXTRACTED_DIR` and `RAW_EXTRACTED_DIR` constant variables into the **settings.py** file.
+    - These directories will be located in the same folder as the configuration file for this tool.
+- ADDED: Added more options and configuration file handling to the **__main__.py** file.
+    - Added `-r, --raw-dump` option.
+    - Added `-g, --gen-config` option.
+    - Added `-w, --where` option.
+- ADDED: Added ANSI conversion functions to the **conversion_utils.py** file.
+    - Added `rgb_to_ansi()` and `ansi_to_rgb()` functions.
+- CHANGED: Changed the naming convention for the color names in **Extractor.py** and **extraction_utils.py** files to be all lowercase.
+    - Made all color names lowercase (e.g. `Red` to `red`, `Dark Red` to `dark red`, etc.).
+- CHANGED: Changed `extract_color_palettes()` function name to `extract_colors()` in **extraction_utils.py** and **Extractor.py** files.
+- CHANGED: Refactored the **Extractor.py** file and added some new functions.
+    - Added `convert_to_pastel()` function to replace `check_pastel_conversion()` function.
+    - Added `organize_extracted_dictionary()` function to replace `construct_palette_dictionary()` function.
+    - Added `set_color_format()`, `generate_palettes()` and `generate_default_palettes()` functions.
+    - Removed unnecessary parameters from the _Extractor_ class constructor.
+- CHANGED: Refactored the **arg_messages.py** file.
+    - Corrected a misspelling of PyPalEx CLI call from `pypalex` to `palex`.
+- CHANGED: Completely refactored the **print_utils.py** file to accommodate printing with palette templates.
+    - Improved the readability of the code in this file. 
+    - Removed all the previous functions from this file.
+- CHANGED: Completely refactored the **file_utils.py** file.
+    - Made `generate_config_file()` function for generating a configuration file.
+    - Made `raw_dump()` function for saving the raw extracted colors to a file.
+    - Made `save_palettes()` function for saving organized palettes to files.
+    - Removed all the previous functions from this file.
+
 <br>
 
 ## [2.0.0] - 2024-06-10
@@ -132,6 +189,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[2.1.0]: https://github.com/AlTimofeyev/pypalex/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/AlTimofeyev/pypalex/compare/1.3.5...2.0.0
 [1.3.5]: https://github.com/AlTimofeyev/pypalex/compare/1.3.4...1.3.5
 [1.3.4]: https://github.com/AlTimofeyev/pypalex/compare/1.3.3...1.3.4

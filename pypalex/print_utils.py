@@ -7,33 +7,35 @@
 #
 #   @section authors Author(s)
 #   - Created by Al Timofeyev on April 5, 2023.
+#   - Modified by Al Timofeyev on July 8, 2024.
 
 
 # ---- IMPORTS ----
 from . import conversion_utils as convert
 
 
-##  Prints the default color schemes to the terminal.
-#   @details    Prints a preview of the extracted color palettes
-#               to the user's terminal screen using ANSI escape
-#               codes.
+##  Prints the extracted colors, organized into default color palettes, to the terminal.
+#   @details    Prints a preview of the extracted colors to
+#               the user's CLI / Terminal screen, organized
+#               into default palettes and using ANSI escape
+#               codes and ASCII characters.
 #
-#   @note   The terminal needs to be able to display ASCII
+#   @note   The CLI / Terminal needs to be able to display ASCII
 #           characters and ANSI colors for this to work.
 #
-#   @param  hex_color_palette   A dictionary of light, normal, and dark color palettes in hex format.
-def print_default_scheme_preview(hex_color_palette):
-    rgb_color_palette = get_rgb_palette(hex_color_palette)
-    ansi_color_codes = get_ansi_color_codes(rgb_color_palette)
+#   @param  extracted_colors_dict   A dictionary of colors.
+#   @param  color_format            A string that specifies the format of each color in the extracted colors dictionary (e.g. 'hsv', 'rgb', 'hex', 'ansi').
+def print_default_palette_preview(extracted_colors_dict, color_format):
+    rgb_colors_dict = get_rgb_colors(extracted_colors_dict, color_format)
 
-    reset_color = '\033[0m'  # Reset ANSI color escape code.
+    ansi_color_codes = extracted_colors_dict if color_format == 'ansi' else get_ansi_color_codes(rgb_colors_dict)
 
     light_background_ansi_color = ansi_color_codes['light background']
     dark_background_ansi_color = ansi_color_codes['dark background']
-    ansi_colors1 = [ansi_color_codes['normal black'], ansi_color_codes['normal red'],
-                    ansi_color_codes['normal green'], ansi_color_codes['normal yellow'],
-                    ansi_color_codes['normal blue'], ansi_color_codes['normal magenta'],
-                    ansi_color_codes['normal cyan'], ansi_color_codes['normal white']]
+    ansi_colors1 = [ansi_color_codes['black'], ansi_color_codes['red'],
+                    ansi_color_codes['green'], ansi_color_codes['yellow'],
+                    ansi_color_codes['blue'], ansi_color_codes['magenta'],
+                    ansi_color_codes['cyan'], ansi_color_codes['white']]
 
     ansi_colors2 = [ansi_color_codes['light black'], ansi_color_codes['light red'],
                     ansi_color_codes['light green'], ansi_color_codes['light yellow'],
@@ -45,176 +47,176 @@ def print_default_scheme_preview(hex_color_palette):
                     ansi_color_codes['dark blue'], ansi_color_codes['dark magenta'],
                     ansi_color_codes['dark cyan'], ansi_color_codes['dark white']]
 
-    light_scheme_panes = generate_panes(light_background_ansi_color, ansi_colors1, ansi_colors3)
-    dark_scheme_panes = generate_panes(dark_background_ansi_color, ansi_colors1, ansi_colors2)
-
-    # ASCII characters.
-    # Full Block : █ = $'\u2588'
-    full_block = '\u2588'
-    lower_right_tri = '\u25e2'
-    lower_left_tri = '\u25e3'
-    upper_right_tri = '\u25e5'
-    upper_left_tri = '\u25e4'
-
-    top_border = \
-        lower_right_tri + ' ' + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + \
-        ' ' + lower_left_tri
-    bottom_border = \
-        upper_right_tri + ' ' + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + \
-        ' ' + upper_left_tri
-    foreground_row = \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block + full_block + \
-        full_block + full_block + full_block
-
-    # ****************************************** LIGHT SCHEME
+    # ****************************************** LIGHT PALETTE
     # ---- Top border
-    print(get_color_escape(rgb_color_palette['light background']) + top_border + reset_color)
+    print(make_default_row(rgb_colors_dict['light background'], blank_row=False, border_type='top'))
 
     # ---- Blank row for spacing between border and panes
-    print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color, end='')
-    print(light_background_ansi_color + '                                           ' + reset_color, end='')
-    print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color)
+    print(make_default_row(rgb_colors_dict['light background'], blank_row=True))
 
     # ---- Rows of panes
-    for scheme_pane in light_scheme_panes:
-        print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color, end='')
-        print(light_background_ansi_color + '  ' + scheme_pane
-              + light_background_ansi_color + '  ' + reset_color, end='')
-        print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color)
+    print(make_panes(light_background_ansi_color, ansi_colors1, ansi_colors3))
 
     # ---- Blank row for spacing between panes and foreground
-    print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color, end='')
-    print(light_background_ansi_color + '                                           ' + reset_color, end='')
-    print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color)
+    print(make_default_row(rgb_colors_dict['light background'], blank_row=True))
 
     # ---- Foreground row
-    print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color, end='')
-    print(ansi_color_codes['dark foreground'] + light_background_ansi_color
-          + '      ' + foreground_row + '      '
-          + reset_color, end='')
-    print(get_color_escape(rgb_color_palette['light background']) + full_block + full_block + reset_color)
+    print(make_foreground_row(rgb_colors_dict['dark foreground'], rgb_colors_dict['light background']))
 
     # ---- Bottom border
-    print(get_color_escape(rgb_color_palette['light background']) + bottom_border + reset_color)
+    print(make_default_row(rgb_colors_dict['light background'], blank_row=False, border_type='bottom'))
 
-    # ****************************************** DARK SCHEME
+    # ****************************************** DARK PALETTE
     # ---- Top border
-    print(get_color_escape(rgb_color_palette['dark background']) + top_border + reset_color)
+    print(make_default_row(rgb_colors_dict['dark background'], blank_row=False, border_type='top'))
 
     # ---- Blank row for spacing between border and panes
-    print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color, end='')
-    print(dark_background_ansi_color + '                                           ' + reset_color, end='')
-    print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color)
+    print(make_default_row(rgb_colors_dict['dark background'], blank_row=True))
 
     # ---- Rows of panes
-    for scheme_pane in dark_scheme_panes:
-        print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color, end='')
-        print(dark_background_ansi_color + '  ' + scheme_pane
-              + dark_background_ansi_color + '  ' + reset_color, end='')
-        print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color)
+    print(make_panes(dark_background_ansi_color, ansi_colors1, ansi_colors2))
 
     # ---- Blank row for spacing between panes and foreground
-    print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color, end='')
-    print(dark_background_ansi_color + '                                           ' + reset_color, end='')
-    print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color)
+    print(make_default_row(rgb_colors_dict['dark background'], blank_row=True))
 
     # ---- Foreground row
-    print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color, end='')
-    print(ansi_color_codes['light foreground'] + dark_background_ansi_color
-          + '      ' + foreground_row + '      '
-          + reset_color, end='')
-    print(get_color_escape(rgb_color_palette['dark background']) + full_block + full_block + reset_color)
+    print(make_foreground_row(rgb_colors_dict['light foreground'], rgb_colors_dict['dark background']))
 
     # ---- Bottom border
-    print(get_color_escape(rgb_color_palette['dark background']) + bottom_border + reset_color)
+    print(make_default_row(rgb_colors_dict['dark background'], blank_row=False, border_type='bottom'))
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Prints the extracted colors, organized with palette templates, to the terminal.
+#   @details    Prints a preview of the extracted colors to
+#               the user's CLI / Terminal screen, organized
+#               with palette templates and using ANSI escape
+#               codes and ASCII characters.
+#
+#   @note   The CLI / Terminal needs to be able to display ASCII
+#           characters and ANSI colors for this to work.
+#
+#   @param  extracted_colors_dict   A dictionary of colors.
+#   @param  palette_templates       A dictionary of palette templates.
+#   @param  color_format            A string that specifies the format of each color in the extracted colors dictionary (e.g. 'hsv', 'rgb', 'hex', 'ansi').
+def print_template_palette_preview(extracted_colors_dict, palette_templates, color_format):
+    rgb_colors_dict = get_rgb_colors(extracted_colors_dict, color_format)
+
+    ansi_color_codes = extracted_colors_dict if color_format == 'ansi' else get_ansi_color_codes(rgb_colors_dict)
+
+    failsafe_color = ansi_color_codes['black']
+
+    for palette_name, palette_template in palette_templates.items():
+        background_rgb_color = rgb_colors_dict['dark background']
+        foreground_rgb_color = rgb_colors_dict['light foreground']
+        background_ansi_color = ansi_color_codes['dark background']
+
+        standard_ansi_colors = [ansi_color_codes['black'], failsafe_color, failsafe_color, failsafe_color,
+                                failsafe_color, failsafe_color, failsafe_color, ansi_color_codes['white']]
+        intense_ansi_colors = [ansi_color_codes['light black'], failsafe_color, failsafe_color, failsafe_color,
+                               failsafe_color, failsafe_color, failsafe_color, ansi_color_codes['light white']]
+
+        for key, color_name in palette_template.items():
+            if key == 'palette-type':
+                # The dark palette type is assigned by default, so we only test for light.
+                if color_name == 'light':
+                    background_rgb_color = rgb_colors_dict['light background']
+                    foreground_rgb_color = rgb_colors_dict['dark foreground']
+
+                    background_ansi_color = ansi_color_codes['light background']
+                    intense_ansi_colors[0] = ansi_color_codes['dark black']
+                    intense_ansi_colors[7] = ansi_color_codes['dark white']
+            elif color_name not in ansi_color_codes:
+                continue
+            elif key == 'color1':
+                standard_ansi_colors[1] = ansi_color_codes[color_name]
+            elif key == 'color2':
+                standard_ansi_colors[2] = ansi_color_codes[color_name]
+            elif key == 'color3':
+                standard_ansi_colors[3] = ansi_color_codes[color_name]
+            elif key == 'color4':
+                standard_ansi_colors[4] = ansi_color_codes[color_name]
+            elif key == 'color5':
+                standard_ansi_colors[5] = ansi_color_codes[color_name]
+            elif key == 'color6':
+                standard_ansi_colors[6] = ansi_color_codes[color_name]
+            elif key == 'color9':
+                intense_ansi_colors[1] = ansi_color_codes[color_name]
+            elif key == 'color10':
+                intense_ansi_colors[2] = ansi_color_codes[color_name]
+            elif key == 'color11':
+                intense_ansi_colors[3] = ansi_color_codes[color_name]
+            elif key == 'color12':
+                intense_ansi_colors[4] = ansi_color_codes[color_name]
+            elif key == 'color13':
+                intense_ansi_colors[5] = ansi_color_codes[color_name]
+            elif key == 'color14':
+                intense_ansi_colors[6] = ansi_color_codes[color_name]
+
+        # ---- Top border
+        print(make_default_row(background_rgb_color, blank_row=False, border_type='top'))
+
+        # ---- Blank row for spacing between border and panes
+        print(make_default_row(background_rgb_color, blank_row=True))
+
+        # ---- Rows of panes
+        print(make_panes(background_ansi_color, standard_ansi_colors, intense_ansi_colors))
+
+        # ---- Blank row for spacing between panes and foreground
+        print(make_default_row(background_rgb_color, blank_row=True))
+
+        # ---- Foreground row
+        print(make_foreground_row(foreground_rgb_color, background_rgb_color))
+
+        # ---- Bottom border
+        print(make_default_row(background_rgb_color, blank_row=False, border_type='bottom'))
 
 
 # **************************************************************************
 # **************************************************************************
 
-##  Constructs ANSI color escape code based on an RGB list.
-#   @details    An RGB [r,g,b] list is used to generate an ANSI
-#               escape code of the RGB color for use in the
-#               terminal CLI. The basic format for these codes depends
-#               on if it will be used for foreground or background color.
-#               Use \033[38;2;r;g;bm for the foreground color.
-#               Use \033[48;2;r;g;bm for the background color.
+##  Constructs a dictionary of colors in RGB [r,g,b] format.
 #
-#   @note   For more information about these ANSI escape codes,
-#           here are some sources:
-#           https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences/33206814#33206814
-#           https://stackoverflow.com/questions/45782766/color-python-output-given-rrggbb-hex-value/45782972#45782972
+#   @param  extracted_colors_dict   A dictionary of colors.
+#   @param  color_format            A string that specifies the format of each color in the extracted colors dictionary (e.g. 'hsv', 'rgb', 'hex', 'ansi').
 #
-#   @param  rgb_array   RGB array [r,g,b].
-#   @param  background  Flag for if the RGB color is for a background or not.
-#
-#   @return ANSI escape code of the RGB color.
-def get_color_escape(rgb_array, background=False):
-    r, g, b = rgb_array
-    return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
+#   @return A dictionary of RGB colors.
+def get_rgb_colors(extracted_colors_dict, color_format):
+    rgb_colors_dict = {}
 
+    for color_name, color in extracted_colors_dict.items():
+        rgb_color = [0,0,0]     # Edge case.
+        if color_format == 'rgb':
+            rgb_color = color
+        elif color_format == 'hsv':
+            rgb_color = convert.hsv_to_rgb(color)
+        elif color_format == 'hex':
+            rgb_color = convert.hex_to_rgb(color)
+        elif color_format == 'ansi':
+            rgb_color = convert.ansi_to_rgb(color)
+
+        rgb_colors_dict[color_name] = rgb_color
+
+    return rgb_colors_dict
 
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 
-##  Constructs an RGB [r,g,b] palette dictionary using a hex palette dictionary.
+##  Constructs an ANSI escape code dictionary using a dictionary of colors in RGB [r,g,b] format.
 #
-#   @param  hex_color_palette   A dictionary of color palettes in hex format.
-#
-#   @return A dictionary of colors in RGB [r,g,b] format.
-def get_rgb_palette(hex_color_palette):
-    rgb_color_palette = {}
-
-    for key, value in hex_color_palette.items():
-        rgb_color_palette[key] = convert.hex_to_rgb(value)
-
-    return rgb_color_palette
-
-
-# --------------------------------------------------------------------------
-# --------------------------------------------------------------------------
-
-##  Constructs a ANSI escape code dictionary using a RGB [r,g,b] palette dictionary.
-#
-#   @param  rgb_color_palette   A dictionary of light, normal and dark color palettes in RGB [r,g,b] format.
+#   @param  rgb_colors_dict A dictionary of colors in RGB [r,g,b] format.
 #
 #   @return A dictionary of ANSI color escape codes.
-def get_ansi_color_codes(rgb_color_palette):
+def get_ansi_color_codes(rgb_colors_dict):
     ansi_color_codes = {}
 
-    for key, value in rgb_color_palette.items():
-        if key == 'light background' or key == 'dark background':
-            ansi_color_codes[key] = get_color_escape(value, True)
+    for color_name, rgb_color in rgb_colors_dict.items():
+        if color_name == 'background' or color_name == 'light background' or color_name == 'dark background':
+            ansi_color_codes[color_name] = convert.rgb_to_ansi(rgb_color, background=True)
         else:
-            ansi_color_codes[key] = get_color_escape(value)
+            ansi_color_codes[color_name] = convert.rgb_to_ansi(rgb_color)
 
     return ansi_color_codes
 
@@ -222,21 +224,121 @@ def get_ansi_color_codes(rgb_color_palette):
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 
-##  Generates panes based on two sets of ANSI color escape codes.
+##  Creates a string that represents a default row when printing palette previews.
+#   @details    The default row can be either a blank
+#               row or a row with a specific border.
 #
-#   @note   The terminal needs to be able to display ASCII
-#           characters and ANSI colors for this to be useful.
+#   @param  rgb_row_color   The color of the row in RGB [r,g,b] format.
+#   @param  blank_row       Flag that determines if this is a blank row or a border row.
+#   @param  border_type     A string that specifies if this row needs a border (e.g. 'top', 'bottom').
 #
-#   @param  background_ansi_color   The background ANSI color escape code.
-#   @param  ansi_colors1            List of ANSI color escape codes.
-#   @param  ansi_colors2            List of ANSI color escape codes.
-#
-#   @return List of strings of panes with ASCII and ANSI escape codes.
-def generate_panes(background_ansi_color, ansi_colors1, ansi_colors2):
-    if len(ansi_colors1) != len(ansi_colors2):  # The ansi color lists need to be the same length.
-        return ['', '', '', '']
+#   @return A string that represents a default row that can be printed.
+def make_default_row(rgb_row_color, blank_row, border_type=None):
+    lower_right_tri = '\u25e2'
+    lower_left_tri = '\u25e3'
+    upper_right_tri = '\u25e5'
+    upper_left_tri = '\u25e4'
 
     reset_color = '\033[0m'  # Reset ANSI color escape code.
+
+    row = ''
+
+    if blank_row:
+        row += reset_color + convert.rgb_to_ansi(rgb_row_color, background=True)
+        row += '                                               ' + reset_color
+    else:
+        left_corner, right_corner = '*', '*'
+        if border_type == 'top':
+            left_corner, right_corner = lower_right_tri, lower_left_tri
+        elif border_type == 'bottom':
+            left_corner, right_corner = upper_right_tri, upper_left_tri
+
+        row += reset_color + convert.rgb_to_ansi(rgb_row_color) + left_corner + ' ' + reset_color
+        row += convert.rgb_to_ansi(rgb_row_color, background=True)
+        row += '                                           ' + reset_color
+        row += convert.rgb_to_ansi(rgb_row_color) + ' ' + right_corner + reset_color
+
+    return row
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Creates a string that represents the foreground row when printing palette previews.
+#
+#   @param  rbg_foreground_color    The foreground color of the row in RGB [r,g,b] format.
+#   @param  rbg_background_color    The background color of the row in RGB [r,g,b] format.
+#
+#   @return A string that represents a foreground row that can be printed.
+def make_foreground_row(rbg_foreground_color, rbg_background_color):
+    reset_color = '\033[0m'  # Reset ANSI color escape code.
+
+    ansi_foreground_color = convert.rgb_to_ansi(rbg_foreground_color, background=True)
+    ansi_background_color = convert.rgb_to_ansi(rbg_background_color, background=True)
+
+    row = reset_color
+    row += ansi_background_color + '        ' + reset_color
+    row += ansi_foreground_color + '                               ' + reset_color
+    row += ansi_background_color + '        ' + reset_color
+
+    return row
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Creates a string that represents the 4 rows of panes when printing palette previews.
+#
+#   @param  background_ansi_color   An ANSI escape code string of the background color.
+#   @param  standard_ansi_colors    A list of ANSI escape code strings for standard colors.
+#   @param  intense_ansi_colors     A list of ANSI escape code strings for intense colors.
+#
+#   @return A string that represents the 4 rows of panes that can be printed.
+def make_panes(background_ansi_color, standard_ansi_colors, intense_ansi_colors):
+    top_row = make_panes_row(background_ansi_color, standard_ansi_colors, intense_ansi_colors, panes_section='top')
+    middle_row = make_panes_row(background_ansi_color, standard_ansi_colors, intense_ansi_colors, panes_section='middle')
+    bottom_row = make_panes_row(background_ansi_color, standard_ansi_colors, intense_ansi_colors, panes_section='bottom')
+
+    reset_color = '\033[0m'  # Reset ANSI color escape code.
+
+    pane_rows = reset_color + ''
+
+    # Row 1 - Top row of panes.
+    pane_rows += background_ansi_color + '    ' + reset_color
+    pane_rows += top_row + reset_color
+    pane_rows += background_ansi_color + '    ' + reset_color + "\n"
+
+    # Row 2 - Middle row of panes.
+    pane_rows += background_ansi_color + '    ' + reset_color
+    pane_rows += middle_row + reset_color
+    pane_rows += background_ansi_color + '    ' + reset_color + "\n"
+
+    # Row 3 - Middle row of panes.
+    pane_rows += background_ansi_color + '    ' + reset_color
+    pane_rows += middle_row + reset_color
+    pane_rows += background_ansi_color + '    ' + reset_color + "\n"
+
+    # Row 4 - Bottom row of panes.
+    pane_rows += background_ansi_color + '    ' + reset_color
+    pane_rows += bottom_row + reset_color
+    pane_rows += background_ansi_color + '    ' + reset_color
+
+    return pane_rows
+
+
+# **************************************************************************
+# **************************************************************************
+
+##  Creates a string that represents a row of panes for printing palette previews.
+#
+#   @param  background_ansi_color   An ANSI escape code string of the background color.
+#   @param  standard_ansi_colors    A list of ANSI escape code strings for standard colors.
+#   @param  intense_ansi_colors     A list of ANSI escape code strings for intense colors.
+#   @param  panes_section           A string that specifies which section of the panes to make (e.g. 'top', 'middle', 'bottom').
+#
+#   @return A string that represents a row of panes that can be printed.
+def make_panes_row(background_ansi_color, standard_ansi_colors, intense_ansi_colors, panes_section):
+    reset_color = '\033[0m'     # Reset ANSI color escape code.
 
     # ASCII characters.
     # Full Block : █ = $'\u2588'
@@ -248,33 +350,33 @@ def generate_panes(background_ansi_color, ansi_colors1, ansi_colors2):
 
     # Pane building blocks.
     front_top_pane = full_block + full_block + full_block
-    front_mid_pane1 = full_block + full_block + full_block
-    front_mid_pane2 = full_block + full_block + full_block
+    front_mid_pane = full_block + full_block + full_block
     front_bottom_pane = ' '
     back_top_pane = lower_block
-    back_mid_pane1 = full_block
-    back_mid_pane2 = full_block
+    back_mid_pane = full_block
     back_bottom_pane = upper_block + upper_block + upper_block
 
-    # 4 Rows of panes.
-    top_panes = ''
-    mid_panes1 = ''
-    mid_panes2 = ''
-    bottom_panes = ''
+    front_pane = '##'
+    back_pane = "**"
+    if panes_section == 'top':
+        front_pane = front_top_pane
+        back_pane = back_top_pane
+    elif panes_section == 'middle':
+        front_pane = front_mid_pane
+        back_pane = back_mid_pane
+    elif panes_section == 'bottom':
+        front_pane = front_bottom_pane
+        back_pane = back_bottom_pane
 
-    panes = [top_panes, mid_panes1, mid_panes2, bottom_panes]
-    front_panes = [front_top_pane, front_mid_pane1, front_mid_pane2, front_bottom_pane]
-    back_panes = [back_top_pane, back_mid_pane1, back_mid_pane2, back_bottom_pane]
+    row = reset_color + background_ansi_color + ''
 
-    for idx, (pane, front_pane, back_pane) in enumerate(zip(panes, front_panes, back_panes)):  # For every row of panes.
-        not_first_pane = False
-        for ansi_color1, ansi_color2 in zip(ansi_colors1, ansi_colors2):  # For every color.
-            if not_first_pane:
-                pane += background_ansi_color + ' '
-            pane += ansi_color1 + background_ansi_color + front_pane
-            pane += ansi_color2 + background_ansi_color + back_pane
-            not_first_pane = True
-        pane += reset_color
-        panes[idx] = pane
+    # For every color.
+    for idx, (standard_color, intense_color) in enumerate(zip(standard_ansi_colors, intense_ansi_colors)):
+        row += standard_color + front_pane
+        row += intense_color + back_pane
+        if idx < (len(standard_ansi_colors) - 1):
+            row += ' '
 
-    return panes
+    row += reset_color
+
+    return row

@@ -12,7 +12,7 @@
 <img src="https://github.com/AlTimofeyev/pypalex/blob/main/Assets/README_EXAMPLE-tsujin_bohboh-Holiday.PNG" alt="Package Example with Background Image by tsujin_bohboh on Twitter" title="Package Example with Background Image by tsujin_bohboh on Twitter" align="center">
 
 <p align="justify">
-PyPalEx is a tool for extracting color palettes from images and generating a JSON format file with light and dark color themes. This tool is intended to be OS independent, for use by the tech community for developing their own custom theme managers or by artists who want to extract color palettes for their art from images, pictures or wallpapers they adore.
+PyPalEx is a tool for extracting color palettes from images and storing them in JSON / YAML formated files. This tool is intended to be OS independent, for use by the tech community for developing their own custom theme managers or by artists who want to extract color palettes for their art from images, pictures or wallpapers they adore.
 </p>
 
 <br>
@@ -24,6 +24,7 @@ PyPalEx is a tool for extracting color palettes from images and generating a JSO
   - [Wiki Homepage](#wiki-homepage)
   - [Palette Examples Archive](#wiki-palette-examples-archive)
   - [Code Documentation](#code-documentation)
+  - [Configuration File](#configuration-file)
 - [**Dependencies**](#dependencies)
   - [Environment Variables](#environment-variables)
 - [**Installation**](#installation)
@@ -33,7 +34,7 @@ PyPalEx is a tool for extracting color palettes from images and generating a JSO
   - [Disclosure](#disclosure)
   - [Options List](#options-list)
   - [Notes](#notes)
-  - [Example Usage](#example-usage)
+  - [Option Usage Examples](#option-usage-examples)
 - [**Feedback**](#feedback)
 
 <br>
@@ -42,9 +43,10 @@ PyPalEx is a tool for extracting color palettes from images and generating a JSO
 <h2 align=center id="pypalex-archives">PYPALEX ARCHIVES</h2>
 
 <h3 align=center>
-  [<a href="https://github.com/AlTimofeyev/pypalex/wiki">Wiki Homepage</a>]
-  [<a href="https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples">Palette Examples Archive</a>]
-  [<a href="https://github.com/AlTimofeyev/pypalex/blob/main/pypalex_code_documentation.pdf">Codebase Documentation</a>]
+  [<a href="https://github.com/AlTimofeyev/pypalex/wiki" id="wiki-homepage">Wiki Homepage</a>]
+  [<a href="https://github.com/AlTimofeyev/pypalex/wiki/Archive-of-Palette-Examples" id="wiki-palette-examples-archive">Palette Examples Archive</a>]
+  [<a href="https://github.com/AlTimofeyev/pypalex/blob/main/pypalex_code_documentation.pdf" id="code-documentation">Codebase Documentation</a>]
+  [<a href="https://github.com/AlTimofeyev/pypalex/wiki/Configuration-File" id="configuration-file">Configuration File</a>]
 </h3>
 
 <br>
@@ -59,6 +61,8 @@ Aside from Python, the rest are Python packages that are installable with pip.
     - To manage large amounts of image data.
 - `filetype 1.0+`
     - To confirm filetypes are images file types.
+- `PyYAML 5.4.1+`
+    - To manage YAML file types.
 
 ### ENVIRONMENT VARIABLES
 There are two optional environment variables that can be set by the user:
@@ -72,6 +76,8 @@ By default, PyPalEx will try to store extracted color palettes into one of three
 
 By default, PyPalEx will first try to save extracted color palettes wherever `PYPALEX_CONFIG_DIR` points to in the user's system. If the user does not set the `PYPALEX_CONFIG_DIR` environment variable, then PyPalEx will default to saving extracted color palettes wherever `XDG_CONFIG_HOME/palex` points to in the user's system. And if the `XDG_CONFIG_HOME` environment variable is not set, then PyPalEx will default to saving extracted color palettes into `$HOME/.config/palex`.  
 _This default output location is, of course, overriden if PyPalEx is used with the `-o --output` option._
+
+<br>
 
 <h2 align=center id="installation">INSTALLATION</h2>
 
@@ -100,6 +106,8 @@ pip3 install --user .
 # (In your .bashrc, .zshrc etc)
 export PATH="${PATH}:${HOME}/.local/bin/"
 ```
+
+<br>
 
 <h2 align=center id="user-guide">USER GUIDE</h2> 
 
@@ -130,13 +138,20 @@ Some images may take 2-3 seconds to be processed while other images may take 4-5
 - `--preview-check`
   - Shows a preview of, and asks if the user wants to save, the extracted color palettes.
 - `--pastel`
-  - Converts all color palettes into pastel.
+  - Converts all color types into pastel.
 - `--pastel-light`
-  - Converts light color palette into pastel.
+  - Converts light color type into pastel.
 - `--pastel-normal`
-  - Converts normal color palette into pastel.
+  - Converts normal color type into pastel.
 - `--pastel-dark`
-  - Converts dark color palette into pastel.
+  - Converts dark color type into pastel.
+- `-r --raw-dump`
+  - Saves the raw extracted colors without organizing them into color palettes.
+- `-g --gen-config`
+  - Generates a default configuration file.
+- `-w --where`
+  - Prints where the default output locations of the configuration file and extracted color palattes are located.
+  - This option will also let you know if these locations exist or not, as they are optional.
 - `-v --version`
   -  Prints the PyPalEx version.
 
@@ -146,133 +161,11 @@ Some images may take 2-3 seconds to be processed while other images may take 4-5
 - Please note that all the `--pastel` and `--sat_pref` options only affect the 6 base colors (red, green, yellow, blue, magenta, cyan) and do **NOT** affect the background, foreground, black, and white colors.
 - Please note that the user can individually select which palette to convert to pastel (do not mistake palette for "color scheme/color theme"). For more details, please refer to the PyPalEx wiki homepage to identify which "color scheme/color theme" contains the palette you wish to convert to pastel.
 
-### EXAMPLE USAGE
-#### **`-f --files` Option**
-```sh
-palex -f path/to/image/dir/image.jpeg
-```
-```sh
-palex -f path/to/image/dir/image.jpeg path/to/image/dir/image2.PNG
-```
-The `-f --files` option can be used with a singular image file or with multiple image files. The user must specify the absolute file path to the image they want to use with PyPalEx. However, if the user is already within the directory where the images are located, then a relative file path is also acceptable.
-```sh
-~ > cd path/to
-~/path/to >
-~/path/to > palex -f image/dir/image.jpeg image/dir/image2.PNG
-```
-```sh
-~ > cd path/to
-~/path/to >
-~/path/to > palex -f image/dir/image.jpeg
-```
-```sh
-~/path/to > cd image/dir
-~/path/to/image/dir >
-~/path/to/image/dir > palex -f image.JPEG image2.png
-```
-The above examples are meant to show how a user can navigate to a directory with images, or at least relatively close to a directory with images, and then use PyPalEx with the `-f --files` option and relative file path(s).
+### OPTION USAGE EXAMPLES
+For usage examples of each of the options provided, please read the Wiki Homepage :  
+[https://github.com/AlTimofeyev/pypalex/wiki#option-usage-examples](https://github.com/AlTimofeyev/pypalex/wiki#option-usage-examples)
 
 <br>
-
-#### **`-p --path` Option**
-```sh
-palex -p path/to/image/dir/
-```
-```sh
-palex -p path/to/ -f image/dir/image.png
-```
-```sh
-palex -p path/to/image/dir/ -f image.png
-```
-```sh
-palex -f image1.png image2.jpg image3.jpeg -p path/to/image/dir/
-```
-The `-p --path` option can be used with a whole directory of images and files or it can be used as a reference point for the `-f --files` option. When the `-f --files` option is used with `-p --path`, the user does not have to specify the absolute path to the images, just the relative image names/filepath(s). The directory that was provided with `-p --path` will be searched for the image names/filepath(s) specified.
-
-<br>
-
-#### **`-o --output` Option**
-```sh
-palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ 
-```
-```sh
-palex -o path/to/output/dir/ -p path/to/image/dir/
-```
-```sh
-palex -p path/to/image/dir/ -f image.png -o path/to/output/dir/
-```
-```sh
-palex -f image1.png image2.jpg image3.jpeg -o path/to/output/dir/ -p path/to/image/dir/
-```
-The `-o --output` option can be used with both the `-f --files` and `-p --path` options. The sole purpose of the `-o --output` option is to let the user override the default output directory. Please refer to [Environment Variables](#environment-variables) for details about the default output directory.
-
-<br>
-
-#### **`--save-check` Option**
-```sh
-palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ --save-check
-```
-Asks if the user wants to save the extracted color palettes after the extraction process is completed.
-
-<br>
-
-#### **`--preview` Option**
-```sh
-palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ --preview
-```
-Shows a preview of the extracted color palettes before saving. This option requires that the user's terminal has the capability to show ASCII characters and ANSI colors. A future update may include a GUI variation of this preview option to avoid this issue.
-
-<br>
-
-#### **`--preview-check` Option**
-```sh
-palex -f path/to/image/dir/image.jpeg -o path/to/output/dir/ --preview-check
-```
-Shows a preview of, and asks if the user wants to save, the extracted color palettes. This option is a combination of the `--preview` and `--save-check` options. This option requires that the user's terminal has the capability to show ASCII characters and ANSI colors. A future update may include a GUI variation of this preview option to avoid this issue.
-
-<br>
-
-#### **`--pastel` Option**
-```sh
-palex --pastel -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Converts all the extracted color palettes into pastel.
-
-<br>
-
-#### **`--pastel-light` Option**
-```sh
-palex --pastel-light -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Converts light color palette into pastel.
-
-<br>
-
-#### **`--pastel-normal` Option**
-```sh
-palex --pastel-normal -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Converts normal color palette into pastel.
-
-<br>
-
-#### **`--pastel-dark` Option**
-```sh
-palex --pastel-dark -f path/to/image/dir/image.jpeg -o path/to/output/dir/
-```
-Converts dark color palette into pastel.
-
-<br>
-
-#### **`-v --version` Option**
-```sh
-palex -v
-```
-```sh
-palex --version
-```
-The `-v --version` option is used to print the PyPalEx version number.
-
 
 <h2 align=center id="feedback">FEEDBACK</h2>
 

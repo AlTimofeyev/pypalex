@@ -9,6 +9,7 @@
 #   - Modified by Al Timofeyev on April 6, 2023.
 #   - Modified by Al Timofeyev on May 31, 2024.
 #   - Modified by Al Timofeyev on June 10, 2024.
+#   - Modified by Al Timofeyev on July 8, 2024.
 
 
 # ---- IMPORTS ----
@@ -60,8 +61,8 @@ def extract_ratios(hsv_img_matrix_2d):
     magenta_ratio = (magenta_pixel / pixels) * 100
 
     # Assign the ratio dictionary.
-    ratio_dict = {'Red': red_ratio, 'Yellow': yellow_ration, 'Green': green_ration,
-                  'Cyan': cyan_ratio, 'Blue': blue_ratio, 'Magenta': magenta_ratio}
+    ratio_dict = {'red': red_ratio, 'yellow': yellow_ration, 'green': green_ration,
+                  'cyan': cyan_ratio, 'blue': blue_ratio, 'magenta': magenta_ratio}
 
     return ratio_dict
 
@@ -116,8 +117,8 @@ def construct_base_color_dictionary(hsv_img_matrix_2d):
     red = numpy.concatenate([red, hsv_img_matrix_2d[end_idx:]])     # Remainder of colors are part of red.
 
     # Colors in each color array are sorted by hue (1st column) in ascending order.
-    base_color_dict = {'Red': red, 'Yellow': yellow, 'Green': green,
-                       'Cyan': cyan, 'Blue': blue, 'Magenta': magenta}
+    base_color_dict = {'red': red, 'yellow': yellow, 'green': green,
+                       'cyan': cyan, 'blue': blue, 'magenta': magenta}
 
     return base_color_dict
 
@@ -125,14 +126,14 @@ def construct_base_color_dictionary(hsv_img_matrix_2d):
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
 
-##  Extracts dominant light, normal, dark color palettes from each of the base colors.
+##  Extracts dominant light, normal and dark colors from each of the base colors.
 #
 #   @param  base_color_dict A dictionary of 2D numpy arrays for each of the base colors.
 #
-#   @return Dictionary of light, normal, dark color palettes for each of the base colors.
-def extract_color_palettes(base_color_dict):
-    base_colors = [base_color_dict['Red'], base_color_dict['Yellow'], base_color_dict['Green'],
-                   base_color_dict['Cyan'], base_color_dict['Blue'], base_color_dict['Magenta']]
+#   @return Dictionary of light, normal and dark color types for each of the base colors.
+def extract_colors(base_color_dict):
+    base_colors = [base_color_dict['red'], base_color_dict['yellow'], base_color_dict['green'],
+                   base_color_dict['cyan'], base_color_dict['blue'], base_color_dict['magenta']]
 
     # Multi-thread the extraction process.
     pool = multiprocessing.Pool(6)
@@ -153,16 +154,15 @@ def extract_color_palettes(base_color_dict):
     light_blue_hsv_color, norm_blue_hsv_color, dark_blue_hsv_color = dominant_blue_colors
     light_magenta_hsv_color, norm_magenta_hsv_color, dark_magenta_hsv_color = dominant_magenta_colors
 
-    extracted_colors_dict = {'Light Red': light_red_hsv_color, 'Light Yellow': light_yellow_hsv_color,
-                             'Light Green': light_green_hsv_color, 'Light Cyan': light_cyan_hsv_color,
-                             'Light Blue': light_blue_hsv_color, 'Light Magenta': light_magenta_hsv_color,
-                             'Normal Red': norm_red_hsv_color, 'Normal Yellow': norm_yellow_hsv_color,
-                             'Normal Green': norm_green_hsv_color, 'Normal Cyan': norm_cyan_hsv_color,
-                             'Normal Blue': norm_blue_hsv_color, 'Normal Magenta': norm_magenta_hsv_color,
-                             'Dark Red': dark_red_hsv_color, 'Dark Yellow': dark_yellow_hsv_color,
-                             'Dark Green': dark_green_hsv_color, 'Dark Cyan': dark_cyan_hsv_color,
-                             'Dark Blue': dark_blue_hsv_color, 'Dark Magenta': dark_magenta_hsv_color
-                             }
+    extracted_colors_dict = {'light red': light_red_hsv_color, 'light yellow': light_yellow_hsv_color,
+                             'light green': light_green_hsv_color, 'light cyan': light_cyan_hsv_color,
+                             'light blue': light_blue_hsv_color, 'light magenta': light_magenta_hsv_color,
+                             'red': norm_red_hsv_color, 'yellow': norm_yellow_hsv_color,
+                             'green': norm_green_hsv_color, 'cyan': norm_cyan_hsv_color,
+                             'blue': norm_blue_hsv_color, 'magenta': norm_magenta_hsv_color,
+                             'dark red': dark_red_hsv_color, 'dark yellow': dark_yellow_hsv_color,
+                             'dark green': dark_green_hsv_color, 'dark cyan': dark_cyan_hsv_color,
+                             'dark blue': dark_blue_hsv_color, 'dark magenta': dark_magenta_hsv_color}
 
     return extracted_colors_dict
 
@@ -186,53 +186,53 @@ def extract_color_palettes(base_color_dict):
 #   @param  base_color_dict         A dictionary of 2D numpy arrays for each of the base colors.
 #   @param  extracted_colors_dict   A Dictionary of extracted colors.
 def check_missing_colors(base_color_dict, extracted_colors_dict):
-    if len(base_color_dict['Red']) == 0:
-        left_color, right_color = get_left_and_right_colors('Light Red')
-        extracted_colors_dict['Light Red'] = borrow_color(extracted_colors_dict, 'Light Red', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Normal Red')
-        extracted_colors_dict['Normal Red'] = borrow_color(extracted_colors_dict, 'Normal Red', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Dark Red')
-        extracted_colors_dict['Dark Red'] = borrow_color(extracted_colors_dict, 'Dark Red', left_color, right_color)
+    if len(base_color_dict['red']) == 0:
+        left_color, right_color = get_left_and_right_colors('light red')
+        extracted_colors_dict['light red'] = borrow_color(extracted_colors_dict, 'light red', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('red')
+        extracted_colors_dict['red'] = borrow_color(extracted_colors_dict, 'red', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('dark red')
+        extracted_colors_dict['dark red'] = borrow_color(extracted_colors_dict, 'dark red', left_color, right_color)
 
-    if len(base_color_dict['Yellow']) == 0:
-        left_color, right_color = get_left_and_right_colors('Light Yellow')
-        extracted_colors_dict['Light Yellow'] = borrow_color(extracted_colors_dict, 'Light Yellow', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Normal Yellow')
-        extracted_colors_dict['Normal Yellow'] = borrow_color(extracted_colors_dict, 'Normal Yellow', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Dark Yellow')
-        extracted_colors_dict['Dark Yellow'] = borrow_color(extracted_colors_dict, 'Dark Yellow', left_color, right_color)
+    if len(base_color_dict['yellow']) == 0:
+        left_color, right_color = get_left_and_right_colors('light yellow')
+        extracted_colors_dict['light yellow'] = borrow_color(extracted_colors_dict, 'light yellow', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('yellow')
+        extracted_colors_dict['yellow'] = borrow_color(extracted_colors_dict, 'yellow', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('dark yellow')
+        extracted_colors_dict['dark yellow'] = borrow_color(extracted_colors_dict, 'dark yellow', left_color, right_color)
 
-    if len(base_color_dict['Green']) == 0:
-        left_color, right_color = get_left_and_right_colors('Light Green')
-        extracted_colors_dict['Light Green'] = borrow_color(extracted_colors_dict, 'Light Green', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Normal Green')
-        extracted_colors_dict['Normal Green'] = borrow_color(extracted_colors_dict, 'Normal Green', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Dark Green')
-        extracted_colors_dict['Dark Green'] = borrow_color(extracted_colors_dict, 'Dark Green', left_color, right_color)
+    if len(base_color_dict['green']) == 0:
+        left_color, right_color = get_left_and_right_colors('light green')
+        extracted_colors_dict['light green'] = borrow_color(extracted_colors_dict, 'light green', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('green')
+        extracted_colors_dict['green'] = borrow_color(extracted_colors_dict, 'green', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('dark green')
+        extracted_colors_dict['dark green'] = borrow_color(extracted_colors_dict, 'dark green', left_color, right_color)
 
-    if len(base_color_dict['Cyan']) == 0:
-        left_color, right_color = get_left_and_right_colors('Light Cyan')
-        extracted_colors_dict['Light Cyan'] = borrow_color(extracted_colors_dict, 'Light Cyan', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Normal Cyan')
-        extracted_colors_dict['Normal Cyan'] = borrow_color(extracted_colors_dict, 'Normal Cyan', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Dark Cyan')
-        extracted_colors_dict['Dark Cyan'] = borrow_color(extracted_colors_dict, 'Dark Cyan', left_color, right_color)
+    if len(base_color_dict['cyan']) == 0:
+        left_color, right_color = get_left_and_right_colors('light cyan')
+        extracted_colors_dict['light cyan'] = borrow_color(extracted_colors_dict, 'light cyan', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('cyan')
+        extracted_colors_dict['cyan'] = borrow_color(extracted_colors_dict, 'cyan', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('dark cyan')
+        extracted_colors_dict['dark cyan'] = borrow_color(extracted_colors_dict, 'dark cyan', left_color, right_color)
 
-    if len(base_color_dict['Blue']) == 0:
-        left_color, right_color = get_left_and_right_colors('Light Blue')
-        extracted_colors_dict['Light Blue'] = borrow_color(extracted_colors_dict, 'Light Blue', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Normal Blue')
-        extracted_colors_dict['Normal Blue'] = borrow_color(extracted_colors_dict, 'Normal Blue', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Dark Blue')
-        extracted_colors_dict['Dark Blue'] = borrow_color(extracted_colors_dict, 'Dark Blue', left_color, right_color)
+    if len(base_color_dict['blue']) == 0:
+        left_color, right_color = get_left_and_right_colors('light blue')
+        extracted_colors_dict['light blue'] = borrow_color(extracted_colors_dict, 'light blue', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('blue')
+        extracted_colors_dict['blue'] = borrow_color(extracted_colors_dict, 'blue', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('dark blue')
+        extracted_colors_dict['dark blue'] = borrow_color(extracted_colors_dict, 'dark blue', left_color, right_color)
 
-    if len(base_color_dict['Magenta']) == 0:
-        left_color, right_color = get_left_and_right_colors('Light Magenta')
-        extracted_colors_dict['Light Magenta'] = borrow_color(extracted_colors_dict, 'Light Magenta', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Normal Magenta')
-        extracted_colors_dict['Normal Magenta'] = borrow_color(extracted_colors_dict, 'Normal Magenta', left_color, right_color)
-        left_color, right_color = get_left_and_right_colors('Dark Magenta')
-        extracted_colors_dict['Dark Magenta'] = borrow_color(extracted_colors_dict, 'Dark Magenta', left_color, right_color)
+    if len(base_color_dict['magenta']) == 0:
+        left_color, right_color = get_left_and_right_colors('light magenta')
+        extracted_colors_dict['light magenta'] = borrow_color(extracted_colors_dict, 'light magenta', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('magenta')
+        extracted_colors_dict['magenta'] = borrow_color(extracted_colors_dict, 'magenta', left_color, right_color)
+        left_color, right_color = get_left_and_right_colors('dark magenta')
+        extracted_colors_dict['dark magenta'] = borrow_color(extracted_colors_dict, 'dark magenta', left_color, right_color)
 
 
 # --------------------------------------------------------------------------
@@ -256,17 +256,17 @@ def generate_remaining_colors(extracted_colors_dict, ratios):
     light_background, light_foreground = light_theme
     dark_background, dark_foreground = dark_theme
 
-    extracted_colors_dict["Light Black"] = light_black
-    extracted_colors_dict["Normal Black"] = norm_black
-    extracted_colors_dict["Dark Black"] = dark_black
-    extracted_colors_dict["Light White"] = light_white
-    extracted_colors_dict["Normal White"] = norm_white
-    extracted_colors_dict["Dark White"] = dark_white
+    extracted_colors_dict['light black'] = light_black
+    extracted_colors_dict['black'] = norm_black
+    extracted_colors_dict['dark black'] = dark_black
+    extracted_colors_dict['light white'] = light_white
+    extracted_colors_dict['white'] = norm_white
+    extracted_colors_dict['dark white'] = dark_white
 
-    extracted_colors_dict["Light Background"] = light_background
-    extracted_colors_dict["Light Foreground"] = light_foreground
-    extracted_colors_dict["Dark Background"] = dark_background
-    extracted_colors_dict["Dark Foreground"] = dark_foreground
+    extracted_colors_dict['light background'] = light_background
+    extracted_colors_dict['light foreground'] = light_foreground
+    extracted_colors_dict['dark background'] = dark_background
+    extracted_colors_dict['dark foreground'] = dark_foreground
 
 
 # **************************************************************************
@@ -328,42 +328,42 @@ def extract_color_types(hsv_base_color_matrix):
 #
 #   @return List of color names that are to the left and right of the originating color.
 def get_left_and_right_colors(origin_color_name):
-    if origin_color_name == 'Light Red':
-        return ['Light Yellow', 'Light Magenta']
-    elif origin_color_name == 'Normal Red':
-        return ['Normal Yellow', 'Normal Magenta']
-    elif origin_color_name == 'Dark Red':
-        return ['Dark Yellow', 'Dark Magenta']
-    elif origin_color_name == 'Light Yellow':
-        return ['Light Green', 'Light Red']
-    elif origin_color_name == 'Normal Yellow':
-        return ['Normal Green', 'Normal Red']
-    elif origin_color_name == 'Dark Yellow':
-        return ['Dark Green', 'Dark Red']
-    elif origin_color_name == 'Light Green':
-        return ['Light Cyan', 'Light Yellow']
-    elif origin_color_name == 'Normal Green':
-        return ['Normal Cyan', 'Normal Yellow']
-    elif origin_color_name == 'Dark Green':
-        return ['Dark Cyan', 'Dark Yellow']
-    elif origin_color_name == 'Light Cyan':
-        return ['Light Blue', 'Light Green']
-    elif origin_color_name == 'Normal Cyan':
-        return ['Normal Blue', 'Normal Green']
-    elif origin_color_name == 'Dark Cyan':
-        return ['Dark Blue', 'Dark Green']
-    elif origin_color_name == 'Light Blue':
-        return ['Light Magenta', 'Light Cyan']
-    elif origin_color_name == 'Normal Blue':
-        return ['Normal Magenta', 'Normal Cyan']
-    elif origin_color_name == 'Dark Blue':
-        return ['Dark Magenta', 'Dark Cyan']
-    elif origin_color_name == 'Light Magenta':
-        return ['Light Red', 'Light Blue']
-    elif origin_color_name == 'Normal Magenta':
-        return ['Normal Red', 'Normal Blue']
-    elif origin_color_name == 'Dark Magenta':
-        return ['Dark Red', 'Dark Blue']
+    if origin_color_name == 'light red':
+        return ['light yellow', 'light magenta']
+    elif origin_color_name == 'red':
+        return ['yellow', 'magenta']
+    elif origin_color_name == 'dark red':
+        return ['dark yellow', 'dark magenta']
+    elif origin_color_name == 'light yellow':
+        return ['light green', 'light red']
+    elif origin_color_name == 'yellow':
+        return ['green', 'red']
+    elif origin_color_name == 'dark yellow':
+        return ['dark green', 'dark red']
+    elif origin_color_name == 'light green':
+        return ['light cyan', 'light yellow']
+    elif origin_color_name == 'green':
+        return ['cyan', 'yellow']
+    elif origin_color_name == 'dark green':
+        return ['dark cyan', 'dark yellow']
+    elif origin_color_name == 'light cyan':
+        return ['light blue', 'light green']
+    elif origin_color_name == 'cyan':
+        return ['blue', 'green']
+    elif origin_color_name == 'dark cyan':
+        return ['dark blue', 'dark green']
+    elif origin_color_name == 'light blue':
+        return ['light magenta', 'light cyan']
+    elif origin_color_name == 'blue':
+        return ['magenta', 'cyan']
+    elif origin_color_name == 'dark blue':
+        return ['dark magenta', 'dark cyan']
+    elif origin_color_name == 'light magenta':
+        return ['light red', 'light blue']
+    elif origin_color_name == 'magenta':
+        return ['red', 'blue']
+    elif origin_color_name == 'dark magenta':
+        return ['dark red', 'dark blue']
 
 
 # --------------------------------------------------------------------------
@@ -410,17 +410,17 @@ def borrow_color(extracted_colors_dict, origin, borrow_left, borrow_right):
 
     # ---- Calculate distance to the optimal hue of original color, defined in constants.
     optimal_hue = const.RED_HUE     # -- Default
-    if origin == 'Light Red' or origin == 'Normal Red' or origin == 'Dark Red':
+    if origin == 'light red' or origin == 'red' or origin == 'dark red':
         optimal_hue = const.RED_HUE
-    elif origin == 'Light Yellow' or origin == 'Normal Yellow' or origin == 'Dark Yellow':
+    elif origin == 'light yellow' or origin == 'yellow' or origin == 'dark yellow':
         optimal_hue = const.YELLOW_HUE
-    elif origin == 'Light Green' or origin == 'Normal Green' or origin == 'Dark Green':
+    elif origin == 'light green' or origin == 'green' or origin == 'dark green':
         optimal_hue = const.GREEN_HUE
-    elif origin == 'Light Cyan' or origin == 'Normal Cyan' or origin == 'Dark Cyan':
+    elif origin == 'light cyan' or origin == 'cyan' or origin == 'dark cyan':
         optimal_hue = const.CYAN_HUE
-    elif origin == 'Light Blue' or origin == 'Normal Blue' or origin == 'Dark Blue':
+    elif origin == 'light blue' or origin == 'blue' or origin == 'dark blue':
         optimal_hue = const.BLUE_HUE
-    elif origin == 'Light Magenta' or origin == 'Normal Magenta' or origin == 'Dark Magenta':
+    elif origin == 'light magenta' or origin == 'magenta' or origin == 'dark magenta':
         optimal_hue = const.MAGENTA_HUE
 
     distance_from_left = min(abs(optimal_hue - potential_left[0]), 360 - abs(optimal_hue - potential_left[0]))
@@ -459,9 +459,9 @@ def get_dominant_hue(extracted_colors_dict, ratios):
     index = random.randrange(len(dominant_color_array)) if len(dominant_color_array) > 0 else -1
     dominant_color_name = dominant_color_array[index]
 
-    light_hue, temp_sat1, temp_bright1 = extracted_colors_dict["Light " + dominant_color_name]
-    norm_hue, temp_sat2, temp_bright2 = extracted_colors_dict["Normal " + dominant_color_name]
-    dark_hue, temp_sat3, temp_bright3 = extracted_colors_dict["Dark " + dominant_color_name]
+    light_hue, temp_sat1, temp_bright1 = extracted_colors_dict["light " + dominant_color_name]
+    norm_hue, temp_sat2, temp_bright2 = extracted_colors_dict[dominant_color_name]
+    dark_hue, temp_sat3, temp_bright3 = extracted_colors_dict["dark " + dominant_color_name]
 
     cos_light_hue = math.cos(math.radians(light_hue))
     cos_norm_hue = math.cos(math.radians(norm_hue))

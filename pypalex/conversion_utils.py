@@ -6,6 +6,7 @@
 #   - Modified by Al Timofeyev on April 21, 2022.
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on April 5, 2023.
+#   - Modified by Al Timofeyev on July 8, 2024.
 
 
 ##  Converts RGB array [r,g,b] to HSV array [h,s,v].
@@ -76,6 +77,55 @@ def hex_to_rgb(hex_str):
         rgb_array.append(int(hex_digit1+hex_digit2, 16))
 
     return rgb_array
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Constructs ANSI color escape code based on an RGB list.
+#   @details    An RGB [r,g,b] list is used to generate an ANSI
+#               escape code of the RGB color for use in the
+#               terminal CLI. The basic format for these codes depends
+#               on if it will be used for foreground or background color.
+#               Use \033[38;2;r;g;bm for the foreground color.
+#               Use \033[48;2;r;g;bm for the background color.
+#
+#   @note   For more information about these ANSI escape codes,
+#           here are some sources:
+#           https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+#           https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences/33206814#33206814
+#           https://stackoverflow.com/questions/45782766/color-python-output-given-rrggbb-hex-value/45782972#45782972
+#
+#   @param  rgb_array   RGB array [r,g,b].
+#   @param  background  Flag for if the RGB color is for a background or not.
+#
+#   @return ANSI escape code string of the RGB color.
+def rgb_to_ansi(rgb_array, background=False):
+    r, g, b = rgb_array
+    return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Converts ANSI color escape code string into an RGB array.
+#
+#   @note   This function is dependent on the ANSI string to
+#           be formatted like '\033[{};2;{};{};{}m' or
+#           '\u001b[{};2;{};{};{}m' or something similar. For more
+#           information about these ANSI escape codes, here are
+#           some sources:
+#           https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+#           https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences/33206814#33206814
+#           https://stackoverflow.com/questions/45782766/color-python-output-given-rrggbb-hex-value/45782972#45782972
+#
+#   @param  ansi_string ANSI color escape code string.
+#
+#   @return RGB array [r,g,b].
+def ansi_to_rgb(ansi_string):
+    split_ansi = ansi_string.split(';')
+    r, g, b = int(split_ansi[-3]), int(split_ansi[-2]), int(split_ansi[-1][:-1])
+    return [r, g, b]
 
 
 # **************************************************************************

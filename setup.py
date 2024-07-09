@@ -8,6 +8,8 @@
 #   - Created by Al Timofeyev on February 20, 2022.
 #   - Modified by Al Timofeyev on April 7, 2023.
 #   - Modified by Al Timofeyev on June 10, 2024.
+#   - Modified by Al Timofeyev on July 8, 2024.
+
 
 import sys
 import setuptools
@@ -25,6 +27,7 @@ REQUIREMENTS = [
     'pillow >= 9.0',
     'numpy >= 1.21',
     'filetype >= 1.0'
+    'PyYAML >= 5.4.1'
 ]
 
 setuptools.setup(
@@ -32,11 +35,10 @@ setuptools.setup(
     version=VERSION,
     author="Al Timofeyev",
     author_email="al.timofeyev@outlook.com",
-    description="Python Palette Extractor: extracts color palettes from images into json files.",
+    description="Python Palette Extractor: extracts color palettes from images into json / yaml files.",
     long_description_content_type="text/markdown",
     long_description=LONG_DESC,
     install_requires=REQUIREMENTS,
-    # keywords="python palex color-palette colorscheme extract-colorscheme extract-palette extractor",
     keywords=['python', 'pypalex', 'palex', 'color-palette', 'colorscheme', 'extract-colorscheme', 'extract-palette', 'extractor'],
     license="MIT",
     url="https://github.com/AlTimofeyev/pypalex",

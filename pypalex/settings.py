@@ -16,12 +16,13 @@
 #   - Modified by Al Timofeyev on May 16, 2024.
 #   - Modified by Al Timofeyev on May 31, 2024.
 #   - Modified by Al Timofeyev on June 10, 2024.
+#   - Modified by Al Timofeyev on July 8, 2024.
 
 
 import os
 import platform
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 __cache_version__ = "1.0.0"
 
 HOME = os.getenv("HOME", os.getenv("USERPROFILE"))
@@ -34,6 +35,9 @@ XDG_CONF_DIR = os.getenv("XDG_CONFIG_HOME", os.path.join(HOME, ".config"))
 # global shell environment variable.
 CACHE_DIR = os.getenv("PYPALEX_CACHE_DIR", os.path.join(XDG_CACHE_DIR, "palex"))
 CONF_DIR = os.getenv("PYPALEX_CONFIG_DIR", os.path.join(XDG_CONF_DIR, "palex"))
+DEFAULT_EXTRACTED_DIR = os.path.join(CONF_DIR, "primary")
+PASTEL_EXTRACTED_DIR = os.path.join(CONF_DIR, "pastel")
+RAW_EXTRACTED_DIR = os.path.join(CONF_DIR, "raw")
 MODULE_DIR = os.path.dirname(__file__)
 
 OS = platform.uname()[0]
