@@ -30,6 +30,7 @@
 #   - Modified by Al Timofeyev on June 10, 2024.
 #   - Modified by Al Timofeyev on July 8, 2024.
 #   - Modified by Al Timofeyev on December 15, 2024.
+#   - Modified by Al Timofeyev on August 3, 2025.
 
 
 # ---- IMPORTS ----
@@ -206,24 +207,24 @@ def extract_color_palettes():
             extractor.convert_to_pastel(pastel_light=PASTEL_L, pastel_normal=PASTEL_N, pastel_dark=PASTEL_D)
             print("COMPLETED")
 
-            # If the user selected adaptive or mood palette creation.
-            if ADAPTIVE_PALETTE or MOOD_PALETTE or SAVE_RAW:
+        # If the user selected adaptive or mood palette creation.
+        if ADAPTIVE_PALETTE or MOOD_PALETTE or SAVE_RAW:
+            if ADAPTIVE_PALETTE:
+                preview_and_save(extractor, 'a', index)
+
+            if MOOD_PALETTE:
                 if ADAPTIVE_PALETTE:
-                    preview_and_save(extractor, 'a', index)
+                    print()
+                preview_and_save(extractor, 'm', index)
 
-                if MOOD_PALETTE:
-                    if ADAPTIVE_PALETTE:
-                        print()
-                    preview_and_save(extractor, 'm', index)
+            if SAVE_RAW:  # Raw save needs to always be done LAST!
+                if ADAPTIVE_PALETTE or MOOD_PALETTE:
+                    print()
+                preview_and_save(extractor, 'r', index)
 
-                if SAVE_RAW:  # Raw save needs to always be done LAST!
-                    if ADAPTIVE_PALETTE or MOOD_PALETTE:
-                        print()
-                    preview_and_save(extractor, 'r', index)
-
-            # Else save the specified extracted palettes.
-            else:
-                preview_and_save(extractor, 't', index)
+        # Else save the specified extracted palettes.
+        else:
+            preview_and_save(extractor, 't', index)
 
         if index < len(PROPER_IMAGES) - 1:  # Print blank line separator if there are more images.
             print()

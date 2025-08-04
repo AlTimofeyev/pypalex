@@ -18,12 +18,12 @@
 #   - Modified by Al Timofeyev on June 10, 2024.
 #   - Modified by Al Timofeyev on July 8, 2024.
 #   - Modified by Al Timofeyev on October 12, 2024.
-
+#   - Modified by Al Tiomfeyev on August 3, 2025.
 
 import os
 import platform
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 __cache_version__ = "1.0.0"
 
 HOME = os.getenv("HOME", os.getenv("USERPROFILE"))
