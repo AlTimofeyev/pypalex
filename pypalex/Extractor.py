@@ -10,6 +10,7 @@
 #   - Modified by Al Timofeyev on June 10, 2024.
 #   - Modified by Al Timofeyev on July 8, 2024.
 #   - Modified by Al Timofeyev on October 12, 2024.
+#   - Modified by Al Timofeyev on August 3, 2025.
 
 
 # ---- IMPORTS ----
@@ -479,27 +480,45 @@ class Extractor:
             'dark foreground': self.extracted_colors_dict['dark foreground'],
             'black': self.extracted_colors_dict['black'],
             'red': self.extracted_colors_dict['red'],
-            'green': self.extracted_colors_dict['green'],
+            'orange': self.extracted_colors_dict['orange'],
             'yellow': self.extracted_colors_dict['yellow'],
-            'blue': self.extracted_colors_dict['blue'],
-            'magenta': self.extracted_colors_dict['magenta'],
+            'chartreuse': self.extracted_colors_dict['chartreuse'],
+            'green': self.extracted_colors_dict['green'],
+            'spring': self.extracted_colors_dict['spring'],
             'cyan': self.extracted_colors_dict['cyan'],
+            'azure': self.extracted_colors_dict['azure'],
+            'blue': self.extracted_colors_dict['blue'],
+            'violet': self.extracted_colors_dict['violet'],
+            'magenta': self.extracted_colors_dict['magenta'],
+            'rose': self.extracted_colors_dict['rose'],
             'white': self.extracted_colors_dict['white'],
             'light black': self.extracted_colors_dict['light black'],
             'light red': self.extracted_colors_dict['light red'],
-            'light green': self.extracted_colors_dict['light green'],
+            'light orange': self.extracted_colors_dict['light orange'],
             'light yellow': self.extracted_colors_dict['light yellow'],
-            'light blue': self.extracted_colors_dict['light blue'],
-            'light magenta': self.extracted_colors_dict['light magenta'],
+            'light chartreuse': self.extracted_colors_dict['light chartreuse'],
+            'light green': self.extracted_colors_dict['light green'],
+            'light spring': self.extracted_colors_dict['light spring'],
             'light cyan': self.extracted_colors_dict['light cyan'],
+            'light azure': self.extracted_colors_dict['light azure'],
+            'light blue': self.extracted_colors_dict['light blue'],
+            'light violet': self.extracted_colors_dict['light violet'],
+            'light magenta': self.extracted_colors_dict['light magenta'],
+            'light rose': self.extracted_colors_dict['light rose'],
             'light white': self.extracted_colors_dict['light white'],
             'dark black': self.extracted_colors_dict['dark black'],
             'dark red': self.extracted_colors_dict['dark red'],
-            'dark green': self.extracted_colors_dict['dark green'],
+            'dark orange': self.extracted_colors_dict['dark orange'],
             'dark yellow': self.extracted_colors_dict['dark yellow'],
-            'dark blue': self.extracted_colors_dict['dark blue'],
-            'dark magenta': self.extracted_colors_dict['dark magenta'],
+            'dark chartreuse': self.extracted_colors_dict['dark chartreuse'],
+            'dark green': self.extracted_colors_dict['dark green'],
+            'dark spring': self.extracted_colors_dict['dark spring'],
             'dark cyan': self.extracted_colors_dict['dark cyan'],
+            'dark azure': self.extracted_colors_dict['dark azure'],
+            'dark blue': self.extracted_colors_dict['dark blue'],
+            'dark violet': self.extracted_colors_dict['dark violet'],
+            'dark magenta': self.extracted_colors_dict['dark magenta'],
+            'dark rose': self.extracted_colors_dict['dark rose'],
             'dark white': self.extracted_colors_dict['dark white']
         }
 

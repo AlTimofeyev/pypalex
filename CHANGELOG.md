@@ -12,10 +12,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 <br>
 
+## [2.2.2] - 2025-08-03
+- CHANGED: Changed the `organize_extracted_dictionary()` function in the **Extractor.py** file.
+  - The `organize_extracted_dictionary()` function was missing the 6 newly added colors, causing an issue with palette generation (which wasn't detecting the new colors and throwing errors).
+
+<br>
+
 ## [2.2.1] - 2025-08-03
 - CHANGED: Indentation issue in the **__main__.py** file was resolved.
   - There was an `if...else` conditional statement int the `extract_color_palettes()` function that was indented one level deeper than it should have been, resulting in extracted color palettes not saving.
 
+<br>
 
 ## [2.2.0] - 2024-12-15
 - This update was delayed to August 2025.
@@ -229,6 +236,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[2.2.2]: https://github.com/AlTimofeyev/pypalex/compare/2.2.1...2.2.2
 [2.2.1]: https://github.com/AlTimofeyev/pypalex/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/AlTimofeyev/pypalex/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/AlTimofeyev/pypalex/compare/2.1.0...2.1.1

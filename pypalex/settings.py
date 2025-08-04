@@ -23,7 +23,7 @@
 import os
 import platform
 
-__version__ = "2.2.1"
+__version__ = "2.2.2"
 __cache_version__ = "1.0.0"
 
 HOME = os.getenv("HOME", os.getenv("USERPROFILE"))
