@@ -35,6 +35,7 @@ PyPalEx is a tool for extracting color palettes from images and storing them in 
   - [Options List](#options-list)
   - [Notes](#notes)
   - [Option Usage Examples](#option-usage-examples)
+  - [Shell Usage](#shell-usage)
 - [**Feedback**](#feedback)
 
 <br>
@@ -164,6 +165,44 @@ Some images may take 2-3 seconds to be processed while other images may take 4-5
 ### OPTION USAGE EXAMPLES
 For usage examples of each of the options provided, please read the Wiki Homepage :  
 [https://github.com/AlTimofeyev/pypalex/wiki#option-usage-examples](https://github.com/AlTimofeyev/pypalex/wiki#option-usage-examples)
+
+### SHELL USAGE
+Here's an example of how to use the Extractor class from a python environment running in a terminal / shell (CLI):
+
+``` python
+>>> from pypalex.Extractor import Extractor
+>>> from pypalex.print_utils import print_palette_preview
+>>> from pypalex.file_utils import save_palettes
+>>>
+>>> extractor = Extractor()
+>>>
+>>> extractor.load("$HOME/aboslute/path/to/image.jpg")
+>>> extractor.run()
+>>>
+>>> # The colors are extracted in HSV format, and the generated palettes are also in HSV format.
+>>> adaptive_palettes_HSV = extractor.generate_adaptive_palettes(light_palette_name="binga", dark_palette_name="bongo")
+>>>
+>>> # You can change the color format of the colors that are in the Extractor before generating palettes.
+>>> extractor.set_color_format("hex")
+>>> mood_palettes_HEX = extractor.generate_mood_palettes(light_palette_name="happy", dark_palette_name="gloomy")
+>>>
+>>> # Print the palettes before saving them, but don't forget to specify their color types.
+>>> print_palette_preview(adaptive_palettes_HSV, "hsv")
+>>> print_palette_preview(mood_palettes_HEX, "hex")
+>>>
+>>> # If you're happy with the palettes from the image, you can save them.
+>>> save_palettes(adaptive_palettes_HSV, image_name="forest", output_path="$HOME/absolute/path/to/output/folder", export_file_format="json", export_color_format="hsv")
+>>> save_palettes(mood_palettes_HEX, image_name="melody", output_path="$HOME/absolute/path/to/output/folder", export_file_format="yaml", export_color_format="hex")
+>>>
+>>> # OR you can load another image into the Extractor and repeat the process.
+>>> extractor.load("$HOME/aboslute/path/to/another/image.jpg")
+>>> extractor.run()
+>>>
+>>> # Please look through the code documentation file, or the codebase, to 
+>>> # get a better understanding of how to use each funciton and class 
+>>> # separately. You can also import the funcitons and classes in this 
+>>> # package into your own projects.
+```
 
 <br>
 

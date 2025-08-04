@@ -7,6 +7,7 @@
 #   @section authors Author(s)
 #   - Created by Al Timofeyev on April 5, 2023.
 #   - Modified by Al Timofeyev on July 8, 2024.
+#   - Modified by Al Timofeyev on October 12, 2024.
 
 
 # ---- IMPORTS ----
@@ -37,29 +38,22 @@ def generate_config_file(config_filename):
                           'color4': 'blue', 'color5': 'magenta', 'color6': 'cyan', 'color9': 'light red',
                           'color10': 'light green', 'color11': 'light yellow', 'color12': 'light blue',
                           'color13': 'light magenta', 'color14': 'light cyan'}
-    # mixed_light_theme = {'palette-type': 'light', 'color1': 'red', 'color2': 'green', 'color3': 'yellow',
-    #                      'color4': 'blue', 'color5': 'magenta', 'color6': 'cyan', 'color9': 'rose',
-    #                      'color10': 'chartreuse', 'color11': 'orange', 'color12': 'azure',
-    #                      'color13': 'violet', 'color14': 'spring'}
-    # mixed_dark_theme = {'palette-type': 'dark', 'color1': 'rose', 'color2': 'chartreuse', 'color3': 'orange',
-    #                     'color4': 'azure', 'color5': 'violet', 'color6': 'spring', 'color9': 'red',
-    #                     'color10': 'green', 'color11': 'yellow', 'color12': 'blue',
-    #                     'color13': 'magenta', 'color14': 'cyan'}
+    default_light_theme_2 = {'palette-type': 'light', 'color1': 'rose', 'color2': 'chartreuse', 'color3': 'orange',
+                             'color4': 'azure', 'color5': 'violet', 'color6': 'spring', 'color9': 'dark rose',
+                             'color10': 'dark chartreuse', 'color11': 'dark orange', 'color12': 'dark azure',
+                             'color13': 'dark violet', 'color14': 'dark spring'}
+    default_dark_theme_2 = {'palette-type': 'dark', 'color1': 'rose', 'color2': 'chartreuse', 'color3': 'orange',
+                            'color4': 'azure', 'color5': 'violet', 'color6': 'spring', 'color9': 'light rose',
+                            'color10': 'light chartreuse', 'color11': 'light orange', 'color12': 'light azure',
+                            'color13': 'light violet', 'color14': 'light spring'}
 
-    # config = {
-    #     'save-check': True,
-    #     'show-preview': True,
-    #     'export-file-format': 'json',
-    #     'export-color-format': 'hex',
-    #     'exported-palettes': {'light-theme': default_light_theme, 'dark-theme': default_dark_theme,
-    #                         'mixed-light-theme': mixed_light_theme, 'mixed-dark-theme': mixed_dark_theme}
-    # }
     config = {
         'save-check': True,
         'show-preview': True,
         'export-file-format': 'json',
         'export-color-format': 'hex',
-        'exported-palettes': {'light-theme': default_light_theme, 'dark-theme': default_dark_theme}
+        'exported-palettes': {'light-theme': default_light_theme, 'dark-theme': default_dark_theme,
+                              'light-theme-2': default_light_theme_2, 'dark-theme-2': default_dark_theme_2}
     }
 
     config_comments = "# ******************************************** CONFIG NOTES ********************************************\n"
@@ -82,17 +76,17 @@ def generate_config_file(config_filename):
     config_comments += "# ************************************ COLORS AVAILABLE FOR PALETTES ***********************************\n"
     config_comments += "# ------------------------------------------------------------------------------------------------------\n"
     config_comments += "# 1.  red,        light red,        dark red\n"
-    # config_comments += "# 2.  orange,     light orange,     dark orange\n"
+    config_comments += "# 2.  orange,     light orange,     dark orange\n"
     config_comments += "# 3.  yellow,     light yellow,     dark yellow\n"
-    # config_comments += "# 4.  chartreuse, light chartreuse, dark chartreuse\n"
+    config_comments += "# 4.  chartreuse, light chartreuse, dark chartreuse\n"
     config_comments += "# 5.  green,      light green,      dark green\n"
-    # config_comments += "# 6.  spring,     light spring,     dark spring\n"
+    config_comments += "# 6.  spring,     light spring,     dark spring\n"
     config_comments += "# 7.  cyan,       light cyan,       dark cyan\n"
-    # config_comments += "# 8.  azure,      light azure,      dark azure\n"
+    config_comments += "# 8.  azure,      light azure,      dark azure\n"
     config_comments += "# 9.  blue,       light blue,       dark blue\n"
-    # config_comments += "# 10. violet,     light violet,     dark violet\n"
+    config_comments += "# 10. violet,     light violet,     dark violet\n"
     config_comments += "# 11. magenta,    light magenta,    dark magenta\n"
-    # config_comments += "# 12. rose,       light rose,       dark rose\n"
+    config_comments += "# 12. rose,       light rose,       dark rose\n"
     config_comments += "# \n"
     config_comments += "# NOTES ABOUT PALETTES :\n"
     config_comments += "# - Palette Templates is just another way of saying Color Theme or Color Scheme Templates.\n"
@@ -122,6 +116,11 @@ def generate_config_file(config_filename):
 #   @param  export_file_format      A string that specifies the format of the file that will be exported (e.g. 'json', 'yaml').
 #   @param  export_color_format     A string that specifies the format of the colors that will be exported (e.g. 'hsv', 'rgb', 'hex', 'ansi').
 def raw_dump(extracted_colors_dict, image_name, output_path, export_file_format, export_color_format):
+    # These are the only file formats currently supported.
+    if export_file_format not in {'json', 'yaml', 'yml'}:
+        print("CANNOT SAVE : ", export_file_format, " Not Supported", sep='')
+        return
+
     if output_path == '':
         output_path = RAW_EXTRACTED_DIR
         filename = image_name + '-raw_colors.' + export_file_format
@@ -167,33 +166,44 @@ def raw_dump(extracted_colors_dict, image_name, output_path, export_file_format,
 #   @note    If files with the same name already exist, they can be overwritten.
 #
 #   @param  palettes            A dictionary of palettes that were organized based on the palette templates.
-#   @param  palette_templates   A dictionary of palette templates.
 #   @param  image_name          A string that represents the name of the image from where the colors were extracted (e.g. 'forest_wallpaper', 'bubblegum', etc).
 #   @param  output_path         A string that specifies the directory where to save the file (can be a blank string).
 #   @param  export_file_format  A string that specifies the format of the file that will be exported (e.g. 'json', 'yaml').
 #   @param  export_color_format A string that specifies the format of the colors that will be exported (e.g. 'hsv', 'rgb', 'hex', 'ansi').
-#   @param  pastel_light        A Flag that specifies if the light colors have been converted to pastel.
-#   @param  pastel_normal       A Flag that specifies if the normal colors have been converted to pastel.
-#   @param  pastel_dark         A Flag that specifies if the dark colors have been converted to pastel.
-def save_palettes(palettes, palette_templates, image_name, output_path, export_file_format, export_color_format, pastel_light=False, pastel_normal=False, pastel_dark=False):
+#   @param  palette_color_types A dictionary that holds flags (True / False) for the color types contained in each palette and if those color types are pastel or not.
+def save_palettes(palettes, image_name, output_path, export_file_format, export_color_format, palette_color_types=None):
+    # These are the only file formats currently supported.
+    if export_file_format not in {'json', 'yaml', 'yml'}:
+        print("CANNOT SAVE : ", export_file_format, " Not Supported", sep='')
+        return
+
     output_filepaths = []
-    make_output_path, make_default_primary_path, make_default_pastel_path = False, False, False
+
+    make_output_path = output_path != ''
+    make_default_primary_path = (palette_color_types is None or not palette_color_types) and not make_output_path
+    make_default_pastel_path = False
 
     for palette_name, palette in palettes.items():
         filename = palette_name + '.' + export_file_format
 
-        if output_path == '':
-            if ( (pastel_light and palette_templates[palette_name]['contains-light']) or
-                    (pastel_normal and palette_templates[palette_name]['contains-normal']) or
-                    (pastel_dark and palette_templates[palette_name]['contains-dark']) ):
-                make_default_pastel_path = True
-                output_filepaths.append(os.path.join(os.path.join(PASTEL_EXTRACTED_DIR, image_name), filename))
-            else:
-                make_default_primary_path = True
-                output_filepaths.append(os.path.join(os.path.join(DEFAULT_EXTRACTED_DIR, image_name), filename))
-        else:
-            make_output_path = True
+        contains_valid_color_types = False
+        if palette_color_types is not None and palette_name in palette_color_types:
+            contains_valid_color_types = all(color_type in palette_color_types[palette_name]
+                                             for color_type in {'contains-light', 'contains-normal', 'contains-dark',
+                                                                'pastel-light', 'pastel-normal', 'pastel-dark'})
+
+        if make_output_path:
             output_filepaths.append(os.path.join(os.path.join(output_path, image_name), filename))
+        elif palette_color_types is None or not contains_valid_color_types:
+            output_filepaths.append(os.path.join(os.path.join(DEFAULT_EXTRACTED_DIR, image_name), filename))
+        elif ((palette_color_types[palette_name]['pastel-light'] and palette_color_types[palette_name]['contains-light']) or
+              (palette_color_types[palette_name]['pastel-normal'] and palette_color_types[palette_name]['contains-normal']) or
+              (palette_color_types[palette_name]['pastel-dark'] and palette_color_types[palette_name]['contains-dark'])):
+            make_default_pastel_path = True
+            output_filepaths.append(os.path.join(os.path.join(PASTEL_EXTRACTED_DIR, image_name), filename))
+        else:
+            make_default_primary_path = True
+            output_filepaths.append(os.path.join(os.path.join(DEFAULT_EXTRACTED_DIR, image_name), filename))
 
     if make_output_path:
         os.makedirs(os.path.join(output_path, image_name), exist_ok=True)

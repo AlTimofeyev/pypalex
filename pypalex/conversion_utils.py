@@ -7,7 +7,104 @@
 #   - Modified by Al Timofeyev on March 6, 2023.
 #   - Modified by Al Timofeyev on April 5, 2023.
 #   - Modified by Al Timofeyev on July 8, 2024.
+#   - Modified by Al Timofeyev on October 12, 2024.
 
+
+##  Convert HSV array [h,s,v] to HEX string '#ffffff'.
+#   @details    HSV where h is in the set [0, 359] and s, v are in the set [0.0, 100.0].
+#               HEX string is in the set ["#000000", "#ffffff"].
+#
+#   @param  hsv_array   HSV array [h,s,v].
+#
+#   @return A HEX string.
+def hsv_to_hex(hsv_array):
+    rgb_array = hsv_to_rgb(hsv_array)
+    return rgb_to_hex(rgb_array)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Convert HEX string '#ffffff' to HSV array [h,s,v].
+#   @details    HEX string is in the set ["#000000", "#ffffff"].
+#               HSV where h is in the set [0, 359] and s, v are in the set [0.0, 100.0].
+#
+#   @param  hex_str HEX string '#ffffff'.
+#
+#   @return HSV array [h,s,v].
+def hex_to_hsv(hex_str):
+    rgb_array = hex_to_rgb(hex_str)
+    return rgb_to_hsv(rgb_array)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Convert HSV array [h,s,v] to an ANSI color escape code string.
+#   @details    HSV where h is in the set [0, 359] and s, v are in the set [0.0, 100.0].
+#               ANSI where \033[38;2;r;g;bm is for the foreground color
+#               and \033[48;2;r;g;bm is for the background color.
+#
+#   @param  hsv_array   HSV array [h,s,v].
+#   @param  background  Flag for if the HSV color is for a background or not.
+#
+#   @return ANSI escape code string.
+def hsv_to_ansi(hsv_array, background=False):
+    rgb_array = hsv_to_rgb(hsv_array)
+    return rgb_to_ansi(rgb_array, background=background)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Converts ANSI color escape code string tp HSV array [h,s,v].
+#   @details    ANSI where \033[38;2;r;g;bm is for the foreground color
+#               and \033[48;2;r;g;bm is for the background color.
+#               HSV where h is in the set [0, 359] and s, v are in the set [0.0, 100.0].
+#
+#   @param  ansi_string ANSI color escape code string.
+#
+#   @return HSV array [h,s,v].
+def ansi_to_hsv(ansi_string):
+    rgb_array = ansi_to_rgb(ansi_string)
+    return rgb_to_hsv(rgb_array)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Convert HEX string '#ffffff' to an ANSI color escape code string.
+#   @details    HEX string is in the set ["#000000", "#ffffff"].
+#               ANSI where \033[38;2;r;g;bm is for the foreground color
+#               and \033[48;2;r;g;bm is for the background color.
+#
+#   @param  hex_str     HEX string '#ffffff'.
+#   @param  background  Flag for if the HEX string is for a background or not.
+#
+#   @return ANSI escape code string.
+def hex_to_ansi(hex_str, background=False):
+    rgb_array = hex_to_rgb(hex_str)
+    return rgb_to_ansi(rgb_array, background=background)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Converts ANSI color escape code string to HEX string '#ffffff'.
+#   @details    ANSI where \033[38;2;r;g;bm is for the foreground color
+#               and \033[48;2;r;g;bm is for the background color.
+#               HEX string is in the set ["#000000", "#ffffff"].
+#
+#   @param  ansi_string ANSI color escape code string.
+#
+#   @return A HEX string.
+def ansi_to_hex(ansi_string):
+    rgb_array = ansi_to_rgb(ansi_string)
+    return rgb_to_hex(rgb_array)
+
+
+# **************************************************************************
+# **************************************************************************
 
 ##  Converts RGB array [r,g,b] to HSV array [h,s,v].
 #   @details    RGB where [r,g,b] are in the set [0, 255].
@@ -50,88 +147,6 @@ def rgb_to_hsv(rgb_array):
 
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
-
-##  Convert HSV array [h,s,v] to HEX string 'ffffff'.
-#   @details    HSV where h is in the set [0, 359] and s, v are in the set [0.0, 100.0].
-#               HEX string is in the set ["#000000", "#ffffff"].
-#
-#   @param  hsv_array   HSV array [h,s,v].
-#
-#   @return A HEX string.
-def hsv_to_hex(hsv_array):
-    rgb_array = hsv_to_rgb(hsv_array)
-    return rgb_to_hex(rgb_array)
-
-
-# --------------------------------------------------------------------------
-# --------------------------------------------------------------------------
-
-##  Convert HEX string '#ffffff' to RGB array [r,g,b].
-#   @details    HEX string is in the set ["#000000", "#ffffff"].
-#               RGB where [r,g,b] are in the set [0, 255].
-#
-#   @param  hex_str HEX string '#ffffff'.
-#
-#   @return RGB array [r,g,b].
-def hex_to_rgb(hex_str):
-    rgb_array = []
-    for hex_digit1, hex_digit2 in zip(hex_str[1::2], hex_str[2::2]):    # Hex strings now contain a hashtag '#'.
-        rgb_array.append(int(hex_digit1+hex_digit2, 16))
-
-    return rgb_array
-
-
-# --------------------------------------------------------------------------
-# --------------------------------------------------------------------------
-
-##  Constructs ANSI color escape code based on an RGB list.
-#   @details    An RGB [r,g,b] list is used to generate an ANSI
-#               escape code of the RGB color for use in the
-#               terminal CLI. The basic format for these codes depends
-#               on if it will be used for foreground or background color.
-#               Use \033[38;2;r;g;bm for the foreground color.
-#               Use \033[48;2;r;g;bm for the background color.
-#
-#   @note   For more information about these ANSI escape codes,
-#           here are some sources:
-#           https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-#           https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences/33206814#33206814
-#           https://stackoverflow.com/questions/45782766/color-python-output-given-rrggbb-hex-value/45782972#45782972
-#
-#   @param  rgb_array   RGB array [r,g,b].
-#   @param  background  Flag for if the RGB color is for a background or not.
-#
-#   @return ANSI escape code string of the RGB color.
-def rgb_to_ansi(rgb_array, background=False):
-    r, g, b = rgb_array
-    return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
-
-
-# --------------------------------------------------------------------------
-# --------------------------------------------------------------------------
-
-##  Converts ANSI color escape code string into an RGB array.
-#
-#   @note   This function is dependent on the ANSI string to
-#           be formatted like '\033[{};2;{};{};{}m' or
-#           '\u001b[{};2;{};{};{}m' or something similar. For more
-#           information about these ANSI escape codes, here are
-#           some sources:
-#           https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
-#           https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences/33206814#33206814
-#           https://stackoverflow.com/questions/45782766/color-python-output-given-rrggbb-hex-value/45782972#45782972
-#
-#   @param  ansi_string ANSI color escape code string.
-#
-#   @return RGB array [r,g,b].
-def ansi_to_rgb(ansi_string):
-    split_ansi = ansi_string.split(';')
-    r, g, b = int(split_ansi[-3]), int(split_ansi[-2]), int(split_ansi[-1][:-1])
-    return [r, g, b]
-
-
-# **************************************************************************
-# **************************************************************************
 
 ##  Convert HSV array [h,s,v] to RGB array [r,g,b].
 #   @details    HSV where h is in the set [0, 359] and s, v are in the set [0.0, 100.0].
@@ -187,3 +202,70 @@ def rgb_to_hex(rgb_array):
     hex_string = '#%02x%02x%02x' % (r, g, b)
 
     return hex_string
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Convert HEX string '#ffffff' to RGB array [r,g,b].
+#   @details    HEX string is in the set ["#000000", "#ffffff"].
+#               RGB where [r,g,b] are in the set [0, 255].
+#
+#   @param  hex_str HEX string '#ffffff'.
+#
+#   @return RGB array [r,g,b].
+def hex_to_rgb(hex_str):
+    rgb_array = []
+    for hex_digit1, hex_digit2 in zip(hex_str[1::2], hex_str[2::2]):    # Hex strings now contain a hashtag '#'.
+        rgb_array.append(int(hex_digit1+hex_digit2, 16))
+
+    return rgb_array
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Convert RGB array [r,g,b] to an ANSI color escape code string.
+#   @details    An RGB [r,g,b] array is used to generate an ANSI
+#               escape code of the RGB color for use in the
+#               terminal CLI. The basic format for these codes depends
+#               on if it will be used for foreground or background color.
+#               Use \033[38;2;r;g;bm for the foreground color.
+#               Use \033[48;2;r;g;bm for the background color.
+#
+#   @note   For more information about these ANSI escape codes,
+#           here are some sources:
+#           https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+#           https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences/33206814#33206814
+#           https://stackoverflow.com/questions/45782766/color-python-output-given-rrggbb-hex-value/45782972#45782972
+#
+#   @param  rgb_array   RGB array [r,g,b].
+#   @param  background  Flag for if the RGB color is for a background or not.
+#
+#   @return ANSI escape code string of the RGB color.
+def rgb_to_ansi(rgb_array, background=False):
+    r, g, b = rgb_array
+    return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
+
+
+# --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+
+##  Converts ANSI color escape code string to an RGB array.
+#
+#   @note   This function is dependent on the ANSI string to
+#           be formatted like '\033[{};2;{};{};{}m' or
+#           '\u001b[{};2;{};{};{}m' or something similar. For more
+#           information about these ANSI escape codes, here are
+#           some sources:
+#           https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+#           https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences/33206814#33206814
+#           https://stackoverflow.com/questions/45782766/color-python-output-given-rrggbb-hex-value/45782972#45782972
+#
+#   @param  ansi_string ANSI color escape code string.
+#
+#   @return RGB array [r,g,b].
+def ansi_to_rgb(ansi_string):
+    split_ansi = ansi_string.split(';')
+    r, g, b = int(split_ansi[-3]), int(split_ansi[-2]), int(split_ansi[-1][:-1])
+    return [r, g, b]

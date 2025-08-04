@@ -10,32 +10,60 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased
 - . . .
 
+<br>
 
-
-- MOVE IMAGE PROCESSING INTO EXTRACTOR CLASS!!!
-    - Make constructor Empty : `Extractor()`.
-    - Make a load function in Extractor class that will process the image:
-        - `extractor.load(img_dir, image_name)`
-        - The image name is optional.
-        - This function saves the image name in the Extractor object if it is specified, otherwise it will be `None`.
-- MAKE AN ADAPTIVE PALETTE OPTION FOR PYPALEX WHEN ADDING THE EXTRA COLORS!!!!!
-    - The most dominant 6 colors in the image are set as the 6 colors of a "adaptive" palette.
-    - e.g. [red, orange, azure, violet, magenta, rose] and their light/dark variations.
-************************************************************************************
-***** THIS IS OLD, JUST USE IT FOR REFERENCE, THESE AREN'T IN THE MAIN PACKAGE *****
-
-- CHANGED: Updated extraction algorithm to use standard deviation and account for any outlying color data.
-    - This will help with ignoring colors that are not part of clusters/groups of colors.
-- CHANGED: Added a check for edge cases in `extract_color_types()` and `check_missing_color_types()` functions.
-    - !!!!! This doesn't need to be changed !!!!!
-- CHANGED: Isolated saturation preference to a single function called `get_saturated_sample()`.
-    - This function retrieves a saturated sample to use for extraction to avoid skewed results.
-- CHANGED: Changed the lower bound of `BRIGHTNESS_RANGE` in `constants.py` from 25.0 to 30.0.
-
-***** THIS IS OLD, JUST USE IT FOR REFERENCE, THESE AREN'T IN THE MAIN PACKAGE *****
-************************************************************************************
-
-
+## [2.2.0] - 2024-12-15
+- This update was delayed to August 2025.
+- ADDED: Added 6 new colors to the **constants.py** file to be extracted along with the original 6.
+    - Added orange, chartreuse, spring, azure, violet and rose.
+    - Adjusted some existing color constants in the process.
+- ADDED: Added more color format conversion functions to the **conversion_utils.py** file.
+    - Added `hex_to_hsv()`, `hsv_to_ansi()`, `ansi_to_hsv()`, `hex_to_ansi()` and `ansi_to_hex()`.
+- CHANGED: Changed he **constants.py** file.
+    - Changed the `SATURATION_TOLERANCE_RANGE` constant value from `[10.0, 15.0]` to `[15.0, 20.0]`.
+    - Changed the `PASTEL_SATURATION_RANGE` constant value from `[15.0, 75.0]` to `[20.0, 55.0]`.
+- CHANGED: Changed the **print_utils.py** file.
+  - Added `print_raw_colors()` function to allow for printing raw extracted colors to the Terminal.
+    - This is for when the user wants to extract only the raw colors (not palettes) but also wants to print a preview.
+  - Added `print_palette_preview()` function, a simplified version of the prior print palette function that uses already-made palettes.
+  - Deprecated the following two functions in favor of `print_palette_preview()`:
+    - `print_default_palette_preview()`
+    - `print_template_palette_preview()`
+    - These two functions will remain in this new version update, just in case there might be a use for them.
+- CHANGED: Changed the **file_utils.py** file.
+    - Changed the `generate_config_file()` function to include the new colors.
+    - Refactored the `save_palettes()` function header and the beginning of the function.
+      - Removed the pastel optional parameters from the header in favor of an optional dictionary that would contain the same values.
+    - Added a `export_file_format` check at the beginning of all the functions in this file, except `generate_config_file()`, to make sure it's a supported format.
+- CHANGED: Changed the **Extractor.py** file and class.
+    - Added `math` and `stat` packages to this file.
+    - Moved the image processing portion of the package into the `Extractor` class.
+      - This class now contains a `load()` function to load the Extractor class with an image before using the `run()` function.
+    - Added support for the 6 new colors.
+    - Added `generate_mood_palettes()` and `generate_adaptive_palettes()` functions to generate mood and adaptive color palettes.
+    - Changed the `set_color_format()` function to be able to modify the color format of both the extracted colors dictionary or any color palette dictionary that is passed to this function.
+      - This function can now change the color format more than once, removing the limit from the last update.
+    - Changed the `convert_pastel()` function so that the saturation is adjusted regardless if it was already set to a proper saturation.
+- CHANGED: Changed the **extraction_utils.py** file.
+    - Changed `check_missing_color_types()` function to use `new_bounds[0] +` for borrowing color types.
+      - Previously, some of the color-type-checks used `new_bounds[1] -` instead, so I changed that for this update.
+    - Changed the linear color ordering to be more intuitive.
+      - From *(left side)*`['red', 'rose', 'magenta', 'violet', 'blue', 'azure', 'cyan', 'spring', 'green', 'chartreuse', 'yellow', 'orange']`*(right side)*
+      - To *(left side)*`['red', 'orange', 'yellow', 'chartreuse', 'green', 'spring', 'cyan', 'azure', 'blue', 'violet', 'magenta', 'rose']`*(right side)*
+      - This will work better for mental visualization in the long run as the latter variation is more intuitive.
+    - Changed `get_left_and_right_colors()` and `borrow_color()` functions to accommodate the change in linear color ordering.
+    - Added the 6 new base colors into the extraction process for some functions.
+    - Changed the `extract_colors()` function by adding a `ratios` parameter to the function header.
+    - Changed the saturation and brightness values for black and white colors in `generate_black_and_white()` function.
+    - Added ration type processing to the `sort_by_sat_and_bright_value()` function.
+      - This will record the percentage/ratios of each color type for each of the base colors.
+    - Added `get_dominant_color_name()` function to get the name of the dominant base color.
+    - Added `get_hue_shift_value()` function to calculate how much to shift a hue based on the hue's range and on the percentage provided.
+    - Added `calculate_dist_between_2_colors()` function to calculate the distance between two HSV colors.
+    - Changed `check_missing_colors()` function to be more concise.
+    - Added `set_missing_color()` function to support the `check_missing_colors()` function as there was repeated code.
+    - Changed `find_closest_to_centroid()` function to use the new `calculate_dist_between_2_colors()` function.
+- CHANGED: Changed the **__main__.py** file.
 
 <br>
 
@@ -106,7 +134,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - CHANGED: The image rescale function in **image_utils.py**.
     - Images are now rescaled according to a proper mathematical formula and maintain their aspect ratio instead of hard-rescaling images to 480p with a 16:9 or 9:16 aspect ratio.
     - The math behind rescaling the image came from: https://math.stackexchange.com/a/3078131
-    - If an image is smaller the required sampling size of 480p, it is not rescaled.
+    - If an image is smaller than the required sampling size of 480p, it is not rescaled.
 
 <br>
 
@@ -196,6 +224,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - [filenam]-color_palette.json
 
 
+[2.2.0]: https://github.com/AlTimofeyev/pypalex/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/AlTimofeyev/pypalex/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/AlTimofeyev/pypalex/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/AlTimofeyev/pypalex/compare/1.3.5...2.0.0

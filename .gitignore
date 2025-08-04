@@ -21,3 +21,4 @@
 !/CHANGELOG.md
 !/MANIFEST.in
 !/pypalex_code_documentation.pdf
+!/.gitignore
